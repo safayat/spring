@@ -1,19 +1,14 @@
 package com.mkyong.customer.controller;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +25,7 @@ public class CustomerController{
 	
 	@Autowired
 	public CustomerController(CustomerValidator customerValidator){
+		System.out.println("in CustomerController contruct");
 		this.customerValidator = customerValidator;
 	}
 	
@@ -88,13 +84,13 @@ public class CustomerController{
 		return webFrameworkList;
 	}
 	
-	@InitBinder
+	/*@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
 		
-	}
+	}*/
 	
 	@ModelAttribute("numberList")
 	public List<String> populateNumberList() {

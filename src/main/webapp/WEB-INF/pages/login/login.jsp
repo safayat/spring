@@ -18,7 +18,7 @@
 
 <body>
 
-<form:form method="POST" commandName="login">
+<form:form method="POST" commandName="login" action="/login.htm">
     <div>UserName</div>
     <div>
         <form:input path="userName"  />

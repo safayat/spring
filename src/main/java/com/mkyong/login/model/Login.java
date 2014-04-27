@@ -18,6 +18,10 @@ public class Login implements Serializable{
     private String firstName;
     private String lastName;
 
+    public Login() {
+		// TODO Auto-generated constructor stub
+	}
+    
     public Login(String userName) {
         this.userName = userName;
     }
