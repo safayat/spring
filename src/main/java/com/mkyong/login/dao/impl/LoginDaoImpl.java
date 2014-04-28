@@ -2,6 +2,8 @@ package com.mkyong.login.dao.impl;
 
 import com.mkyong.login.dao.LoginDAO;
 import com.mkyong.login.model.Login;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,8 +16,8 @@ public class LoginDaoImpl extends AbstractDaoImpl<Login,String> implements Login
 
     protected LoginDaoImpl()
     {
-         super(Login.class);
-
+         //super(Login.class);
+          setEntityClass(Login.class);
     }
 
 
@@ -27,6 +29,7 @@ public class LoginDaoImpl extends AbstractDaoImpl<Login,String> implements Login
 
     @Override
     public List<Login> findUsers(String userName) {
-        return null;
+       return findByCriteria(Restrictions.like("userName", userName, MatchMode.START));
+
     }
 }

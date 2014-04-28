@@ -20,30 +20,19 @@ import com.mkyong.login.validator.LoginValidator;
  */
 
 @Controller
+
+@Configuration
 @RequestMapping("/login.htm")
-/*@Configuration
-@ComponentScan("com.mkyong.login.service")*/
+@ComponentScan("com.mkyong.login.service")
 public class LoginController {
 
-
+@Autowired
 LoginValidator loginValidator;
 
-   /* @Autowired
-    private UserService userService;*/
+   @Autowired
+    private UserService userService;
 
-@Autowired
- public LoginController(LoginValidator loginValidator)
-  {
-	
-	System.out.println("in LoginController contruct");
-       this.loginValidator=loginValidator;
-  }
 
-/*@Autowired
-public LoginController()
-{
-	
-}*/
 
     @RequestMapping(method = RequestMethod.GET)
     public String initForm(ModelMap map)
@@ -53,6 +42,8 @@ public LoginController()
         map.addAttribute("login",login);
        return "login/login";
     }
+
+
 
     @RequestMapping(method = RequestMethod.POST)
     public String processSubmit(@ModelAttribute("login")Login login,
@@ -68,6 +59,16 @@ public LoginController()
         } else {
             status.setComplete();
             System.out.println("in processSubmit success");
+            Login oldLogin=userService.findByUserName(login.getUserName());
+            if(oldLogin==null)
+            {
+                System.out.println(" username did not match");
+                return "login/login";
+            }
+            else
+            {
+                 System.out.println(oldLogin);
+            }
             //form success
             return "login/LoginSuccess";
         }

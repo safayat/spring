@@ -20,14 +20,11 @@ import com.mkyong.customer.validator.CustomerValidator;
 @Controller
 @RequestMapping("/customer.htm")
 public class CustomerController{
-	
+    @Autowired
 	CustomerValidator customerValidator;
 	
-	@Autowired
-	public CustomerController(CustomerValidator customerValidator){
-		System.out.println("in CustomerController contruct");
-		this.customerValidator = customerValidator;
-	}
+
+
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public String processSubmit(

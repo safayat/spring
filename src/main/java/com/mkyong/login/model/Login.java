@@ -15,8 +15,8 @@ public class Login implements Serializable{
     private Integer userId;
     private String userName;
     private String password;
-    private String firstName;
-    private String lastName;
+   /* private String firstName;
+    private String lastName;*/
 
     public Login() {
 		// TODO Auto-generated constructor stub
@@ -46,7 +46,7 @@ public class Login implements Serializable{
         this.password = password;
     }
 
-    public String getFirstName() {
+   /* public String getFirstName() {
         return firstName;
     }
 
@@ -61,9 +61,9 @@ public class Login implements Serializable{
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+*/
 
-
-    @Column(name = "userName",unique = true,nullable = false,length =20 )
+    @Column(name = "userName",unique = true,nullable = false,length =20)
     public String getUserName() {
         return userName;
     }
@@ -78,8 +78,8 @@ public class Login implements Serializable{
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+               /* ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +*/
                 '}';
     }
 }

@@ -6,23 +6,28 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.Serializable;
 import java.util.List;
+
 
 public abstract class AbstractDaoImpl<E, I extends Serializable> implements AbstractDAO<E,I> {
 
     private Class<E> entityClass;
 
-    protected AbstractDaoImpl(Class<E> entityClass) {
-        this.entityClass = entityClass;
-    }
 
-   @Autowired
-    private SessionFactory sessionFactory;
+    protected SessionFactory sessionFactory;
+
 
     public Session getCurrentSession() {
-        return sessionFactory.getCurrentSession();
+        return sessionFactory.openSession();
+    }
+
+    @Autowired
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
@@ -42,8 +47,13 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
 
     @Override
     public List<E> findByCriteria(Criterion criterion) {
+
         Criteria criteria = getCurrentSession().createCriteria(entityClass);
         criteria.add(criterion);
         return criteria.list();
+    }
+
+    public void setEntityClass(Class<E> entityClass) {
+        this.entityClass = entityClass;
     }
 }
