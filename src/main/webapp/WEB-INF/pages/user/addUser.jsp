@@ -13,26 +13,24 @@
     <title></title>
 </head>
 <body>
-<form:form method="POST" commandName="user">
-    <div>UserName</div>
-    <div>
-        <form:input path="userName"  />
-    </div>
-    <br>
-
-    <div>Password</div>
-    <div>
-        <form:password path="password" />
-    </div>
-    <br>
-
+<form:form method="POST" commandName="user" action="/userAdd.htm">
+    <div>First Name</div>
     <div>
         <form:input path="firstName"  />
     </div>
+    <br>
 
+    <div>Last Name</div>
     <div>
-        <form:input path="lastName"  />
+        <form:input path="lastName" />
     </div>
+    <br>
+
+    <div></div>
+    <div>
+        <form:input path="mobileNo" />
+    </div>
+
     <div>
         <input type="submit" value="Submit">
     </div>

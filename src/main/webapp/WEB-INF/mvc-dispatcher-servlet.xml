@@ -13,7 +13,7 @@
     <mvc:annotation-driven />
     <context:component-scan base-package="com.mkyong.customer.controller" />
     <context:component-scan base-package="com.mkyong.login.controller" />
-
+    <context:component-scan base-package="com.mkyong.user.controller" />
 
 
 	<bean class="com.mkyong.customer.validator.CustomerValidator" />
