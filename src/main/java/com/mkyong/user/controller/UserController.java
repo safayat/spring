@@ -1,6 +1,11 @@
 package com.mkyong.user.controller;
 
+import com.mkyong.login.service.UserService;
 import com.mkyong.user.model.User;
+import com.mkyong.user.service.UserInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -14,9 +19,16 @@ import org.springframework.web.bind.support.SessionStatus;
  */
 
 @Controller
+@Configuration
 @RequestMapping("/userAdd.htm")
+@ComponentScan("com.mkyong.user.service")
 public class UserController {
 
+    @Autowired
+    UserInfoService userInfoService;
+    @Autowired
+    UserService userService;
+    
     @RequestMapping(method = RequestMethod.GET)
     public String userAdd(ModelMap map) {
         System.out.println("in userAdd");
@@ -29,7 +41,10 @@ public class UserController {
     public String userSave(@ModelAttribute("user")User user,
                            BindingResult result, SessionStatus status) {
 
+        
+
         System.out.println("added user:" + user);
-        return "/userAdd.htm";
+
+        return "user/addUser";
     }
 }

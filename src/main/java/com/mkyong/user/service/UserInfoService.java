@@ -1,5 +1,6 @@
 package com.mkyong.user.service;
 
+import com.mkyong.login.model.Login;
 import com.mkyong.user.model.User;
 
 import java.util.List;
@@ -9,8 +10,9 @@ import java.util.List;
  */
 
 public interface UserInfoService {
-    User findByUserName(String userName);
+    User findByLoginId(Integer loginId);
     void saveUser(User user);
     void deleteUser(String userName);
     List<User> findUsers(String user);
+    User findById(Integer id);
 }

@@ -1,5 +1,6 @@
 package com.mkyong.user.service.impl;
 
+import com.mkyong.login.model.Login;
 import com.mkyong.user.dao.UserDao;
 import com.mkyong.user.model.User;
 import com.mkyong.user.service.UserInfoService;
@@ -14,21 +15,25 @@ import java.util.List;
 /**
  * Created by safayat on 6/6/14.
  */
-@Service("userService")
+@Service("userService2")
 @Transactional(readOnly = true)
 @Configuration
 @ComponentScan("com.mkyong.user.dao")
 public class UserInfoServiceImpl implements UserInfoService {
 
+
+
     @Autowired
     UserDao userDao;
 
     @Override
-    public User findByUserName(String userName) {
-/*
-        List userList=userDao.
-*/
-        return null;
+    public User findById(Integer id) {
+        return userDao.findById(String.valueOf(id));
+    }
+
+    @Override
+    public User findByLoginId(Integer id) {
+        return userDao.findUsers(id).get(0);
     }
 
     @Override

@@ -11,8 +11,7 @@ import java.util.List;
  */
 public interface UserDao extends AbstractDAO<User,String> {
 
-    User findById(Long id);
-    void saveOrUpdate(User user);
-    void delete(User user);
-    List<User> findByCriteria(Criterion criterion);
+    void saveOrUpdateUser(User user);
+    void deleteUser(User user);
+    List<User> findUsers(Integer loginId);
 }
