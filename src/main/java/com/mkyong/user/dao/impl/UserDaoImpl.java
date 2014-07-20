@@ -1,14 +1,13 @@
 package com.mkyong.user.dao.impl;
 
-import com.mkyong.common.dao.impl.AbstractDaoImpl;
-import com.mkyong.user.dao.UserDao;
-import com.mkyong.user.model.User;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
+import java.util.List;
+
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.mkyong.common.dao.impl.AbstractDaoImpl;
+import com.mkyong.user.dao.UserDao;
+import com.mkyong.user.model.User;
 
 /**
  * Created by safayat on 6/5/14.
@@ -21,7 +20,8 @@ public class UserDaoImpl extends AbstractDaoImpl<User,String> implements UserDao
 
     @Override
     public List<User> findUsers(Integer loginId) {
-        return findByCriteria(Restrictions.like("loginId",String.valueOf(loginId), MatchMode.START));    }
+        return findByCriteria(Restrictions.eq("loginId",loginId));    
+    }
 
     @Override
     public void saveOrUpdateUser(User user) {
@@ -32,8 +32,6 @@ public class UserDaoImpl extends AbstractDaoImpl<User,String> implements UserDao
     public void deleteUser(User user) {
         delete(user);
     }
-/*@Override
-    public List<User> findByCriteria(String loginId) {
-        return findByCriteria(Restrictions.like("loginId", loginId, MatchMode.START));
-    }*/
+    
+
 }

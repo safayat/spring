@@ -1,7 +1,9 @@
 package com.mkyong.login.dao.impl;
 
+import com.mkyong.common.dao.impl.AbstractDaoImpl;
 import com.mkyong.login.dao.LoginDAO;
 import com.mkyong.login.model.Login;
+
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;

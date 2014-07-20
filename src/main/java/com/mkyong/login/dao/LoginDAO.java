@@ -1,7 +1,7 @@
 package com.mkyong.login.dao;
 
 import com.mkyong.login.model.Login;
-import com.mkyong.login.dao.AbstractDAO;
+import com.mkyong.common.dao.AbstractDAO;
 import java.util.List;
 
 /**

@@ -26,9 +26,14 @@
     </div>
     <br>
 
-    <div></div>
+    <div>Mobile NO</div>
     <div>
         <form:input path="mobileNo" />
+    </div>
+
+    <div>Login Id</div>
+    <div>
+        <form:input path="loginId" value="0"/>
     </div>
 
     <div>

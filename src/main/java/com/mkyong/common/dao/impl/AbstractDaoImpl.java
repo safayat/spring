@@ -1,6 +1,6 @@
 package com.mkyong.common.dao.impl;
 
-import com.mkyong.login.dao.AbstractDAO;
+import com.mkyong.common.dao.AbstractDAO;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

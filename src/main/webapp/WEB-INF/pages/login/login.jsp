@@ -17,7 +17,6 @@
 
 
 <body>
-
 <form:form method="POST" commandName="login" action="/login.htm">
     <div>UserName</div>
     <div>

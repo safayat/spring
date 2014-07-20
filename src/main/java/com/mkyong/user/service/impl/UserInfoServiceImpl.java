@@ -1,16 +1,16 @@
 package com.mkyong.user.service.impl;
 
-import com.mkyong.login.model.Login;
-import com.mkyong.user.dao.UserDao;
-import com.mkyong.user.model.User;
-import com.mkyong.user.service.UserInfoService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.mkyong.user.dao.UserDao;
+import com.mkyong.user.model.User;
+import com.mkyong.user.service.UserInfoService;
 
 /**
  * Created by safayat on 6/6/14.
@@ -33,13 +33,19 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public User findByLoginId(Integer id) {
-        return userDao.findUsers(id).get(0);
+//        return userDao.findUsers(id).get(0);
+          List<User> userList = userDao.findUsers(id);
+          if(userList.size()>0){
+              return userList.get(0);
+          }
+        return null;
+
     }
 
     @Override
     @Transactional
     public void saveUser(User user) {
-
+        userDao.saveOrUpdateUser(user);
     }
 
     @Override

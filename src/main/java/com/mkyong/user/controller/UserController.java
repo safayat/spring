@@ -40,10 +40,10 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST)
     public String userSave(@ModelAttribute("user")User user,
                            BindingResult result, SessionStatus status) {
-
-        
-
         System.out.println("added user:" + user);
+        if(userInfoService.findByLoginId(user.getLoginId())==null){
+            userInfoService.saveUser(user);
+        }
 
         return "user/addUser";
     }
