@@ -6,34 +6,48 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<jsp:include page="/WEB-INF/pages/common/head.jsp"/>
 <html>
 <head>
     <title>Login</title>
 </head>
 
 
-
-
 <body>
-<form:form method="POST" commandName="login" action="/login.htm">
-    <div>UserName</div>
-    <div>
-        <form:input path="userName"  />
-    </div>
-    <br>
+<div class="container">
+    <form:form method="POST" commandName="login" action="/login.htm" cssClass="form-horizontal">
 
-    <div>Password</div>
-    <div>
-        <form:password path="password" />
-    </div>
-    <br>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">UserName</label>
 
-    <div>
-        <input type="submit" value="Submit">
-    </div>
+            <div class="col-sm-5">
+                <form:input path="userName" cssClass="form-control"/>
+            </div>
+        </div>
+        <br>
 
-</form:form>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Password</label>
+
+            <div class="col-sm-5">
+                <form:password path="password" cssClass="form-control"/>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Sign in</button>
+            </div>
+        </div>
+
+    </form:form>
+</div>
+
+
+
 </body>
 </html>

@@ -11,6 +11,6 @@
     <title></title>
 </head>
 <body>
-User ${login.userName} logged in successfully.
+User ${sessionScope.loginData.userName} logged in successfully. session worked.
 </body>
 </html>
