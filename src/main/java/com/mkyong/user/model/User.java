@@ -1,5 +1,7 @@
 package com.mkyong.user.model;
 
+import com.mkyong.login.model.Login;
+
 import javax.persistence.*;
 
 /**
@@ -15,6 +17,27 @@ public class User {
     private String mobileNo;
     private Integer loginId;
     private Integer userInfoId;
+    private Login login;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", mobileNo='" + mobileNo + '\'' +
+                ", loginId=" + loginId +
+                ", userInfoId=" + userInfoId +
+                ", login=" + login +
+                '}';
+    }
+
+    public Login getLogin() {
+        return login;
+    }
+
+    public void setLogin(Login login) {
+        this.login = login;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,17 +48,6 @@ public class User {
 
     public void setUserInfoId(Integer userInfoId) {
         this.userInfoId = userInfoId;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", mobileNo='" + mobileNo + '\'' +
-                ", loginId=" + loginId +
-                ", userInfoId=" + userInfoId +
-                '}';
     }
 
     @Column(name = "loginId",nullable = false)

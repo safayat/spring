@@ -14,5 +14,6 @@ public interface UserInfoService {
     void saveUser(User user);
     void deleteUser(String userName);
     List<User> findUsers(String user);
+    List<User> findUsers();
     User findById(Integer id);
 }

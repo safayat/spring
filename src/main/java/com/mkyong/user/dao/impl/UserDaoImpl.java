@@ -2,6 +2,8 @@ package com.mkyong.user.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +24,11 @@ public class UserDaoImpl extends AbstractDaoImpl<User,String> implements UserDao
     public List<User> findUsers(Integer loginId) {
         return findByCriteria(Restrictions.eq("loginId",loginId));    
     }
+    @Override
+    public List<User> findUsers() {
+        return findByCriteria(Restrictions.gt("userInfoId",0));
+    }
+
 
     @Override
     public void saveOrUpdateUser(User user) {

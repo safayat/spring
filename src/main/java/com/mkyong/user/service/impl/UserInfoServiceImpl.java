@@ -56,6 +56,10 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public List<User> findUsers(String userName) {
-        return findUsers(userName);
+        return null;
+    }
+    @Override
+    public List<User> findUsers() {
+        return userDao.findUsers();
     }
 }

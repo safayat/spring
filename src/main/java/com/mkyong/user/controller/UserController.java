@@ -20,27 +20,29 @@ import org.springframework.web.bind.support.SessionStatus;
 
 @Controller
 @Configuration
-@RequestMapping("/userAdd.htm")
 @ComponentScan("com.mkyong.user.service")
 public class UserController {
 
     @Autowired
     UserInfoService userInfoService;
-    @Autowired
-    UserService userService;
-    
-    @RequestMapping(method = RequestMethod.GET)
+
+    @RequestMapping(value = "/userAdd.htm", method = RequestMethod.GET)
     public String userAdd(ModelMap map) {
         System.out.println("in userAdd");
         User user=new User();
         map.addAttribute("user",user);
        return "user/addUser";
     }
+    @RequestMapping(value = "/userList.htm", method = RequestMethod.GET)
+    public String userList(ModelMap map) {
+       System.out.println("in userAdd");
+       map.addAttribute("userList", userInfoService.findUsers());
+       return "user/UserList";
+    }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/userAdd.htm", method = RequestMethod.POST)
     public String userSave(@ModelAttribute("user")User user,
                            BindingResult result, SessionStatus status) {
-        System.out.println("added user:" + user);
         if(userInfoService.findByLoginId(user.getLoginId())==null){
             userInfoService.saveUser(user);
         }

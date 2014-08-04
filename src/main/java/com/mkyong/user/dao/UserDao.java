@@ -13,5 +13,6 @@ public interface UserDao extends AbstractDAO<User,String> {
     void saveOrUpdateUser(User user);
     void deleteUser(User user);
     List<User> findUsers(Integer loginId);
+    List<User> findUsers();
 
 }
