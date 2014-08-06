@@ -46,23 +46,6 @@ public class Login implements Serializable{
         this.password = password;
     }
 
-   /* public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-*/
-
     @Column(name = "userName",unique = true,nullable = false,length =20)
     public String getUserName() {
         return userName;

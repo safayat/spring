@@ -7,36 +7,43 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-    <head>
-        <link rel="icon" href="http://getbootstrap.com/favicon.ico">
-        <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-        <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-        <jsp:include page="/WEB-INF/pages/common/head.jsp"/>
-        <jsp:include page="/WEB-INF/pages/common/header.jsp"/>
-    </head>
-    <body>
-        <c:set var="userList" value="${requestScope.userList}" />
-        <table class="table table-bordered">
-            <thead>
+<head>
+    <link rel="icon" href="http://getbootstrap.com/favicon.ico">
+    <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+    <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <jsp:include page="/WEB-INF/pages/common/head.jsp"/>
+    <jsp:include page="/WEB-INF/pages/common/header.jsp"/>
+</head>
+<body>
+<div class="row">
+    <jsp:include page="/WEB-INF/pages/common/menu.jsp"/>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <c:set var="userList" value="${requestScope.userList}"/>
+            <table class="table table-bordered">
+                <thead>
                 <tr>
                     <th>Username</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Mobile Address</th>
                 </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${userList}" var="user">
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </c:forEach>
-            </tbody>
+                </thead>
+                <tbody>
+                <c:forEach items="${userList}" var="user">
+                    <tr>
+                        <td>${user.firstName}</td>
+                        <td>${user.firstName}</td>
+                        <td>${user.lastName}</td>
+                        <td>${user.mobileNo}</td>
+                    </tr>
+                </c:forEach>
+                </tbody>
 
-        </table>
-    </body>
+            </table>
+
+        </div>
+    </div>
+</body>
+
 </html>

@@ -17,7 +17,7 @@ public class User {
     private String mobileNo;
     private Integer loginId;
     private Integer userInfoId;
-    private Login login;
+//    private Login login;
 
     @Override
     public String toString() {
@@ -27,17 +27,17 @@ public class User {
                 ", mobileNo='" + mobileNo + '\'' +
                 ", loginId=" + loginId +
                 ", userInfoId=" + userInfoId +
-                ", login=" + login +
+//                ", login=" + login +
                 '}';
     }
-
+/*
     public Login getLogin() {
         return login;
     }
 
     public void setLogin(Login login) {
         this.login = login;
-    }
+    }*/
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
