@@ -16,13 +16,10 @@ import java.util.List;
 @Repository
 public class LoginDaoImpl extends AbstractDaoImpl<Login,String> implements LoginDAO{
 
-    protected LoginDaoImpl()
-    {
+    protected LoginDaoImpl(){
          //super(Login.class);
           setEntityClass(Login.class);
     }
-
-
 
     @Override
     public void saveUser(Login login) {
@@ -30,8 +27,12 @@ public class LoginDaoImpl extends AbstractDaoImpl<Login,String> implements Login
     }
 
     @Override
-    public List<Login> findUsers(String userName) {
-       return findByCriteria(Restrictions.like("userName", userName, MatchMode.START));
+    public List<Login> findUsers() {
+        return (List<Login>)findByCriteria(null);
+    }
 
+    @Override
+    public Login findUserByUserName(String userName) {
+       return (Login)findByUniqueCriteria(Restrictions.eq("userName",userName));
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by safayat on 4/25/14.
  */
-public interface UserService {
+public interface LoginService {
     Login findByUserName(String userName);
     void saveUser(Login login);
     void deleteUser(String userName);

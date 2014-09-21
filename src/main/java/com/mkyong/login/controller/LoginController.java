@@ -1,5 +1,6 @@
 package com.mkyong.login.controller;
 
+import com.mkyong.login.service.LoginService;
 import com.mkyong.util.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.mkyong.login.model.Login;
-import com.mkyong.login.service.UserService;
+import com.mkyong.login.service.LoginService;
 import com.mkyong.login.validator.LoginValidator;
 import org.springframework.web.context.support.HttpRequestHandlerServlet;
 
@@ -30,7 +31,6 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 
 @Configuration
-@RequestMapping("/login.htm")
 @ComponentScan("com.mkyong.login.service")
 public class LoginController {
 
@@ -38,22 +38,23 @@ public class LoginController {
 LoginValidator loginValidator;
 
    @Autowired
-    private UserService userService;
+    private LoginService loginService;
 
-
-
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/login.htm", method = RequestMethod.GET)
     public String initForm(ModelMap map)
     {
-       Login login=new Login("");
-        System.out.println("in get method of"+ this.getClass().getCanonicalName());
-        map.addAttribute("login",login);
-       return "login/login";
+        map.addAttribute("login",new Login());
+        return "login/login";
     }
 
+    @RequestMapping(value = "/signup.htm", method = RequestMethod.GET)
+    public String initSignupForm(ModelMap map)
+    {
+        map.addAttribute("signup",new Login());
+        return "login/Signup";
+    }
 
-
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/login.htm", method = RequestMethod.POST)
     public String processSubmit(@ModelAttribute("login")Login login,
                                 BindingResult result, SessionStatus status,HttpServletRequest request)
     {
@@ -67,7 +68,7 @@ LoginValidator loginValidator;
         } else {
             status.setComplete();
             System.out.println("in processSubmit success");
-            Login oldLogin=userService.findByUserName(login.getUserName());
+            Login oldLogin=loginService.findByUserName(login.getUserName());
             if(oldLogin==null || oldLogin.getPassword().equals(login.getPassword())==false)
             {
                 System.out.println(" username did not match");
@@ -82,13 +83,32 @@ LoginValidator loginValidator;
            return "login/LoginSuccess";
         }
     }
+@RequestMapping(value = "/signup.htm", method = RequestMethod.POST)
+    public String processSignupSubmit(@ModelAttribute("login")Login login,
+                                BindingResult result, SessionStatus status,HttpServletRequest request)
+    {
 
-    /*@RequestMapping(value = "/logout.htm",method = RequestMethod.GET)
-    public String logOut(ModelMap map){
-
-        return "login/login";
+        loginValidator.validate(login, result);
+        if (result.hasErrors()) {
+            //if validator failed
+        	System.out.println("in processSubmit failured");
+            return "login/signup";
+        } else {
+            status.setComplete();
+            System.out.println("in processSubmit success");
+            if(loginService.findByUserName(login.getUserName())==null)
+            {
+                loginService.saveUser(login);
+            }
+            else
+            {
+                request.setAttribute("errorMsg","username already exists");
+            }
+            //form success
+            return "login/login";
+        }
     }
-*/
+
 
 
 }

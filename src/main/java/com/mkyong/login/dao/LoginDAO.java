@@ -9,6 +9,7 @@ import java.util.List;
  */
 public interface LoginDAO extends AbstractDAO<Login, String>{
     void saveUser(Login login);
-    List<Login> findUsers(String userName);
+    List<Login> findUsers();
+    public Login findUserByUserName(String userName);
 
 }

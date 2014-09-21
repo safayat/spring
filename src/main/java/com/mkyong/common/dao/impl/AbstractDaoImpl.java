@@ -51,6 +51,14 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
         return criteria.list();
     }
 
+    @Override
+    public Object findByUniqueCriteria(Criterion criterion) {
+
+        Criteria criteria = getCurrentSession().createCriteria(entityClass);
+        criteria.add(criterion);
+        return criteria.uniqueResult();
+    }
+
     public void setEntityClass(Class<E> entityClass) {
         this.entityClass = entityClass;
     }

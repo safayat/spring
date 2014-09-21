@@ -13,4 +13,6 @@ public interface AbstractDAO<E,I extends Serializable> {
     E findById(I id);
     void saveOrUpdate(E e);
     void delete(E e);
-    List<E> findByCriteria(Criterion criterion);}
+    List<E> findByCriteria(Criterion criterion);
+    public Object findByUniqueCriteria(Criterion criterion);
+}

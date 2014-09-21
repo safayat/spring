@@ -15,9 +15,7 @@ public class Login implements Serializable{
     private Integer userId;
     private String userName;
     private String password;
-   /* private String firstName;
-    private String lastName;*/
-
+    private String email;
     public Login() {
 		// TODO Auto-generated constructor stub
 	}
@@ -55,14 +53,22 @@ public class Login implements Serializable{
         this.userName = userName;
     }
 
+    @Column(name = "email",unique = true,nullable = false,length =128)
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         return "Login{" +
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
-               /* ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +*/
+                ", email='" + email + '\'' +
                 '}';
     }
 }

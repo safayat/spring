@@ -2,6 +2,7 @@ package com.mkyong.login.service.impl;
 
 import java.util.List;
 
+import com.mkyong.login.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -10,34 +11,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mkyong.login.dao.LoginDAO;
 import com.mkyong.login.model.Login;
-import com.mkyong.login.service.UserService;
 
 /**
  * Created by safayat on 4/25/14.
  */
 
-@Service("userService")
+@Service("loginService")
 @Transactional(readOnly = true)
 @Configuration
 @ComponentScan("com.mkyong.login.dao")
-public class UserServiceImpl implements UserService{
+public class LoginServiceImpl implements LoginService{
 
     @Autowired
     private LoginDAO loginDAO;
 
-    public UserServiceImpl() {
+    public LoginServiceImpl() {
         super();
     }
 
     @Override
     public Login findByUserName(String userName) {
-        List list= loginDAO.findUsers(userName);
-        if(list!=null && list.size()==1)
-        {
-            return (Login)list.get(0);
-        }
-        else
-          return null;
+        return loginDAO.findUserByUserName(userName);
     }
 
     @Override
@@ -58,6 +52,6 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<Login> findUsers(String user) {
-        return loginDAO.findUsers(user);
+        return null;
     }
 }
