@@ -11,8 +11,8 @@ import java.util.List;
 public interface AbstractDAO<E,I extends Serializable> {
 
     E findById(I id);
-    void saveOrUpdate(E e);
-    void delete(E e);
+    void saveOrUpdate(E e) throws Exception;
+    void delete(E e) throws Exception;
     List<E> findByCriteria(Criterion criterion);
-    public Object findByUniqueCriteria(Criterion criterion);
+     E findByUniqueCriteria(Criterion criterion);
 }

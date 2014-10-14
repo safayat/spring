@@ -15,12 +15,11 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
 
     private Class<E> entityClass;
 
-
     protected SessionFactory sessionFactory;
 
 
     public Session getCurrentSession() {
-        return sessionFactory.openSession();
+        return sessionFactory.getCurrentSession();
     }
 
     @Autowired
@@ -33,13 +32,32 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
         return (E) getCurrentSession().get(entityClass, id);
     }
 
+/*
     @Override
-    public void saveOrUpdate(E e) {
-        getCurrentSession().saveOrUpdate(e);
+    public void saveOrUpdate(E e) throws Exception{
+        Session session = getCurrentSession();
+        try
+        {
+            session.getTransaction().begin();
+            session.saveOrUpdate(e);
+            session.getTransaction().commit();
+
+        }catch (Exception ex){
+            session.getTransaction().rollback();
+            session.close();
+            throw new Exception(ex.getMessage());
+        }
+
+    }
+*/
+
+    @Override
+    public void saveOrUpdate(E e) throws Exception{
+            getCurrentSession().saveOrUpdate(e);
     }
 
     @Override
-    public void delete(E e) {
+    public void delete(E e) throws Exception{
         getCurrentSession().delete(e);
     }
 
@@ -52,11 +70,11 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
     }
 
     @Override
-    public Object findByUniqueCriteria(Criterion criterion) {
+     public E findByUniqueCriteria(Criterion criterion) {
 
         Criteria criteria = getCurrentSession().createCriteria(entityClass);
         criteria.add(criterion);
-        return criteria.uniqueResult();
+        return (E) criteria.uniqueResult();
     }
 
     public void setEntityClass(Class<E> entityClass) {

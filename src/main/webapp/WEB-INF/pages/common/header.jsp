@@ -13,9 +13,9 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#">Dashboard</a></li>
                 <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
+                <li><a href="${pageContext.request.contextPath}/profile.htm?profileId=${sessionScope.loginData.userId}">Profile</a></li>
                 <li><a href="#">Help</a></li>
-                <li><a href="/logout.htm">logout</a></li>
+                <li><a href="${pageContext.request.contextPath}/logout.htm">Logout</a></li>
             </ul>
             <form class="navbar-form navbar-right">
                 <input class="form-control" placeholder="Search..." type="text">

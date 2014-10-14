@@ -4,6 +4,7 @@ package com.mkyong.login.service;
  * Created by safayat on 4/25/14.
  */
 import com.mkyong.login.model.Login;
+import com.mkyong.util.DaoResult;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public interface LoginService {
     Login findByUserName(String userName);
-    void saveUser(Login login);
-    void deleteUser(String userName);
+    DaoResult saveUser(Login login);
+    DaoResult deleteUser(String userName);
     List<Login> findUsers(String user);
 }

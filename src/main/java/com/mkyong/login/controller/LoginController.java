@@ -2,6 +2,7 @@ package com.mkyong.login.controller;
 
 import com.mkyong.login.service.LoginService;
 import com.mkyong.util.ApplicationConstants;
+import com.mkyong.util.DaoResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,7 @@ import com.mkyong.login.model.Login;
 import com.mkyong.login.service.LoginService;
 import com.mkyong.login.validator.LoginValidator;
 import org.springframework.web.context.support.HttpRequestHandlerServlet;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -41,8 +43,11 @@ LoginValidator loginValidator;
     private LoginService loginService;
 
     @RequestMapping(value = "/login.htm", method = RequestMethod.GET)
-    public String initForm(ModelMap map)
+    public String initForm(ModelMap map,HttpServletRequest request)
     {
+        if(request.getSession().getAttribute(ApplicationConstants.LOGIN_DATA)!=null){
+            return "common/home";
+        }
         map.addAttribute("login",new Login());
         return "login/login";
     }
@@ -50,13 +55,24 @@ LoginValidator loginValidator;
     @RequestMapping(value = "/signup.htm", method = RequestMethod.GET)
     public String initSignupForm(ModelMap map)
     {
-        map.addAttribute("signup",new Login());
+        if(map.get("signup")==null)
+            map.addAttribute("signup",new Login());
         return "login/Signup";
+    }
+
+    @RequestMapping(value = "/logout.htm", method = RequestMethod.GET)
+    public String logout(ModelMap map,HttpServletRequest request)
+    {
+        request.getSession().removeAttribute(ApplicationConstants.LOGIN_DATA);
+        map.addAttribute("login",new Login());
+        return "login/login";
     }
 
     @RequestMapping(value = "/login.htm", method = RequestMethod.POST)
     public String processSubmit(@ModelAttribute("login")Login login,
-                                BindingResult result, SessionStatus status,HttpServletRequest request)
+                                BindingResult result,
+                                SessionStatus status,
+                                HttpServletRequest request)
     {
     	
         loginValidator.validate(login, result);
@@ -79,34 +95,40 @@ LoginValidator loginValidator;
                  System.out.println(oldLogin);
             }
             //form success
-           request.getSession().setAttribute(ApplicationConstants.LOGIN_DATA,login);
-           return "login/LoginSuccess";
+           request.getSession().setAttribute(ApplicationConstants.LOGIN_DATA,oldLogin);
+           return "common/home";
         }
     }
 @RequestMapping(value = "/signup.htm", method = RequestMethod.POST)
     public String processSignupSubmit(@ModelAttribute("login")Login login,
-                                BindingResult result, SessionStatus status,HttpServletRequest request)
+                                BindingResult result,
+                                SessionStatus status,
+                                HttpServletRequest request,
+                                RedirectAttributes redirectAttributes)
     {
-
+        String target = "login/LoginSuccess";
         loginValidator.validate(login, result);
         if (result.hasErrors()) {
             //if validator failed
         	System.out.println("in processSubmit failured");
-            return "login/signup";
+//            target = "signup";
+            target = "redirect:signup.htm";
         } else {
             status.setComplete();
             System.out.println("in processSubmit success");
-            if(loginService.findByUserName(login.getUserName())==null)
-            {
-                loginService.saveUser(login);
+            DaoResult daoResult = loginService.saveUser(login);
+            if(daoResult.isSuccessful()){
+                request.setAttribute("successMsg",daoResult.getMessage());
+                request.getSession().setAttribute(ApplicationConstants.LOGIN_DATA,login);
+            }else{
+                redirectAttributes.addFlashAttribute("errorMsg",daoResult.getMessage());
+                redirectAttributes.addFlashAttribute("signup",login);
+//                target = "signup";
+                target = "redirect:signup.htm";
             }
-            else
-            {
-                request.setAttribute("errorMsg","username already exists");
-            }
-            //form success
-            return "login/login";
         }
+        System.out.println("target:" + target);
+        return target;
     }
 
 

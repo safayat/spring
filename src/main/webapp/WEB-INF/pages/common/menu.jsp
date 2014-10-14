@@ -2,7 +2,7 @@
     <ul class="nav nav-sidebar">
         <li class="active"><a href="#">User</a></li>
         <li><a href="/Tourism/userAdd.htm">Add User</a></li>
-        <li><a href="/Tourism/userList.htm">View Users</a></li>
+        <li><a href="${pageContext.request.contextPath}/userList.htm">View Users</a></li>
     </ul>
     <ul class="nav nav-sidebar">
         <li><a href="">Nav item</a></li>

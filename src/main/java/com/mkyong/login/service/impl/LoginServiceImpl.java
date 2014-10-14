@@ -3,6 +3,7 @@ package com.mkyong.login.service.impl;
 import java.util.List;
 
 import com.mkyong.login.service.LoginService;
+import com.mkyong.util.DaoResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -36,18 +37,19 @@ public class LoginServiceImpl implements LoginService{
 
     @Override
     @Transactional
-    public void saveUser(Login login) {
-        loginDAO.saveUser(login);
+    public DaoResult saveUser(Login login) {
+        return loginDAO.saveUser(login);
     }
 
     @Override
     @Transactional
-    public void deleteUser(String userName) {
-         Login login=loginDAO.findById(userName);
+    public DaoResult deleteUser(String userName) {
+        /* Login login=loginDAO.findById(userName);
         if(login!=null)
         {
             loginDAO.delete(login);
-        }
+        }*/
+        return null;
     }
 
     @Override

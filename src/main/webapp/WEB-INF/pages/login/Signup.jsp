@@ -18,6 +18,11 @@
 </head>
 <body>
 <div class="container">
+    <c:if test="${not empty requestScope.errorMsg}">
+        <div class="alert alert-danger">
+            ${requestScope.errorMsg}
+        </div>
+    </c:if>
     <h1>Signup</h1>
 
     <form:form method="POST" commandName="signup" action="/signup.htm" cssClass="form" cssStyle="width: 30%">
@@ -39,7 +44,7 @@
 
         <div class="form-group">
             <label>Email Address</label>
-            <form:password path="email" cssClass="form-control"/>
+            <form:input path="email" cssClass="form-control"/>
         </div>
 
         <button type="submit" class="btn btn-primary">Signup</button>
