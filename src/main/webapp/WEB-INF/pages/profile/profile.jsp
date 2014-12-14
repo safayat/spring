@@ -26,7 +26,7 @@
             <jsp:include page="/WEB-INF/pages/common/menu.jsp"/>
         </div>
         <div class="col-md-9">
-            <form:form method="POST" commandName="profile" action="//updateProfile.htm" cssClass="form" cssStyle="width: 30%">
+            <form:form method="POST" commandName="profile" action="/updateProfile.htm" cssClass="form" cssStyle="width: 30%">
 <%--
 private int profileId;
   private String firstName;

@@ -8,12 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,8 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 @ComponentScan("com.mkyong.profile.service")
 public class ProfileController {
 
-/*@Autowired
-UserValidator loginValidator;*/
 
    @Autowired
     private ProfileService profileService;
@@ -39,7 +40,6 @@ UserValidator loginValidator;*/
     public String initForm(ModelMap map, HttpServletRequest request)
     {
         String id = (String)request.getParameter("profileId");
-        System.out.println("request id: " + id);
         if(!StringUtils.isNullOrEmpty(id)){
             Profile profile = profileService.getProfileById(Integer.parseInt(id));
             if(profile==null){
@@ -57,13 +57,11 @@ UserValidator loginValidator;*/
     public String processSubmit(@ModelAttribute("profile")Profile profile,
                                 BindingResult result,
                                 SessionStatus status,
-                                HttpServletRequest request)
+                                HttpServletRequest request,
+                                RedirectAttributes redirectAttributes)
     {
-       System.out.println(profile);
        DaoResult daoResult = profileService.updateProfile(profile);
-       System.out.println(daoResult);
-
-        return "profile/profile";
+       return "redirect:profile.htm?profileId=" + profile.getProfileId();
 
     }
 

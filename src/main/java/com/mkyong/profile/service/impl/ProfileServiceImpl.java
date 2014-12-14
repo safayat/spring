@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+
 
 import java.util.List;
 
@@ -18,6 +20,7 @@ import java.util.List;
  */
 
 @Service("profileService")
+@Transactional(readOnly = true)
 @Configuration
 @ComponentScan("com.mkyong.profile.dao")
 public class ProfileServiceImpl implements ProfileService {
@@ -31,9 +34,11 @@ public class ProfileServiceImpl implements ProfileService {
 
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public DaoResult updateProfile(Profile profile) {
+        System.out.println("TransactionSynchronizationManager.isActualTransactionActive():"+ TransactionSynchronizationManager.isActualTransactionActive());
         return profileDAO.updateProfile(profile);
+
     }
 
     @Override

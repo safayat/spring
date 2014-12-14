@@ -7,8 +7,9 @@ import java.io.Serializable;
  * Created by safayat on 4/24/14.
  */
 @Entity
-@Table(name = "login",uniqueConstraints = {
-        @UniqueConstraint(columnNames ="userName")
+@Table(name = "user",uniqueConstraints = {
+        @UniqueConstraint(columnNames ="userName"),
+        @UniqueConstraint(columnNames ="email")
 })
 public class Login implements Serializable{
 
