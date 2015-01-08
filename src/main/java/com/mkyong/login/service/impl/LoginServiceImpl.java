@@ -3,6 +3,7 @@ package com.mkyong.login.service.impl;
 import java.util.List;
 
 import com.mkyong.login.service.LoginService;
+import com.mkyong.profile.model.Profile;
 import com.mkyong.util.DaoResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -38,6 +39,9 @@ public class LoginServiceImpl implements LoginService{
     @Override
     @Transactional
     public DaoResult saveUser(Login login) {
+        Profile profile = new Profile();
+        profile.setLogin(login);
+        login.setProfile(profile);
         return loginDAO.saveUser(login);
     }
 
@@ -53,7 +57,12 @@ public class LoginServiceImpl implements LoginService{
     }
 
     @Override
+    public List<Login> getAllUsers() {
+        return loginDAO.getAll();
+    }
+
+    @Override
     public List<Login> findUsers(String user) {
-        return null;
+        return loginDAO.findUsers();
     }
 }

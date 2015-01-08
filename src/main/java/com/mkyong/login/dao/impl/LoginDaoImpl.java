@@ -48,7 +48,7 @@ public class LoginDaoImpl extends AbstractDaoImpl<Login,String> implements Login
 
     @Override
     public List<Login> findUsers() {
-        return (List<Login>)findByCriteria(null);
+        return null;
     }
 
     @Override

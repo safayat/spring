@@ -1,7 +1,11 @@
 package com.mkyong.profile.model;
 
+import com.mkyong.login.model.Login;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import org.hibernate.annotations.Parameter;
 import java.util.Date;
 
 /**
@@ -16,9 +20,22 @@ public class Profile implements Serializable{
     private String lastName;
     private String mobileNo;
     private Date dateOfBirth;
-  public Profile() {
-		// TODO Auto-generated constructor stub
-  }
+    private Login login;
+
+    public Profile() {
+        // TODO Auto-generated constructor stub
+    }
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @PrimaryKeyJoinColumn
+    public Login getLogin() {
+        return login;
+    }
+
+    public void setLogin(Login login) {
+        this.login = login;
+    }
+
 
     @Column(name = "dateOfBirth",nullable = true)
     public Date getDateOfBirth() {
@@ -54,7 +71,11 @@ public class Profile implements Serializable{
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
+    @GenericGenerator(name = "generator", strategy = "foreign",
+            parameters = @Parameter(name = "property", value = "login"))
     @Id
+    @GeneratedValue(generator = "generator")
     @Column(name = "profileId",unique = true,nullable = false)
     public int getProfileId() {
         return profileId;

@@ -27,14 +27,7 @@
         </div>
         <div class="col-md-9">
             <form:form method="POST" commandName="profile" action="/updateProfile.htm" cssClass="form" cssStyle="width: 30%">
-<%--
-private int profileId;
-  private String firstName;
-  private String lastName;
-  private String mobileNo;
-  private Date dateOfBirth;
 
---%>
                 <form:hidden path="profileId"/>
                 <div class="form-group">
                     <label>First Name</label>

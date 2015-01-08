@@ -13,8 +13,7 @@
     <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     <jsp:include page="/WEB-INF/pages/common/head.jsp" />
-    <jsp:include page="/WEB-INF/pages/common/header.jsp" />
-
+    <%--<jsp:include page="/WEB-INF/pages/common/header.jsp" />--%>
 </head>
 <body>
 User ${sessionScope.loginData.userName} logged in successfully. session worked.

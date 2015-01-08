@@ -16,4 +16,5 @@ public interface LoginService {
     DaoResult saveUser(Login login);
     DaoResult deleteUser(String userName);
     List<Login> findUsers(String user);
+    List<Login> getAllUsers();
 }

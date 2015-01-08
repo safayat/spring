@@ -1,5 +1,6 @@
 *.project
 *.iml
-.idea
+.idea/*
+.idea/workspace.xml
 target/
 

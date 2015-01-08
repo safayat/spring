@@ -12,7 +12,6 @@ import java.util.List;
 
 
 public abstract class AbstractDaoImpl<E, I extends Serializable> implements AbstractDAO<E,I> {
-
     private Class<E> entityClass;
 
     protected SessionFactory sessionFactory;
@@ -31,26 +30,6 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
     public E findById(I id) {
         return (E) getCurrentSession().get(entityClass, id);
     }
-
-/*
-    @Override
-    public void saveOrUpdate(E e) throws Exception{
-        Session session = getCurrentSession();
-        try
-        {
-            session.getTransaction().begin();
-            session.saveOrUpdate(e);
-            session.getTransaction().commit();
-
-        }catch (Exception ex){
-            session.getTransaction().rollback();
-            session.close();
-            throw new Exception(ex.getMessage());
-        }
-
-    }
-*/
-
     @Override
     public void saveOrUpdate(E e) throws Exception{
             getCurrentSession().saveOrUpdate(e);
@@ -67,6 +46,11 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
         Criteria criteria = getCurrentSession().createCriteria(entityClass);
         criteria.add(criterion);
         return criteria.list();
+    }
+
+    @Override
+    public List<E> getAll() {
+        return getCurrentSession().createQuery(" from " + entityClass.getSimpleName()).list();
     }
 
     @Override

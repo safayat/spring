@@ -1,8 +1,11 @@
 package com.mkyong.profile.controller;
 
+import com.mkyong.login.model.Login;
 import com.mkyong.profile.model.Profile;
 import com.mkyong.profile.service.ProfileService;
+import com.mkyong.util.ApplicationConstants;
 import com.mkyong.util.DaoResult;
+import com.mkyong.util.Utility;
 import com.mysql.jdbc.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -39,16 +42,19 @@ public class ProfileController {
     @RequestMapping(value = "/profile.htm", method = RequestMethod.GET)
     public String initForm(ModelMap map, HttpServletRequest request)
     {
+        if(!Utility.validateSession(request)){
+            return "redirect:login.htm";
+        }
+
         String id = (String)request.getParameter("profileId");
+        Login login = (Login) request.getSession().getAttribute(ApplicationConstants.LOGIN_DATA);
         if(!StringUtils.isNullOrEmpty(id)){
             Profile profile = profileService.getProfileById(Integer.parseInt(id));
-            if(profile==null){
-                profile = new Profile();
-                profile.setProfileId(Integer.parseInt(id));
-                profileService.updateProfile(profile);
+            if(profile.getProfileId() != login.getUserId()){
+                map.addAttribute("errorMsg","Authentication error");
+                return "common/error";
             }
             map.addAttribute("profile",profile);
-
         }
         return "profile/profile";
     }

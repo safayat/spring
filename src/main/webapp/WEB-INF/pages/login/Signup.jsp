@@ -13,11 +13,12 @@
     <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     <jsp:include page="/WEB-INF/pages/common/head.jsp" />
-    <jsp:include page="/WEB-INF/pages/common/header.jsp" />
 
 </head>
 <body>
-<div class="container">
+    <%--<jsp:include page="/WEB-INF/pages/common/header.jsp" />--%>
+
+<div class="container" style="width: 500px">
     <c:if test="${not empty requestScope.errorMsg}">
         <div class="alert alert-danger">
             ${requestScope.errorMsg}
@@ -25,16 +26,18 @@
     </c:if>
     <h1>Signup</h1>
 
-    <form:form method="POST" commandName="signup" action="/signup.htm" cssClass="form" cssStyle="width: 30%">
+    <form:form method="POST" commandName="signup" action="/signup.htm" cssClass="form">
 
         <div class="form-group">
             <label>UserName</label>
-            <form:input path="userName" cssClass="form-control col-md-2"/>
+            <form:input path="userName" cssClass="form-control"/>
+            <form:errors path="userName" cssClass="error"/>
         </div>
 
         <div class="form-group">
             <label>Password</label>
             <form:password path="password" cssClass="form-control"/>
+            <form:errors path="password" cssClass="error"/>
         </div>
 
         <div class="form-group">
@@ -44,7 +47,8 @@
 
         <div class="form-group">
             <label>Email Address</label>
-            <form:input path="email" cssClass="form-control"/>
+            <form:input path="email" cssClass="form-control" />
+            <form:errors path="email" cssClass="has-error"/>
         </div>
 
         <button type="submit" class="btn btn-primary">Signup</button>

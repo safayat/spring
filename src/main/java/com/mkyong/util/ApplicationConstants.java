@@ -5,4 +5,5 @@ package com.mkyong.util;
  */
 public class ApplicationConstants {
     public static final String LOGIN_DATA="loginData";
+    public static final String EMAIL_REGEX=".+@.+\\..+";
 }

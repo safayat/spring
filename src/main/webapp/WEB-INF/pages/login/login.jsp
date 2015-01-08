@@ -8,7 +8,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<jsp:include page="/WEB-INF/pages/common/head.jsp"/>
 <html>
 <head>
     <title>Login</title>
@@ -17,6 +16,8 @@
 
 <body>
 <div class="container">
+    <jsp:include page="/WEB-INF/pages/common/head.jsp"/>
+
     <form:form method="POST" commandName="login" action="/login.htm" cssClass="form-horizontal">
 
         <div class="form-group">
@@ -24,6 +25,7 @@
 
             <div class="col-sm-5">
                 <form:input path="userName" cssClass="form-control"/>
+                <form:errors path="userName" cssClass="has-error"/>
             </div>
         </div>
         <br>
@@ -33,10 +35,9 @@
 
             <div class="col-sm-5">
                 <form:password path="password" cssClass="form-control"/>
+                <form:errors path="password" cssClass="has-error"/>
             </div>
         </div>
-
-        <br>
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">

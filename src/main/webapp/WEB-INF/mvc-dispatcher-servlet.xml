@@ -27,10 +27,13 @@
 
 	<bean class="com.mkyong.customer.validator.CustomerValidator" />
     <bean class="com.mkyong.login.validator.LoginValidator" />
+    <bean class="com.mkyong.login.validator.SignupValidator" />
  	<!-- Register the Customer.properties -->
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
-		<property name="basename" value="com/mkyong/customer/properties/Customer" />
+		<property name="basename">
+            <value>messages</value>
+        </property>
 	</bean>
  	
 	<bean id="viewResolver"

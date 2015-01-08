@@ -15,4 +15,5 @@ public interface AbstractDAO<E,I extends Serializable> {
     void delete(E e) throws Exception;
     List<E> findByCriteria(Criterion criterion);
      E findByUniqueCriteria(Criterion criterion);
+    List<E> getAll();
 }

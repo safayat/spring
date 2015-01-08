@@ -1,5 +1,7 @@
 package com.mkyong.login.model;
 
+import com.mkyong.profile.model.Profile;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -16,7 +18,9 @@ public class Login implements Serializable{
     private Integer userId;
     private String userName;
     private String password;
+    private String confirmPassword;
     private String email;
+    private Profile profile;
     public Login() {
 		// TODO Auto-generated constructor stub
 	}
@@ -30,6 +34,15 @@ public class Login implements Serializable{
     @Column(name = "userId",unique = true,nullable = false)
     public Integer getUserId() {
         return userId;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "login", cascade = CascadeType.ALL)
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     public void setUserId(Integer userId) {
@@ -63,6 +76,15 @@ public class Login implements Serializable{
         this.email = email;
     }
 
+    @Transient
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
     @Override
     public String toString() {
         return "Login{" +
@@ -70,6 +92,7 @@ public class Login implements Serializable{
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", profile=" + profile +
                 '}';
     }
 }

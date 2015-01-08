@@ -1,13 +1,17 @@
 package com.mkyong.login.controller;
 
 import com.mkyong.login.service.LoginService;
+import com.mkyong.login.validator.SignupValidator;
+import com.mkyong.profile.model.Profile;
 import com.mkyong.util.ApplicationConstants;
 import com.mkyong.util.DaoResult;
+import com.mkyong.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,6 +27,7 @@ import org.springframework.web.context.support.HttpRequestHandlerServlet;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 //import javax.servlet.http.HttpServletRequest;
 
@@ -36,8 +41,10 @@ import javax.servlet.http.HttpServletRequest;
 @ComponentScan("com.mkyong.login.service")
 public class LoginController {
 
-@Autowired
-LoginValidator loginValidator;
+    @Autowired
+    LoginValidator loginValidator;
+    @Autowired
+    SignupValidator signupValidator;
 
    @Autowired
     private LoginService loginService;
@@ -55,8 +62,9 @@ LoginValidator loginValidator;
     @RequestMapping(value = "/signup.htm", method = RequestMethod.GET)
     public String initSignupForm(ModelMap map)
     {
-        if(map.get("signup")==null)
+        if(map.get("signup")==null){
             map.addAttribute("signup",new Login());
+        }
         return "login/Signup";
     }
 
@@ -76,63 +84,58 @@ LoginValidator loginValidator;
     {
     	
         loginValidator.validate(login, result);
-        System.out.println("in processSubmit");
         if (result.hasErrors()) {
             //if validator failed
-        	System.out.println("in processSubmit failured");
             return "login/login";
         } else {
             status.setComplete();
-            System.out.println("in processSubmit success");
             Login oldLogin=loginService.findByUserName(login.getUserName());
             if(oldLogin==null || oldLogin.getPassword().equals(login.getPassword())==false)
             {
-                System.out.println(" username did not match");
                 return "login/login";
             }
-            else
-            {
-                 System.out.println(oldLogin);
-            }
-            //form success
+
            request.getSession().setAttribute(ApplicationConstants.LOGIN_DATA,oldLogin);
            return "common/home";
         }
     }
-@RequestMapping(value = "/signup.htm", method = RequestMethod.POST)
-    public String processSignupSubmit(@ModelAttribute("login")Login login,
+
+    @RequestMapping(value = "/signup.htm", method = RequestMethod.POST)
+    public String processSignupSubmit(@ModelAttribute("signup")Login login,
                                 BindingResult result,
                                 SessionStatus status,
                                 HttpServletRequest request,
                                 RedirectAttributes redirectAttributes)
     {
         String target = "login/LoginSuccess";
-        loginValidator.validate(login, result);
+        signupValidator.validate(login, result);
         if (result.hasErrors()) {
-            //if validator failed
-        	System.out.println("in processSubmit failured");
-//            target = "signup";
-            target = "redirect:signup.htm";
+            target = "login/Signup";
         } else {
             status.setComplete();
-            System.out.println("in processSubmit success");
             DaoResult daoResult = loginService.saveUser(login);
             if(daoResult.isSuccessful()){
                 request.setAttribute("successMsg",daoResult.getMessage());
                 request.getSession().setAttribute(ApplicationConstants.LOGIN_DATA,login);
             }else{
-                redirectAttributes.addFlashAttribute("errorMsg",daoResult.getMessage());
-                redirectAttributes.addFlashAttribute("signup",login);
-//                target = "signup";
-                target = "redirect:signup.htm";
+                request.setAttribute("errorMsg",daoResult.getMessage());
+                target = "login/Signup";
             }
         }
-        System.out.println("target:" + target);
         return target;
     }
 
-
-
+    @RequestMapping(value = "/userList.htm", method = RequestMethod.GET)
+    public String getUserList(ModelMap map,HttpServletRequest request)
+    {
+        String target = "login/userList";
+        if(!Utility.validateSession(request)){
+            return "redirect:login.htm";
+        }
+        List userList = loginService.getAllUsers();
+        map.addAttribute("userList",userList);
+        return target;
+    }
 }
 
 
