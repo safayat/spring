@@ -7,6 +7,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import org.hibernate.annotations.Parameter;
 import java.util.Date;
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Created by safayat on 4/24/14.
@@ -28,6 +30,7 @@ public class Profile implements Serializable{
 
     @OneToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
+    @JsonBackReference
     public Login getLogin() {
         return login;
     }
@@ -38,6 +41,7 @@ public class Profile implements Serializable{
 
 
     @Column(name = "dateOfBirth",nullable = true)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     public Date getDateOfBirth() {
         return dateOfBirth;
     }

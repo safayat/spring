@@ -1,8 +1,11 @@
 package com.mkyong.login.controller;
 
+import com.google.gson.Gson;
 import com.mkyong.login.service.LoginService;
 import com.mkyong.login.validator.SignupValidator;
 import com.mkyong.profile.model.Profile;
+import com.mkyong.profile.service.ProfileService;
+import com.mkyong.profile.service.impl.ProfileServiceImpl;
 import com.mkyong.util.ApplicationConstants;
 import com.mkyong.util.DaoResult;
 import com.mkyong.util.Utility;
@@ -10,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -27,6 +33,8 @@ import org.springframework.web.context.support.HttpRequestHandlerServlet;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 //import javax.servlet.http.HttpServletRequest;
@@ -49,17 +57,17 @@ public class LoginController {
    @Autowired
     private LoginService loginService;
 
-    @RequestMapping(value = "/login.htm", method = RequestMethod.GET)
-    public String initForm(ModelMap map,HttpServletRequest request)
+    @RequestMapping(value = "/login.web", method = RequestMethod.GET)
+    public String initForm(ModelMap map, Principal principal)
     {
-        if(request.getSession().getAttribute(ApplicationConstants.LOGIN_DATA)!=null){
+        if(principal != null){
             return "common/home";
         }
         map.addAttribute("login",new Login());
-        return "login/login";
+        return ApplicationConstants.LOGIN_PAGE;
     }
 
-    @RequestMapping(value = "/signup.htm", method = RequestMethod.GET)
+    @RequestMapping(value = "/signup.web", method = RequestMethod.GET)
     public String initSignupForm(ModelMap map)
     {
         if(map.get("signup")==null){
@@ -68,39 +76,7 @@ public class LoginController {
         return "login/Signup";
     }
 
-    @RequestMapping(value = "/logout.htm", method = RequestMethod.GET)
-    public String logout(ModelMap map,HttpServletRequest request)
-    {
-        request.getSession().removeAttribute(ApplicationConstants.LOGIN_DATA);
-        map.addAttribute("login",new Login());
-        return "login/login";
-    }
-
-    @RequestMapping(value = "/login.htm", method = RequestMethod.POST)
-    public String processSubmit(@ModelAttribute("login")Login login,
-                                BindingResult result,
-                                SessionStatus status,
-                                HttpServletRequest request)
-    {
-    	
-        loginValidator.validate(login, result);
-        if (result.hasErrors()) {
-            //if validator failed
-            return "login/login";
-        } else {
-            status.setComplete();
-            Login oldLogin=loginService.findByUserName(login.getUserName());
-            if(oldLogin==null || oldLogin.getPassword().equals(login.getPassword())==false)
-            {
-                return "login/login";
-            }
-
-           request.getSession().setAttribute(ApplicationConstants.LOGIN_DATA,oldLogin);
-           return "common/home";
-        }
-    }
-
-    @RequestMapping(value = "/signup.htm", method = RequestMethod.POST)
+    @RequestMapping(value = "/signup.web", method = RequestMethod.POST)
     public String processSignupSubmit(@ModelAttribute("signup")Login login,
                                 BindingResult result,
                                 SessionStatus status,
@@ -108,15 +84,17 @@ public class LoginController {
                                 RedirectAttributes redirectAttributes)
     {
         String target = "login/LoginSuccess";
+        System.out.println("login :" + login);
         signupValidator.validate(login, result);
+        login.setPassword(new BCryptPasswordEncoder().encode(login.getPassword()));
         if (result.hasErrors()) {
             target = "login/Signup";
         } else {
             status.setComplete();
             DaoResult daoResult = loginService.saveUser(login);
             if(daoResult.isSuccessful()){
-                request.setAttribute("successMsg",daoResult.getMessage());
-                request.getSession().setAttribute(ApplicationConstants.LOGIN_DATA,login);
+                request.setAttribute("successMsg", daoResult.getMessage());
+                target = "redirect:login.web";
             }else{
                 request.setAttribute("errorMsg",daoResult.getMessage());
                 target = "login/Signup";
@@ -124,18 +102,32 @@ public class LoginController {
         }
         return target;
     }
-
-    @RequestMapping(value = "/userList.htm", method = RequestMethod.GET)
-    public String getUserList(ModelMap map,HttpServletRequest request)
+    @RequestMapping(value = "/private/getUserData.web",
+            method = RequestMethod.GET,
+            produces = "application/json")
+    public @ResponseBody
+    ArrayList getUserData()
     {
-        String target = "login/userList";
-        if(!Utility.validateSession(request)){
-            return "redirect:login.htm";
-        }
-        List userList = loginService.getAllUsers();
-        map.addAttribute("userList",userList);
-        return target;
+        return (ArrayList)loginService.getAllUsers();
     }
+
+    @RequestMapping(value = "/private/userData.web",
+            method = RequestMethod.GET)
+    public String userList()
+    {
+        return "login/userList";
+    }
+
+    @RequestMapping(value = "/private/home.web",
+            method = RequestMethod.GET)
+    public String home(HttpServletRequest request,Principal principal)
+    {
+        Gson gson = new Gson();
+        Login login = gson.fromJson(principal.getName(), Login.class);
+        return "common/home";
+    }
+
+
 }
 
 

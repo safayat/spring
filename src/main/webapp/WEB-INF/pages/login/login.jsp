@@ -18,14 +18,14 @@
 <div class="container">
     <jsp:include page="/WEB-INF/pages/common/head.jsp"/>
 
-    <form:form method="POST" commandName="login" action="/login.htm" cssClass="form-horizontal">
+    <form:form method="POST" commandName="login" action="/j_spring_security_check" cssClass="form-horizontal">
 
         <div class="form-group">
             <label class="col-sm-2 control-label">UserName</label>
 
             <div class="col-sm-5">
-                <form:input path="userName" cssClass="form-control"/>
-                <form:errors path="userName" cssClass="has-error"/>
+                <form:input path="username" cssClass="form-control"/>
+                <form:errors path="username" cssClass="has-error"/>
             </div>
         </div>
         <br>

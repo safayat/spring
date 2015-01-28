@@ -1,13 +1,20 @@
 package com.mkyong.login.service.impl;
 
-import java.util.List;
+import java.util.*;
 
 import com.mkyong.login.service.LoginService;
 import com.mkyong.profile.model.Profile;
 import com.mkyong.util.DaoResult;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +29,7 @@ import com.mkyong.login.model.Login;
 @Transactional(readOnly = true)
 @Configuration
 @ComponentScan("com.mkyong.login.dao")
-public class LoginServiceImpl implements LoginService{
+public class LoginServiceImpl implements LoginService,UserDetailsService{
 
     @Autowired
     private LoginDAO loginDAO;
@@ -32,8 +39,8 @@ public class LoginServiceImpl implements LoginService{
     }
 
     @Override
-    public Login findByUserName(String userName) {
-        return loginDAO.findUserByUserName(userName);
+    public Login findByUserName(String username) {
+        return loginDAO.findUserByUserName(username);
     }
 
     @Override
@@ -47,12 +54,7 @@ public class LoginServiceImpl implements LoginService{
 
     @Override
     @Transactional
-    public DaoResult deleteUser(String userName) {
-        /* Login login=loginDAO.findById(userName);
-        if(login!=null)
-        {
-            loginDAO.delete(login);
-        }*/
+    public DaoResult deleteUser(String username) {
         return null;
     }
 
@@ -65,4 +67,24 @@ public class LoginServiceImpl implements LoginService{
     public List<Login> findUsers(String user) {
         return loginDAO.findUsers();
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Login login = loginDAO.findUserByUserName(username);
+        System.out.println("login:"+login);
+        Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
+        setAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
+        List <GrantedAuthority> authorities = new ArrayList<>(setAuths);
+        ObjectMapper mapper = new ObjectMapper();
+        String loginInfo = null;
+        try{
+            loginInfo = mapper.writeValueAsString(login);
+        }catch (Exception e){
+
+        }
+        UserDetails userDetails = new User(loginInfo, login.getPassword(), true, true, true, true, authorities);
+        return userDetails;
+    }
+
+
 }

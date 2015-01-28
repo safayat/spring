@@ -26,12 +26,12 @@
     </c:if>
     <h1>Signup</h1>
 
-    <form:form method="POST" commandName="signup" action="/signup.htm" cssClass="form">
+    <form:form method="POST" commandName="signup" action="/signup.web" cssClass="form">
 
         <div class="form-group">
             <label>UserName</label>
-            <form:input path="userName" cssClass="form-control"/>
-            <form:errors path="userName" cssClass="error"/>
+            <form:input path="username" cssClass="form-control"/>
+            <form:errors path="username" cssClass="error"/>
         </div>
 
         <div class="form-group">
@@ -42,7 +42,7 @@
 
         <div class="form-group">
             <label>Confirm Password</label>
-            <input type="password" class="form-control" id="confirmPassword"/>
+            <form:password path="confirmPassword" class="form-control" />
         </div>
 
         <div class="form-group">

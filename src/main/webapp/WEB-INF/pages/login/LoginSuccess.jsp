@@ -16,6 +16,6 @@
     <%--<jsp:include page="/WEB-INF/pages/common/header.jsp" />--%>
 </head>
 <body>
-User ${sessionScope.loginData.userName} logged in successfully. session worked.
+User ${sessionScope.loginData.username} logged in successfully. session worked.
 </body>
 </html>

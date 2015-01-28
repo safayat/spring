@@ -2,6 +2,7 @@ package com.mkyong.common.dao.impl;
 
 import com.mkyong.common.dao.AbstractDAO;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
@@ -60,6 +61,7 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
         criteria.add(criterion);
         return (E) criteria.uniqueResult();
     }
+
 
     public void setEntityClass(Class<E> entityClass) {
         this.entityClass = entityClass;

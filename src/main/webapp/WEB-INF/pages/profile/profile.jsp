@@ -26,7 +26,7 @@
             <jsp:include page="/WEB-INF/pages/common/menu.jsp"/>
         </div>
         <div class="col-md-9">
-            <form:form method="POST" commandName="profile" action="/updateProfile.htm" cssClass="form" cssStyle="width: 30%">
+            <form:form method="POST" commandName="profile" action="/private/updateProfile.web" cssClass="form" cssStyle="width: 30%">
 
                 <form:hidden path="profileId"/>
                 <div class="form-group">
@@ -41,7 +41,7 @@
 
                 <div class="form-group">
                     <label>Date Of Birth</label>
-                    <form:input  path="dateOfBirth" class="form-control"/>
+                    <form:input path="dateOfBirth" class="form-control"/>
                 </div>
 
                 <div class="form-group">

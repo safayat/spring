@@ -4,19 +4,20 @@ import com.mkyong.profile.model.Profile;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 
 /**
  * Created by safayat on 4/24/14.
  */
 @Entity
 @Table(name = "user",uniqueConstraints = {
-        @UniqueConstraint(columnNames ="userName"),
+        @UniqueConstraint(columnNames ="username"),
         @UniqueConstraint(columnNames ="email")
 })
 public class Login implements Serializable{
 
     private Integer userId;
-    private String userName;
+    private String username;
     private String password;
     private String confirmPassword;
     private String email;
@@ -25,8 +26,8 @@ public class Login implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
     
-    public Login(String userName) {
-        this.userName = userName;
+    public Login(String username) {
+        this.username = username;
     }
 
     @Id
@@ -37,6 +38,7 @@ public class Login implements Serializable{
     }
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "login", cascade = CascadeType.ALL)
+    @JsonManagedReference
     public Profile getProfile() {
         return profile;
     }
@@ -58,13 +60,13 @@ public class Login implements Serializable{
         this.password = password;
     }
 
-    @Column(name = "userName",unique = true,nullable = false,length =20)
-    public String getUserName() {
-        return userName;
+    @Column(name = "username",unique = true,nullable = false,length =20)
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Column(name = "email",unique = true,nullable = false,length =128)
@@ -89,8 +91,9 @@ public class Login implements Serializable{
     public String toString() {
         return "Login{" +
                 "userId=" + userId +
-                ", userName='" + userName + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
                 ", email='" + email + '\'' +
                 ", profile=" + profile +
                 '}';

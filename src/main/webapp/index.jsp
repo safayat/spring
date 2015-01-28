@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%System.out.print("in index jsp");%>
-<jsp:forward page="/login.htm" />
+<jsp:forward page="/login.web" />
 <html>
 <head>
     <title></title>

@@ -28,13 +28,13 @@ public class LoginDaoImpl extends AbstractDaoImpl<Login,String> implements Login
         try{
             Login oldLogin = (Login) findByUniqueCriteria(
                     Restrictions.or(
-                            Restrictions.eq("userName", login.getUserName())
+                            Restrictions.eq("username", login.getUsername())
                             , Restrictions.eq("email", login.getEmail())));
             if(oldLogin==null){
                 saveOrUpdate(login);
                 daoResult.setValues(true, "User saved successfully", DaoResult.DONE);
             }else{
-                if(oldLogin.getUserName().equals(login.getUserName())){
+                if(oldLogin.getUsername().equals(login.getUsername())){
                     daoResult.setValues(false,"Username already exists", DaoResult.VALIDATION_ERROR);
                 }else{
                     daoResult.setValues(false,"Email already exists", DaoResult.VALIDATION_ERROR);
@@ -52,7 +52,11 @@ public class LoginDaoImpl extends AbstractDaoImpl<Login,String> implements Login
     }
 
     @Override
-    public Login findUserByUserName(String userName) {
-       return (Login)findByUniqueCriteria(Restrictions.eq("userName",userName));
+    public Login findUserByUserName(String username) {
+       return (Login)findByUniqueCriteria(Restrictions.eq("username",username));
     }
+
+
+
+
 }

@@ -18,10 +18,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 
 //import javax.servlet.http.HttpServletRequest;
 
@@ -39,37 +41,31 @@ public class ProfileController {
    @Autowired
     private ProfileService profileService;
 
-    @RequestMapping(value = "/profile.htm", method = RequestMethod.GET)
+    @RequestMapping(value = "/private/profile.web", method = RequestMethod.GET)
     public String initForm(ModelMap map, HttpServletRequest request)
     {
-        if(!Utility.validateSession(request)){
-            return "redirect:login.htm";
+        Integer id = (Integer)request.getSession().getAttribute("LOGIN_ID");
+        System.out.println("id:" + id);
+        Profile profile = profileService.getProfileById(id);
+        if(profile == null){
+            map.addAttribute("errorMsg","Authentication error");
+            return "common/error";
         }
-
-        String id = (String)request.getParameter("profileId");
-        Login login = (Login) request.getSession().getAttribute(ApplicationConstants.LOGIN_DATA);
-        if(!StringUtils.isNullOrEmpty(id)){
-            Profile profile = profileService.getProfileById(Integer.parseInt(id));
-            if(profile.getProfileId() != login.getUserId()){
-                map.addAttribute("errorMsg","Authentication error");
-                return "common/error";
-            }
-            map.addAttribute("profile",profile);
-        }
+        map.addAttribute("profile",profile);
         return "profile/profile";
     }
 
-    @RequestMapping(value = "/updateProfile.htm", method = RequestMethod.POST)
+    @RequestMapping(value = "/private/updateProfile.web", method = RequestMethod.POST)
     public String processSubmit(@ModelAttribute("profile")Profile profile,
-                                BindingResult result,
-                                SessionStatus status,
                                 HttpServletRequest request,
                                 RedirectAttributes redirectAttributes)
     {
-       DaoResult daoResult = profileService.updateProfile(profile);
-       return "redirect:profile.htm?profileId=" + profile.getProfileId();
+        DaoResult daoResult = profileService.updateProfile(profile);
+        return "redirect:profile.web?profileId=" + profile.getProfileId();
 
     }
+
+
 
 
 

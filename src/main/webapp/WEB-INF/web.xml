@@ -14,12 +14,15 @@
   
   <servlet-mapping>
  	<servlet-name>mvc-dispatcher</servlet-name>
-    <url-pattern>*.htm</url-pattern>
+    <url-pattern>*.web</url-pattern>
   </servlet-mapping>
 
   <context-param>
 	<param-name>contextConfigLocation</param-name>
-	<param-value>/WEB-INF/mvc-dispatcher-servlet.xml</param-value>
+	<param-value>
+        /WEB-INF/mvc-dispatcher-servlet.xml,
+        /WEB-INF/spring-security.xml
+    </param-value>
   </context-param>
   
   <listener>
@@ -43,16 +46,26 @@
         <filter-name>openSessionInViewFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-  
-  <!--<error-page>
-	<error-code>404</error-code>
-	<location>/WEB-INF/pages/404.jsp</location>
-  </error-page>
+    <!-- Spring Security -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
 
-  <error-page>
-	<exception-type>java.lang.Exception</exception-type>
-	<location>/WEB-INF/pages/404.jsp</location>
-  </error-page>-->
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--<error-page>
+      <error-code>404</error-code>
+      <location>/WEB-INF/pages/404.jsp</location>
+    </error-page>
+
+    <error-page>
+      <exception-type>java.lang.Exception</exception-type>
+      <location>/WEB-INF/pages/404.jsp</location>
+    </error-page>-->
     
    <welcome-file-list>
        <welcome-file>index.jsp</welcome-file>

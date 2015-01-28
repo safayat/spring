@@ -11,6 +11,7 @@
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="Dashboard%20Template%20for%20Bootstrap_files/ie10-viewport-bug-workaround.js"></script>--%>
 <script src="js/jquery.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
 <script src="js/bootstrap/bootstrap.min.js"></script>
 <%--<script src="js/bootstrap/docs.js"></script>--%>
 
