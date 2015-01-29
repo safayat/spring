@@ -17,11 +17,12 @@
     <context:annotation-config />
     <mvc:annotation-driven />
     <context:component-scan base-package="com.mkyong.login.controller" />
-    <context:component-scan base-package="com.mkyong.login.service.impl" />
-    <context:component-scan base-package="com.mkyong.login.dao.impl" />
+    <context:component-scan base-package="com.mkyong.login.service" />
+    <context:component-scan base-package="com.mkyong.login.dao" />
     <context:component-scan base-package="com.mkyong.profile.controller" />
-    <context:component-scan base-package="com.mkyong.profile.service.impl" />
-    <context:component-scan base-package="com.mkyong.profile.dao.impl" />
+    <context:component-scan base-package="com.mkyong.profile.service" />
+    <context:component-scan base-package="com.mkyong.profile.dao" />
+    <context:component-scan base-package="com.mkyong.common.dao" />
 
     <bean class="com.mkyong.login.validator.LoginValidator" />
     <bean class="com.mkyong.login.validator.SignupValidator" />
@@ -71,10 +72,9 @@
 
     </bean>
 
-    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager" >
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
-
 
 </beans>

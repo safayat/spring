@@ -5,11 +5,11 @@ import com.mkyong.login.service.LoginService;
 import com.mkyong.login.validator.SignupValidator;
 import com.mkyong.profile.model.Profile;
 import com.mkyong.profile.service.ProfileService;
-import com.mkyong.profile.service.impl.ProfileServiceImpl;
 import com.mkyong.util.ApplicationConstants;
 import com.mkyong.util.DaoResult;
 import com.mkyong.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpRequest;
@@ -54,7 +54,7 @@ public class LoginController {
     @Autowired
     SignupValidator signupValidator;
 
-   @Autowired
+    @Autowired
     private LoginService loginService;
 
     @RequestMapping(value = "/login.web", method = RequestMethod.GET)
@@ -122,6 +122,7 @@ public class LoginController {
             method = RequestMethod.GET)
     public String home(HttpServletRequest request,Principal principal)
     {
+        System.out.println("principal info:" + principal.getName());
         Gson gson = new Gson();
         Login login = gson.fromJson(principal.getName(), Login.class);
         return "common/home";

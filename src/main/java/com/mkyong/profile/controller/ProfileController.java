@@ -8,6 +8,7 @@ import com.mkyong.util.DaoResult;
 import com.mkyong.util.Utility;
 import com.mysql.jdbc.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
@@ -38,7 +39,8 @@ import java.util.ArrayList;
 public class ProfileController {
 
 
-   @Autowired
+    @Qualifier("profileService")
+    @Autowired
     private ProfileService profileService;
 
     @RequestMapping(value = "/private/profile.web", method = RequestMethod.GET)
