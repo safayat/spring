@@ -18,6 +18,7 @@ public class ProfileDAO extends CommonDaoImpl<Profile, Integer> {
 
     protected ProfileDAO(){
         //super(Profile.class);
+        setEntityClass(Profile.class);
     }
 
     public DaoResult updateProfile(Profile profile) {

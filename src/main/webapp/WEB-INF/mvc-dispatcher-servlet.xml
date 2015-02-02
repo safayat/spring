@@ -26,6 +26,9 @@
 
     <bean class="com.mkyong.login.validator.LoginValidator" />
     <bean class="com.mkyong.login.validator.SignupValidator" />
+    <bean class="com.mkyong.login.service.LoginService" />
+    <bean class="com.mkyong.profile.service.ProfileService" name="profileServiceNew" />
+    <bean class="com.mkyong.profile.dao.ProfileDAO" name="profileDAOnew" />
  	<!-- Register the Customer.properties -->
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">

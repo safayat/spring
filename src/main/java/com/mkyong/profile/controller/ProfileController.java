@@ -1,5 +1,6 @@
 package com.mkyong.profile.controller;
 
+import com.google.gson.Gson;
 import com.mkyong.login.model.Login;
 import com.mkyong.profile.model.Profile;
 import com.mkyong.profile.service.ProfileService;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.ArrayList;
 
 //import javax.servlet.http.HttpServletRequest;
@@ -33,22 +35,19 @@ import java.util.ArrayList;
  */
 
 @Controller
-
-@Configuration
 @ComponentScan("com.mkyong.profile.service")
 public class ProfileController {
 
 
-    @Qualifier("profileService")
     @Autowired
+    @Qualifier(value = "profileServiceNew")
     private ProfileService profileService;
 
     @RequestMapping(value = "/private/profile.web", method = RequestMethod.GET)
-    public String initForm(ModelMap map, HttpServletRequest request)
+    public String initForm(ModelMap map, Principal principal)
     {
-        Integer id = (Integer)request.getSession().getAttribute("LOGIN_ID");
-        System.out.println("id:" + id);
-        Profile profile = profileService.getProfileById(id);
+        System.out.println("principal.getName():"+principal.getName());
+        Profile profile = profileService.getProfileById(new Gson().fromJson(principal.getName(), Login.class).getUserId());
         if(profile == null){
             map.addAttribute("errorMsg","Authentication error");
             return "common/error";

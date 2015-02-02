@@ -20,8 +20,6 @@ import java.util.List;
  * Created by safayat on 4/25/14.
  */
 
-@Service("profileService")
-@Qualifier("profileService")
 
 @Transactional(readOnly = true)
 @Configuration
@@ -29,6 +27,7 @@ import java.util.List;
 public class ProfileService {
 
     @Autowired
+    @Qualifier(value = "profileDAOnew")
     private ProfileDAO profileDAO;
 
     public ProfileService() {

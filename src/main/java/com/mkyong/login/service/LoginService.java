@@ -24,16 +24,14 @@ import com.mkyong.login.model.Login;
 /**
  * Created by safayat on 4/25/14.
  */
-@Service(value = "loginService")
-@Transactional(readOnly = true)
-@Configuration
-@ComponentScan("com.mkyong.login.dao")
-public class LoginService implements UserDetailsService{
 
-    @Autowired
+@Transactional(readOnly = true)
+public class LoginService{
+
     private LoginDAO loginDAO;
 
     public LoginService() {
+        loginDAO = new LoginDAO();
     }
 
     public Login findByUserName(String username) {
@@ -55,27 +53,6 @@ public class LoginService implements UserDetailsService{
 
     public List<Login> getAllUsers() {
         return loginDAO.getAll();
-    }
-
-    public List<Login> findUsers(String user) {
-        return loginDAO.findUsers();
-    }
-
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Login login = loginDAO.findUserByUserName(username);
-        System.out.println("login:"+login);
-        Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
-        setAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
-        List <GrantedAuthority> authorities = new ArrayList<>(setAuths);
-        ObjectMapper mapper = new ObjectMapper();
-        String loginInfo = null;
-        try{
-            loginInfo = mapper.writeValueAsString(login);
-        }catch (Exception e){
-
-        }
-        UserDetails userDetails = new User(loginInfo, login.getPassword(), true, true, true, true, authorities);
-        return userDetails;
     }
 
 

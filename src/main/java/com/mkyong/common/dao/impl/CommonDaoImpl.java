@@ -55,6 +55,12 @@ public abstract class CommonDaoImpl<E, I extends Serializable> {
     public List<E> getByHql(String hql) {
         return getCurrentSession().createQuery(hql).list();
     }
+   public E getUniqueByHql(String hql) throws Exception{
+        List<E> data = getCurrentSession().
+                            createQuery(hql).
+                                    list();
+        return data.size()==1? (E)data.get(0):null;
+    }
 
      public E findByUniqueCriteria(Criterion criterion) {
 

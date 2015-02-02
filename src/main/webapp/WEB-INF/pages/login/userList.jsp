@@ -16,7 +16,7 @@
     <%--<jsp:include page="/WEB-INF/pages/common/header.jsp" />--%>
 </head>
 
-<script>
+<script type="text/javascript">
     var app = angular.module('myApp', []);
     function MyController($scope, $http){
         $http({method: 'GET', url: 'getUserData.web'}).
@@ -49,7 +49,7 @@
                     <td>{{item.profile.firstname}}</td>
                     <td>{{item.profile.lastName}}</td>
                     <td>{{item.email}}</td>
-                    <td>{{item.profile.dateOfBirth}}</td>
+                    <td>{{item.profile.dateOfBirth | date:'yyyy-MM-dd'}}</td>
                 </tr>
             </tbody>
         </table>

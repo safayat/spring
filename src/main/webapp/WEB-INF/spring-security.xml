@@ -24,12 +24,12 @@
     </http>
 
     <authentication-manager>
-        <authentication-provider user-service-ref="loginService">
+        <authentication-provider user-service-ref="loginAuthenticationService">
             <password-encoder ref="encoder" />
         </authentication-provider>
     </authentication-manager>
 
-    <beans:bean id="loginService" class="com.mkyong.login.service.LoginService">
+    <beans:bean id="loginAuthenticationService" class="com.mkyong.login.service.LoginAuthenticationService">
     </beans:bean>
     <beans:bean id="encoder"
         class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">

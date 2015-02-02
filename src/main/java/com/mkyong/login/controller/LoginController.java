@@ -46,16 +46,18 @@ import java.util.List;
 @Controller
 
 @Configuration
-@ComponentScan("com.mkyong.login.service")
 public class LoginController {
+
+    LoginService loginService;
+    public LoginController() {
+        loginService = new LoginService();
+    }
 
     @Autowired
     LoginValidator loginValidator;
     @Autowired
     SignupValidator signupValidator;
 
-    @Autowired
-    private LoginService loginService;
 
     @RequestMapping(value = "/login.web", method = RequestMethod.GET)
     public String initForm(ModelMap map, Principal principal)
@@ -108,6 +110,7 @@ public class LoginController {
     public @ResponseBody
     ArrayList getUserData()
     {
+        System.out.println("users: " + (ArrayList)loginService.getAllUsers());
         return (ArrayList)loginService.getAllUsers();
     }
 
@@ -117,6 +120,12 @@ public class LoginController {
     {
         return "login/userList";
     }
+    @RequestMapping(value = "/theme.web",
+            method = RequestMethod.GET)
+    public String getTheme()
+    {
+        return "login/theme";
+    }
 
     @RequestMapping(value = "/private/home.web",
             method = RequestMethod.GET)
@@ -125,6 +134,7 @@ public class LoginController {
         System.out.println("principal info:" + principal.getName());
         Gson gson = new Gson();
         Login login = gson.fromJson(principal.getName(), Login.class);
+        System.out.println("login:" + login);
         return "common/home";
     }
 

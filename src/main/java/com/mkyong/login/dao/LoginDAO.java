@@ -15,11 +15,11 @@ import java.util.List;
 /**
  * Created by safayat on 4/25/14.
  */
-@Repository
 public class LoginDAO extends CommonDaoImpl<Login,Integer>{
 
-    protected LoginDAO(){
+    public LoginDAO(){
         //super(Login.class);
+        setEntityClass(Login.class);
     }
 
     public DaoResult saveUser(Login login) {
@@ -43,10 +43,6 @@ public class LoginDAO extends CommonDaoImpl<Login,Integer>{
             daoResult.setValues(false, e.getMessage(), DaoResult.EXCEPTION);
         }
         return  daoResult;
-    }
-
-    public List<Login> findUsers() {
-        return null;
     }
 
     public Login findUserByUserName(String username) {
