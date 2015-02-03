@@ -17,6 +17,7 @@ public class Attendance {
     private int studentId;
     private boolean isPresent;
     private int classId;
+    private int attId;
 
     @Override
     public String toString() {
@@ -26,6 +27,17 @@ public class Attendance {
                 ", isPresent=" + isPresent +
                 ", classId=" + classId +
                 '}';
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "att_id",unique = true,nullable = false)
+    public int getAttId() {
+        return attId;
+    }
+
+    public void setAttId(int attId) {
+        this.attId = attId;
     }
 
     @Column(name = "att_date",nullable = false)

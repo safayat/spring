@@ -26,36 +26,14 @@
     </c:if>
     <h1>Signup</h1>
 
-    <form:form method="POST" commandName="signup" action="/signup.web" cssClass="form">
+    <form:form method="POST" commandName="teacher" action="/signup.web" cssClass="form">
 
-        <div class="form-group">
-            <label>UserName</label>
-            <form:input path="login.username" cssClass="form-control"/>
-            <form:errors path="login.username" cssClass="error"/>
-        </div>
-
-        <div class="form-group">
-            <label>Password</label>
-            <form:password path="login.password" cssClass="form-control"/>
-            <form:errors path="login.password" cssClass="error"/>
-        </div>
-
-        <div class="form-group">
-            <label>Confirm Password</label>
-            <form:password path="login.confirmPassword" class="form-control" />
-        </div>
-
-        <div class="form-group">
-            <label>Email Address</label>
-            <form:input path="login.email" cssClass="form-control" />
-            <form:errors path="login.email" cssClass="has-error"/>
-        </div>
-
-        <form:select path="userType">
+        <%--<form:select path="userType">
             <form:option value="teacher">Teacher</form:option>
             <form:option value="student">Student</form:option>
             <form:option value="parent">Parent</form:option>
-        </form:select>
+        </form:select>--%>
+        <jsp:include page="/WEB-INF/pages/user/loginInfo.jsp" />
 
         <div class="form-group">
             <label>Designation</label>

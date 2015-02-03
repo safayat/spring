@@ -46,12 +46,11 @@ import java.util.List;
 @Controller
 
 @Configuration
+@ComponentScan("com.mkyong.login.service")
 public class LoginController {
 
+    @Autowired
     LoginService loginService;
-    public LoginController() {
-        loginService = new LoginService();
-    }
 
     @Autowired
     LoginValidator loginValidator;
@@ -131,7 +130,6 @@ public class LoginController {
             method = RequestMethod.GET)
     public String home(HttpServletRequest request,Principal principal)
     {
-        System.out.println("principal info:" + principal.getName());
         Gson gson = new Gson();
         Login login = gson.fromJson(principal.getName(), Login.class);
         System.out.println("login:" + login);

@@ -20,14 +20,13 @@ import java.util.List;
  * Created by safayat on 4/25/14.
  */
 
-
+@Service
 @Transactional(readOnly = true)
 @Configuration
 @ComponentScan("com.mkyong.profile.dao")
 public class ProfileService {
 
     @Autowired
-    @Qualifier(value = "profileDAOnew")
     private ProfileDAO profileDAO;
 
     public ProfileService() {

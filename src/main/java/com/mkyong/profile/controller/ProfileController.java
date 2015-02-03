@@ -40,7 +40,6 @@ public class ProfileController {
 
 
     @Autowired
-    @Qualifier(value = "profileServiceNew")
     private ProfileService profileService;
 
     @RequestMapping(value = "/private/profile.web", method = RequestMethod.GET)

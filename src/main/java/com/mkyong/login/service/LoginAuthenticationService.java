@@ -28,11 +28,8 @@ import java.util.Set;
 @Configuration
 public class LoginAuthenticationService implements UserDetailsService{
 
+    @Autowired
     private LoginDAO loginDAO;
-
-    public LoginAuthenticationService() {
-        loginDAO = new LoginDAO();
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

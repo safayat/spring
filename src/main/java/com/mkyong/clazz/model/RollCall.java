@@ -16,6 +16,18 @@ public class RollCall {
     private Date rollCallDate;
     private int techaerId;
     private int classId;
+    private int rcId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "rc_id",unique = true,nullable = false)
+    public int getRcId() {
+        return rcId;
+    }
+
+    public void setRcId(int rcId) {
+        this.rcId = rcId;
+    }
 
     @Column(name = "rc_date",nullable = false)
     public Date getRollCallDate() {

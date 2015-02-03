@@ -24,15 +24,13 @@ import com.mkyong.login.model.Login;
 /**
  * Created by safayat on 4/25/14.
  */
-
+@ComponentScan("com.mkyong.login.dao")
+@Service
 @Transactional(readOnly = true)
 public class LoginService{
 
+    @Autowired
     private LoginDAO loginDAO;
-
-    public LoginService() {
-        loginDAO = new LoginDAO();
-    }
 
     public Login findByUserName(String username) {
         return loginDAO.findUserByUserName(username);

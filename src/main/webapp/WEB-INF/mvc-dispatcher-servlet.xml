@@ -23,12 +23,11 @@
     <context:component-scan base-package="com.mkyong.profile.service" />
     <context:component-scan base-package="com.mkyong.profile.dao" />
     <context:component-scan base-package="com.mkyong.common.dao" />
+    <context:component-scan base-package="com.mkyong.user.controller" />
+
 
     <bean class="com.mkyong.login.validator.LoginValidator" />
     <bean class="com.mkyong.login.validator.SignupValidator" />
-    <bean class="com.mkyong.login.service.LoginService" />
-    <bean class="com.mkyong.profile.service.ProfileService" name="profileServiceNew" />
-    <bean class="com.mkyong.profile.dao.ProfileDAO" name="profileDAOnew" />
  	<!-- Register the Customer.properties -->
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">

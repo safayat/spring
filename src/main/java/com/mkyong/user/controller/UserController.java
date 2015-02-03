@@ -40,10 +40,20 @@ import java.util.ArrayList;
 public class UserController {
 
     @RequestMapping(value = "/private/createTeacher.web", method = RequestMethod.GET)
-    public String initForm(ModelMap map, Principal principal){
+    public String initForm(ModelMap map){
         CommonUser commonUser = new Teacher();
-        map.addAttribute("signup", commonUser);
-        return "user/Signup";
+        map.addAttribute("teacher", commonUser);
+        return "user/createUser";
+    }
+
+    @RequestMapping(value = "/private/createTeacher.web", method = RequestMethod.POST)
+    public String processSubmit(@ModelAttribute("teacher")CommonUser commonUser,
+                                BindingResult result,
+                                SessionStatus status,
+                                HttpServletRequest request,
+                                RedirectAttributes redirectAttributes){
+
+        return "user/createUser";
     }
 
 

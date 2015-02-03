@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * Created by safayat on 4/25/14.
  */
+@Repository
 public class LoginDAO extends CommonDaoImpl<Login,Integer>{
 
     public LoginDAO(){
