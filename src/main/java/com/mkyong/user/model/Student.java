@@ -1,6 +1,11 @@
 package com.mkyong.user.model;
 
+import com.mkyong.clazz.model.Clazz;
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by safayat on 2/1/15.
@@ -25,10 +30,53 @@ public class Student extends CommonUser{
     private int studentId;
     private int userId;
     private int classId;
-    private int admissionDate;
-    private int parentUserId;
-    private int rollNumber;
+    private Date admissionDate;
+    private Integer parentUserId;
+    private String rollNumber;
+    private Clazz clazz;
 
+    @Transient
+    @Override
+    public String getUsername() {
+        return getLogin().getUsername();
+    }
+
+    @Transient
+    @Override
+    public String getConfirmPassword() {
+        return getLogin().getConfirmPassword();
+    }
+
+    @Override
+    public void setUsername(String username) {
+        getLogin().setUsername(username);
+    }
+
+    @Override
+    public void setPassword(String password) {
+        getLogin().setPassword(password);
+    }
+
+    @Override
+    public void setEmail(String email) {
+        getLogin().setEmail(email);
+    }
+
+    @Override
+    public void setConfirmPassword(String confirmPassword) {
+        getLogin().setConfirmPassword(confirmPassword);
+    }
+
+    @Transient
+    @Override
+    public String getPassword() {
+        return getLogin().getPassword();
+    }
+    @Transient
+    @Override
+    public String getEmail() {
+        return getLogin().getEmail();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,30 +108,53 @@ public class Student extends CommonUser{
     }
 
     @Column(name = "st_admission_date",nullable = false)
-    public int getAdmissionDate() {
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    public Date getAdmissionDate() {
         return admissionDate;
     }
 
-    public void setAdmissionDate(int admissionDate) {
+    public void setAdmissionDate(Date admissionDate) {
         this.admissionDate = admissionDate;
     }
 
     @Column(name = "st_parent_user_id",nullable = true)
-    public int getParentUserId() {
+    public Integer getParentUserId() {
         return parentUserId;
     }
 
-    public void setParentUserId(int parentUserId) {
+    public void setParentUserId(Integer parentUserId) {
         this.parentUserId = parentUserId;
     }
 
     @Column(name = "st_roll",nullable = false)
-    public int getRollNumber() {
+    public String getRollNumber() {
         return rollNumber;
     }
 
-    public void setRollNumber(int rollNumber) {
+    public void setRollNumber(String rollNumber) {
         this.rollNumber = rollNumber;
+    }
+
+    @Transient
+    @Override
+    public int getId() {
+        return userId;
+    }
+
+    @Override
+    public void setId(int id) {
+        userId = id;
+    }
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(insertable = false, updatable = false, name = "st_class_id", referencedColumnName = "cs_class_id", nullable = true)
+    @JsonBackReference
+    public Clazz getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(Clazz clazz) {
+        this.clazz = clazz;
     }
 
     @Override

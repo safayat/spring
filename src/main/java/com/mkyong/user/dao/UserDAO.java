@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 /**
  * Created by safayat on 2/2/15.
  */
-public interface UserDAO {
+@Repository
+public class UserDAO extends CommonDaoImpl{
 
 
 }

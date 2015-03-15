@@ -12,10 +12,9 @@ import java.io.Serializable;
 import java.util.List;
 
 @Component
-public abstract class CommonDaoImpl<E, I extends Serializable> {
+public abstract class CommonDaoImpl{
 
     protected SessionFactory sessionFactory;
-    Class<E> entityClass;
 
     public Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
@@ -26,21 +25,21 @@ public abstract class CommonDaoImpl<E, I extends Serializable> {
     }
 
     
-    public E  getById(I id) {
+    public <E,I extends Serializable> E  getById(Class entityClass,I id) {
         return (E)getCurrentSession().get(entityClass,id);
     }
     
-    public void saveOrUpdate(E e) throws Exception{
+    public <E> void saveOrUpdate(E e) throws Exception{
             getCurrentSession().saveOrUpdate(e);
     }
 
     
-    public void delete(E e) throws Exception{
+    public<E> void delete(E e) throws Exception{
         getCurrentSession().delete(e);
     }
 
     
-    public List<E> findByCriteria(Criterion criterion) {
+    public<E> List<E> findByCriteria(Class entityClass,Criterion criterion) {
 
         Criteria criteria = getCurrentSession().createCriteria(entityClass);
         criteria.add(criterion);
@@ -48,28 +47,26 @@ public abstract class CommonDaoImpl<E, I extends Serializable> {
     }
 
     
-    public List<E> getAll() {
+    public<E> List<E> getAll(Class entityClass) {
         return getCurrentSession().createQuery(" from " + entityClass.getSimpleName()).list();
     }
 
-    public List<E> getByHql(String hql) {
+    public<E> List<E> getByHql(String hql) {
         return getCurrentSession().createQuery(hql).list();
     }
-   public E getUniqueByHql(String hql) throws Exception{
+   public<E> E getUniqueByHql(String hql) throws Exception{
         List<E> data = getCurrentSession().
                             createQuery(hql).
                                     list();
         return data.size()==1? (E)data.get(0):null;
     }
 
-     public E findByUniqueCriteria(Criterion criterion) {
+     public<E> E findByUniqueCriteria(Class entityClass,Criterion criterion) {
 
         Criteria criteria = getCurrentSession().createCriteria(entityClass);
         criteria.add(criterion);
         return  (E)criteria.uniqueResult();
     }
 
-    public void setEntityClass(Class<E> entityClass) {
-        this.entityClass = entityClass;
-    }
+
 }

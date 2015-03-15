@@ -77,32 +77,6 @@ public class LoginController {
         return "login/Signup";
     }
 
-    @RequestMapping(value = "/signup.web", method = RequestMethod.POST)
-    public String processSignupSubmit(@ModelAttribute("signup")Login login,
-                                BindingResult result,
-                                SessionStatus status,
-                                HttpServletRequest request,
-                                RedirectAttributes redirectAttributes)
-    {
-        String target = "login/LoginSuccess";
-        System.out.println("login :" + login);
-        signupValidator.validate(login, result);
-        login.setPassword(new BCryptPasswordEncoder().encode(login.getPassword()));
-        if (result.hasErrors()) {
-            target = "login/Signup";
-        } else {
-            status.setComplete();
-            DaoResult daoResult = loginService.saveUser(login);
-            if(daoResult.isSuccessful()){
-                request.setAttribute("successMsg", daoResult.getMessage());
-                target = "redirect:login.web";
-            }else{
-                request.setAttribute("errorMsg",daoResult.getMessage());
-                target = "login/Signup";
-            }
-        }
-        return target;
-    }
     @RequestMapping(value = "/private/getUserData.web",
             method = RequestMethod.GET,
             produces = "application/json")
@@ -132,7 +106,7 @@ public class LoginController {
     {
         Gson gson = new Gson();
         Login login = gson.fromJson(principal.getName(), Login.class);
-        System.out.println("login:" + login);
+        System.out.println("principal login:" + login);
         return "common/home";
     }
 

@@ -24,10 +24,15 @@
     <context:component-scan base-package="com.mkyong.profile.dao" />
     <context:component-scan base-package="com.mkyong.common.dao" />
     <context:component-scan base-package="com.mkyong.user.controller" />
+    <context:component-scan base-package="com.mkyong.clazz.controller" />
+    <context:component-scan base-package="com.mkyong.clazz.service" />
+    <context:component-scan base-package="com.mkyong.clazz.dao" />
 
 
     <bean class="com.mkyong.login.validator.LoginValidator" />
     <bean class="com.mkyong.login.validator.SignupValidator" />
+    <bean class="com.mkyong.user.validator.TeacherValidator" />
+    <bean class="com.mkyong.user.validator.StudentValidator" />
  	<!-- Register the Customer.properties -->
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
@@ -63,7 +68,7 @@
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.mkyong" />
+        <property name="packagesToScan" value="com.mkyong.login.model, com.mkyong.profile.model, com.mkyong.clazz.model, com.mkyong.user.model" />
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
@@ -74,7 +79,7 @@
 
     </bean>
 
-    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"  />
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager" >
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>

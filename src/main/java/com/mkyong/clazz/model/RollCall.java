@@ -1,7 +1,12 @@
 package com.mkyong.clazz.model;
 
+import com.mkyong.user.model.Student;
+import org.codehaus.jackson.annotate.JsonManagedReference;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by safayat on 2/1/15.
@@ -12,11 +17,20 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "rollCall")
-public class RollCall {
+public class RollCall implements Serializable{
     private Date rollCallDate;
     private int techaerId;
     private int classId;
     private int rcId;
+    private List<Attendance> attendanceList;
+
+    public RollCall(Date rollCallDate, int rcId) {
+        this.rollCallDate = rollCallDate;
+        this.rcId = rcId;
+    }
+
+    public RollCall() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,6 +68,16 @@ public class RollCall {
 
     public void setClassId(int classId) {
         this.classId = classId;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "rollCall")
+    @JsonManagedReference
+    public List<Attendance> getAttendanceList() {
+        return attendanceList;
+    }
+
+    public void setAttendanceList(List<Attendance> attendanceList) {
+        this.attendanceList = attendanceList;
     }
 
     @Override

@@ -1,6 +1,10 @@
 package com.mkyong.clazz.model;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.hibernate.annotations.Proxy;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,13 +15,26 @@ import java.util.Date;
  att_class_id int(10) unsigned NOT NULL
  */
 @Entity
-@Table(name = "attendance")
-public class Attendance {
+@Table(name = "attendance"/*,uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "att_date","att_class_id"})}*/)
+public class Attendance implements Serializable{
     private Date attDate;
     private int studentId;
     private boolean isPresent;
     private int classId;
     private int attId;
+    private RollCall rollCall;
+
+    public Attendance() {
+    }
+
+    public Attendance(Date attDate, int studentId, boolean isPresent, int classId, int attId) {
+        this.attDate = attDate;
+        this.studentId = studentId;
+        this.isPresent = isPresent;
+        this.classId = classId;
+        this.attId = attId;
+    }
 
     @Override
     public String toString() {
@@ -74,5 +91,20 @@ public class Attendance {
 
     public void setClassId(int classId) {
         this.classId = classId;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JoinColumns({
+            @JoinColumn(name = "att_date", referencedColumnName = "rc_date" , insertable = false, updatable = false),
+            @JoinColumn(name = "att_class_id", referencedColumnName = "rc_class_id", insertable = false, updatable = false)
+
+    })
+    public RollCall getRollCall() {
+        return rollCall;
+    }
+
+    public void setRollCall(RollCall rollCall) {
+        this.rollCall = rollCall;
     }
 }

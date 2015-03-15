@@ -1,6 +1,8 @@
 package com.mkyong.login.validator;
 
+import com.mkyong.common.dao.impl.CommonDaoImpl;
 import com.mkyong.login.model.Login;
+import com.mkyong.user.model.CommonUser;
 import com.mkyong.util.ApplicationConstants;
 import org.springframework.validation.Errors;
 import com.mysql.jdbc.StringUtils;
@@ -10,12 +12,11 @@ import org.springframework.validation.Validator;
 /**
  * Created by safayat on 4/24/14.
  */
-public class SignupValidator implements Validator {
+public class SignupValidator{
 
-
-    @Override
-    public void validate(Object target, Errors errors) {
-        Login login = (Login)target;
+    public static void signupValidate(Object target, Errors errors) {
+        CommonUser login = (CommonUser)target;
+        System.out.println("sdsdsd:" +login.getLogin());
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username",
                 "required.username","default msg for user");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,"password",
@@ -35,10 +36,5 @@ public class SignupValidator implements Validator {
             }
         }
 
-    }
-
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return Login.class.isAssignableFrom(clazz);
     }
 }

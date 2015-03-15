@@ -14,11 +14,9 @@ import java.util.List;
  * Created by safayat on 4/25/14.
  */
 @Repository
-public class ProfileDAO extends CommonDaoImpl<Profile, Integer> {
+public class ProfileDAO extends CommonDaoImpl{
 
     protected ProfileDAO(){
-        //super(Profile.class);
-        setEntityClass(Profile.class);
     }
 
     public DaoResult updateProfile(Profile profile) {
@@ -38,7 +36,7 @@ public class ProfileDAO extends CommonDaoImpl<Profile, Integer> {
     }
 
     public Profile getProfileById(int id) {
-        return getById(id);
+        return getById(Profile.class, id);
     }
 
 }

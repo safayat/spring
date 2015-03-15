@@ -16,17 +16,15 @@ import java.util.List;
  * Created by safayat on 4/25/14.
  */
 @Repository
-public class LoginDAO extends CommonDaoImpl<Login,Integer>{
+public class LoginDAO extends CommonDaoImpl{
 
     public LoginDAO(){
-        //super(Login.class);
-        setEntityClass(Login.class);
     }
 
     public DaoResult saveUser(Login login) {
         DaoResult daoResult=new DaoResult();
         try{
-            Login oldLogin = (Login) findByUniqueCriteria(
+            Login oldLogin = (Login) findByUniqueCriteria(Login.class,
                     Restrictions.or(
                             Restrictions.eq("username", login.getUsername())
                             , Restrictions.eq("email", login.getEmail())));
@@ -47,7 +45,7 @@ public class LoginDAO extends CommonDaoImpl<Login,Integer>{
     }
 
     public Login findUserByUserName(String username) {
-        return (Login)findByUniqueCriteria(Restrictions.eq("username",username));
+        return (Login)findByUniqueCriteria(Login.class, Restrictions.eq("username",username));
     }
 
 

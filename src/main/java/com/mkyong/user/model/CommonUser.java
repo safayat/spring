@@ -5,16 +5,25 @@ import com.mkyong.login.model.Login;
 import java.util.Date;
 
 public abstract class CommonUser {
+
     Login login;
 
-    /*public abstract int getTeacherId();
+    public CommonUser() {
+        this.login = new Login();
+    }
 
-    public abstract int getUserId();
+    public abstract String getUsername();
+    public abstract String getPassword();
+    public abstract String getEmail();
+    public abstract String getConfirmPassword();
 
-    public abstract String getDestination();
+    public abstract void setUsername(String username);
+    public abstract void setPassword(String password);
+    public abstract void setEmail(String email);
+    public abstract void setConfirmPassword(String confirmPassword);
 
-    public abstract Date getJoiningDate();*/
-
+    public abstract int getId();
+    public abstract void setId(int id);
     public Login getLogin() {
         return login;
     }

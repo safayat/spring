@@ -50,7 +50,7 @@ public class LoginService{
     }
 
     public List<Login> getAllUsers() {
-        return loginDAO.getAll();
+        return loginDAO.getAll(Login.class);
     }
 
 
