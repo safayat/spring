@@ -1,29 +1,27 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<jsp:include page="/WEB-INF/pages/common/head.jsp"/>
-<section id="main-wrapper" class="theme-default">
-    <jsp:include page="/WEB-INF/pages/common/header.jsp?v=2"/>
-    <jsp:include page="/WEB-INF/pages/common/menu.jsp?v=2"/>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<script src="${appBaseUrl}/js/neuboard/pieChart.js"></script>
 
-    <!--main content start-->
-    <section class="main-content-wrapper">
-        <div class="pageheader">
-            <h1>Home</h1>
-
-            <div class="breadcrumb-wrapper hidden-xs">
-                <span class="label">You are here:</span>
-                <ol class="breadcrumb">
-                    <li>
-                        <a href="http://authenticgoods.co/wrapbootstrap/themes/neuboard-v1.4/HTML_full_version/index.html">Dashboard</a>
-                    </li>
-                    <li>Pages</li>
-                    <li class="active">Blank Page</li>
-                </ol>
+<tiles:insertDefinition name="defaultTemplate">
+    <tiles:putAttribute name="body">
+        <section class="main-content-wrapper">
+            <div class="pageheader">
+               Home
             </div>
-        </div>
-        <section id="main-content" class="animated fadeInUp">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"> <h1>Welcome To School</h1></h3>
+                </div>
+                <div class="panel-body">
+
+
+                </div>
+            </div>
+
+
 
         </section>
-    </section>
-    <!--main content end-->
-</section>
+    </tiles:putAttribute>
+</tiles:insertDefinition>
+

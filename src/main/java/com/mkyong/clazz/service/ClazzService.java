@@ -2,8 +2,10 @@ package com.mkyong.clazz.service;
 
 import com.mkyong.clazz.dao.ClazzDAO;
 import com.mkyong.clazz.model.Attendance;
+import com.mkyong.clazz.model.ClassRoutineConfiguration;
 import com.mkyong.clazz.model.Clazz;
 import com.mkyong.clazz.model.RollCall;
+import com.mkyong.login.model.Login;
 import com.mkyong.user.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by safayat on 2/3/15.
@@ -27,9 +26,38 @@ public class ClazzService {
 
     @Transactional
     public List<Clazz> getClassList(){
-        System.out.println("clazzDAO.getAll(Clazz.class)" + clazzDAO.getAll(Clazz.class));
         return clazzDAO.getAll(Clazz.class);
     }
+
+    @Transactional
+    public Map getClassStudentCount(){
+       Iterator itr = clazzDAO.getByHql("SELECT COUNT(*),st.classId FROM " +  Student.class.getSimpleName()  + " st GROUP BY st.classId").iterator();
+       Map<Integer,String> studentCountMapByClass = new HashMap<>();
+       while(itr.hasNext()){
+           Object[] row = (Object[])itr.next();
+           studentCountMapByClass.put((Integer)row[1],row[0]+"");
+       }
+       return studentCountMapByClass;
+    }
+    @Transactional
+    public Clazz getClassById(Integer id,boolean eager){
+        if(eager){
+            ((Clazz)clazzDAO.getById(Clazz.class,id)).getStudentList().size();
+        }
+        return clazzDAO.getById(Clazz.class,id);
+    }
+
+    @Transactional
+    public ClassRoutineConfiguration getClassRoutineConfigByClassId(Integer id){
+        try{
+            return clazzDAO.getUniqueByHql(" from " + ClassRoutineConfiguration.class.getSimpleName() + " where classId = " + id);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Transactional
     public Clazz getClassById(Integer id){
         ((Clazz)clazzDAO.getById(Clazz.class,id)).getStudentList().size();
@@ -55,6 +83,7 @@ public class ClazzService {
                 attendanceList.add(attendance);
             }
             rollCall.setAttendanceList(attendanceList);
+            System.out.println("att: " + rollCall.getAttendanceList().size());
             clazzDAO.saveOrUpdate(rollCall);
         }catch (Exception e){
 

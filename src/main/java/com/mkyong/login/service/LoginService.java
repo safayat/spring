@@ -4,7 +4,6 @@ import java.util.*;
 
 import com.mkyong.profile.model.Profile;
 import com.mkyong.util.DaoResult;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,6 +33,10 @@ public class LoginService{
 
     public Login findByUserName(String username) {
         return loginDAO.findUserByUserName(username);
+    }
+
+    public Login findById(Integer id) {
+        return loginDAO.getById(Login.class, id);
     }
 
     @Transactional

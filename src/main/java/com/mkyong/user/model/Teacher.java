@@ -3,8 +3,8 @@ package com.mkyong.user.model;
 import com.mkyong.clazz.model.Clazz;
 import com.mkyong.login.model.Login;
 import com.mkyong.profile.model.Profile;
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -33,7 +33,7 @@ public class Teacher extends CommonUser{
     private Profile profile;
     private List<Clazz> clazzList;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Profile.class)
+    @OneToOne(fetch = FetchType.EAGER, targetEntity = Profile.class)
     @JoinColumn(name = "tr_user_id",referencedColumnName = "profileId",insertable = false, updatable = false)
     @JsonManagedReference
     public Profile getProfile() {
@@ -45,7 +45,7 @@ public class Teacher extends CommonUser{
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "classTeacher")
-    @JsonManagedReference
+    @JsonBackReference
     public  List<Clazz>  getClazzList() {
         return clazzList;
     }
@@ -74,6 +74,7 @@ public class Teacher extends CommonUser{
     public void setConfirmPassword(String confirmPassword) {
         login.setConfirmPassword(confirmPassword);
     }
+
 
     @Transient
     @Override
@@ -147,6 +148,17 @@ public class Teacher extends CommonUser{
         userId = id;
     }
 
+    @Transient
+    @Override
+    public String getUserType() {
+        return getLogin().getUserType();
+    }
+
+    @Override
+    public void setUserType(String userType) {
+        getLogin().setUserType(userType);
+    }
+
     @Override
     public String toString() {
         return "teacher{" +
@@ -154,7 +166,6 @@ public class Teacher extends CommonUser{
                 ", userId=" + userId +
                 ", destination='" + destination + '\'' +
                 ", joiningDate=" + joiningDate +
-                ", profile=" + profile +
                 '}';
     }
 }

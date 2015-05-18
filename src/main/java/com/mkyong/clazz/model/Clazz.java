@@ -2,8 +2,8 @@ package com.mkyong.clazz.model;
 
 import com.mkyong.user.model.Student;
 import com.mkyong.user.model.Teacher;
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.List;
@@ -76,7 +76,7 @@ public class Clazz {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cs_teacher_id", nullable = true, referencedColumnName = "tr_teacher_id", insertable = false, updatable = false)
-    @JsonBackReference
+    @JsonManagedReference
     public Teacher getClassTeacher() {
         return classTeacher;
     }
@@ -114,6 +114,7 @@ public class Clazz {
 
     @OneToOne(fetch = FetchType.EAGER, targetEntity = Student.class)
     @JoinColumn(insertable = false, updatable = false, name = "cs_captain_id", referencedColumnName = "st_student_id")
+    @JsonManagedReference
     public Student getClassCaptain() {
         return classCaptain;
     }
@@ -122,15 +123,14 @@ public class Clazz {
         this.classCaptain = classCaptain;
     }
 
-    @Override
+   /* @Override
     public String toString() {
-        return "Clazz{" +
+        return "Clazz123{" +
                 "classId=" + classId +
                 ", className='" + className + '\'' +
                 ", classCaptainId=" + classCaptainId +
                 ", classTeacherId=" + classTeacherId +
                 ", classTeacher=" + classTeacher +
-                ", studentList=" + studentList +
                 '}';
-    }
+    }*/
 }

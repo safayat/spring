@@ -1,7 +1,7 @@
 package com.mkyong.clazz.model;
 
 import com.mkyong.user.model.Student;
-import org.codehaus.jackson.annotate.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -70,7 +70,7 @@ public class RollCall implements Serializable{
         this.classId = classId;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "rollCall")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "rollCall", cascade = CascadeType.ALL)
     @JsonManagedReference
     public List<Attendance> getAttendanceList() {
         return attendanceList;
@@ -88,4 +88,6 @@ public class RollCall implements Serializable{
                 ", classId=" + classId +
                 '}';
     }
+
 }
+

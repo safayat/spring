@@ -1,7 +1,9 @@
 package com.mkyong.user.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mkyong.clazz.model.Clazz;
-import org.codehaus.jackson.annotate.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.mkyong.profile.model.Profile;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -34,6 +36,7 @@ public class Student extends CommonUser{
     private Integer parentUserId;
     private String rollNumber;
     private Clazz clazz;
+    private Profile profile;
 
     @Transient
     @Override
@@ -45,6 +48,17 @@ public class Student extends CommonUser{
     @Override
     public String getConfirmPassword() {
         return getLogin().getConfirmPassword();
+    }
+
+    @Transient
+    @Override
+    public String getUserType() {
+        return getLogin().getUserType();
+    }
+
+    @Override
+    public void setUserType(String userType) {
+        getLogin().setUserType(userType);
     }
 
     @Override
@@ -148,13 +162,24 @@ public class Student extends CommonUser{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(insertable = false, updatable = false, name = "st_class_id", referencedColumnName = "cs_class_id", nullable = true)
-    @JsonBackReference
+    @JsonManagedReference
     public Clazz getClazz() {
         return clazz;
     }
 
     public void setClazz(Clazz clazz) {
         this.clazz = clazz;
+    }
+
+    @OneToOne(fetch = FetchType.EAGER, targetEntity = Profile.class)
+    @JoinColumn(name = "st_user_id",referencedColumnName = "profileId",insertable = false, updatable = false)
+    @JsonManagedReference
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     @Override

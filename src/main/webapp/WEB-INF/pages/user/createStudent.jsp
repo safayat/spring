@@ -13,14 +13,7 @@
 <jsp:include page="/WEB-INF/pages/common/head.jsp"/>
 <script type="text/javascript">
     var app = angular.module('myApp', []);
-    function MyController($scope, $http){
-        $http({method: 'GET', url: 'getClassList.web'}).
-                success(function(data, status, headers, config) {
-                    $scope.clazzList = data;
 
-                });
-
-    }
     angular.element(document).ready(function () {
         $('#admissionDate').datepicker();
     });
@@ -51,7 +44,7 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Add Student</h3>
+                            <h3 class="panel-title">Add Update Student</h3>
                             <div class="actions pull-right">
                                 <i class="fa fa-chevron-down"></i>
                                 <i class="fa fa-times"></i>
@@ -60,11 +53,12 @@
                         <div class="panel-body">
                                 <form:form method="POST" commandName="student" action="/private/createStudent.web" cssClass="form-horizontal form-border" >
                                     <jsp:include page="/WEB-INF/pages/user/loginInfo.jsp" />
-                                    <div class="form-group" data-ng-controller="MyController">
+
+                                    <div class="form-group" >
                                         <label class="col-sm-3 control-label">Class Name</label>
                                         <div class="col-sm-6">
-                                            <form:select path="classId"  cssClass="form-control">
-                                                <option ng-repeat = "clazz in clazzList"  value="{{clazz.classId}}">{{clazz.className}}</option>
+                                            <form:select path="classId" cssClass="form-control">
+                                                <form:options items="${classList}" itemValue="classId" itemLabel="className"/>
                                             </form:select>
                                         </div>
                                     </div>

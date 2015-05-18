@@ -17,14 +17,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.security.Principal;
 import java.util.ArrayList;
 
@@ -39,8 +41,12 @@ import java.util.ArrayList;
 public class ProfileController {
 
 
+
     @Autowired
     private ProfileService profileService;
+
+    @Autowired
+    ServletContext servletContext;
 
     @RequestMapping(value = "/private/profile.web", method = RequestMethod.GET)
     public String initForm(ModelMap map, Principal principal)
@@ -52,7 +58,19 @@ public class ProfileController {
             return "common/error";
         }
         map.addAttribute("profile",profile);
+        System.out.println("servletContext.getRealPath:" + servletContext.getRealPath("Tourism"));
+        System.out.println("servletContext.getRealPath:" + servletContext.getRealPath("webapp"));
+        System.out.println("servletContext.getRealPath:" + servletContext.getRealPath(""));
         return "profile/profile";
+    }
+
+    @RequestMapping(value = "/private/profileView.web", method = RequestMethod.GET)
+    public String profileView(ModelMap map, @RequestParam("profileId")Integer profileId)
+    {
+        Profile profile = profileService.getProfileById(profileId);
+        map.addAttribute("profile",profile);
+        System.out.println("p login:" + profile.getLogin());
+        return "profile/profileView";
     }
 
     @RequestMapping(value = "/private/updateProfile.web", method = RequestMethod.POST)
@@ -62,6 +80,36 @@ public class ProfileController {
     {
         DaoResult daoResult = profileService.updateProfile(profile);
         return "redirect:profile.web?profileId=" + profile.getProfileId();
+
+    }
+
+    @RequestMapping(value = "/private/uploadProfilePicture.web", method = RequestMethod.POST)
+    public String uploadProfilePicture(@RequestParam(value = "profileId", defaultValue = "1",required = false)Integer profileId,
+                                       @RequestParam("profileImage")MultipartFile profileImage,
+                                        RedirectAttributes redirectAttributes)
+    {
+
+        Profile profile = profileService.getProfileById(profileId);
+        String contextPath = servletContext.getRealPath("");
+        String imagePath = "/images/" + profile.getProfileId() + "_" + System.currentTimeMillis() + ".jpg";
+
+        String uploadPath = contextPath.substring(0,contextPath.indexOf("/SchoolManagement")) + imagePath;
+        System.out.println("uploadPath:"  + uploadPath);
+        if (!profileImage.isEmpty()) {
+            try {
+                byte[] bytes = profileImage.getBytes();
+
+                BufferedOutputStream stream =
+                        new BufferedOutputStream(new FileOutputStream(new File(uploadPath)));
+                stream.write(bytes);
+                stream.close();
+                profile.setProfileImageUrl(imagePath);
+                profileService.updateProfile(profile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } 
+        return "redirect:profile.web?profileId=" + profileId;
 
     }
 

@@ -1,6 +1,8 @@
 package com.mkyong.user.controller;
 
 import com.google.gson.Gson;
+import com.mkyong.clazz.model.Clazz;
+import com.mkyong.clazz.service.ClazzService;
 import com.mkyong.login.model.Login;
 import com.mkyong.login.service.LoginService;
 import com.mkyong.login.validator.LoginValidator;
@@ -22,10 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -48,6 +47,8 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    ClazzService clazzService;
 
     @Autowired
     StudentValidator studentValidator;
@@ -58,9 +59,15 @@ public class UserController {
 
 
     @RequestMapping(value = "/private/createTeacher.web", method = RequestMethod.GET)
-    public String initTeacherForm(ModelMap map){
-        CommonUser commonUser = new Teacher();
-        commonUser.setLogin(new Login());
+    public String initTeacherForm(ModelMap map, @RequestParam(value = "teacherId", required = false) Integer teacherId){
+        CommonUser commonUser = null;
+        System.out.println("teacherId:" + teacherId);
+        if(teacherId == null){
+            commonUser = new Teacher();
+        }else {
+            commonUser = userService.getUserByUserId(teacherId, Teacher.class);
+
+        }
         map.addAttribute("teacher", commonUser);
         return "user/createTeacher";
     }
@@ -68,48 +75,77 @@ public class UserController {
     @RequestMapping(value = "/private/createTeacher.web", method = RequestMethod.POST)
     public String processTeacherFormSubmit(@ModelAttribute("teacher")Teacher teacher,
                                 BindingResult result,
-                                SessionStatus status
+                                SessionStatus status,
+                                RedirectAttributes redirectAttributes
                                 ){
         CommonUser commonUser = teacher;
-        teacherValidator.validate(teacher, result);
-        System.out.println(result.getAllErrors());
+        commonUser.setUserType("teacher");
+        teacherValidator.validate(teacher,result);
+        System.out.println(result);
         if(!result.hasErrors()){
             status.setComplete();
             userService.saveOrUpdate(commonUser);
         }
-        return "user/createTeacher";
+        return "redirect:createTeacher.web?teacherId=" + teacher.getTeacherId();
     }
 
     @RequestMapping(value = "/private/createStudent.web", method = RequestMethod.GET)
-    public String initStudentForm(ModelMap map){
-        CommonUser commonUser = new Student();
+    public String initStudentForm(ModelMap map, @RequestParam(value = "studentId", required = false) Integer studentId){
+
+        CommonUser commonUser = null;
+        if(studentId ==null){
+            commonUser = new Student();
+        }else{
+            commonUser = userService.getUserByUserId(studentId, Student.class);
+        }
         map.addAttribute("student", commonUser);
+        map.addAttribute("classList",clazzService.getClassList());
         return "user/createStudent";
     }
 
     @RequestMapping(value = "/private/createStudent.web", method = RequestMethod.POST)
     public String processStudentFormSubmit(@ModelAttribute("student")Student student,
                                 BindingResult result,
-                                SessionStatus status){
+                                SessionStatus status,
+                                RedirectAttributes redirectAttributes){
         CommonUser commonUser = student;
+        commonUser.setUserType("student");
         studentValidator.validate(student, result);
         if(!result.hasErrors()){
             status.setComplete();
             userService.saveOrUpdate(commonUser);
         }
-        return "user/createStudent";
+        return "redirect:createStudent.web?studentId=" + student.getStudentId();
     }
+
+   /* @ModelAttribute("classList")
+    public List<Clazz> populateClassList() {
+        List<Clazz> classList = clazzService.getClassList();
+        return classList;
+    }*/
 
     @RequestMapping(value = "/private/getTeacherList.web", method = RequestMethod.GET)
     public @ResponseBody
     List getTeacherList(){
-        return userService.getUserList(Teacher.class);
+        List list = userService.getUserList(Teacher.class);
+        return list;
+    }
+
+    @RequestMapping(value = "/private/getStudentList.web", method = RequestMethod.GET)
+    public @ResponseBody
+    List getStudentList(){
+         return userService.getUserList(Student.class);
     }
 
 
     @RequestMapping(value = "/private/showTeachers.web", method = RequestMethod.GET)
     public String showTeachers(){
         return "user/teachers";
+    }
+
+    @RequestMapping(value = "/private/showStudents.web", method = RequestMethod.GET)
+    public String showStudents(){
+        return "user/students";
     }
 
 

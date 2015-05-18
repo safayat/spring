@@ -1,10 +1,10 @@
 package com.mkyong.login.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mkyong.login.dao.LoginDAO;
 import com.mkyong.login.model.Login;
 import com.mkyong.profile.model.Profile;
 import com.mkyong.util.DaoResult;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +36,7 @@ public class LoginAuthenticationService implements UserDetailsService{
         UserDetails userDetails = null;
         try{
             Login login = loginDAO.findUserByUserName(username);
+
             ObjectMapper mapper = new ObjectMapper();
             String loginInfo = null;
             login.setProfile(null);

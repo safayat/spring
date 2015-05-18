@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,17 +44,7 @@ public class ClazzController {
     public @ResponseBody
     List getClassList()
     {
-//        System.out.println("clazzService.getClassList()" + clazzService.getClassList());
-        List<Clazz> clazzList = clazzService.getClassList();
-        for(Clazz clazz : clazzList){
-            if(clazz.getClassTeacherId() != null){
-                clazz.setClassTeacherName(clazz.getClassTeacher().getProfile().getFirstName() + " " + clazz.getClassTeacher().getProfile().getLastName());
-            }
-            if(clazz.getClassCaptainId() != null){
-//                clazz.setClassTeacherName(clazz.getClassTeacher().getProfile().getFirstName() + " " + clazz.getClassTeacher().getProfile().getLastName());
-            }
-        }
-        return clazzList;
+        return clazzService.getClassList();
     }
 
     @RequestMapping(value = "/private/classDetail.web",
@@ -73,6 +64,7 @@ public class ClazzController {
         Login login = (Login)JsonStringToObjectConvereter.
                       getInstance().
                             getObject(principal.getName(), Login.class);
+
         clazzService.saveRollCall(classId,
                 studentList,
                 userService.getTeacherByUserId(login.getUserId()).getTeacherId());
@@ -83,16 +75,27 @@ public class ClazzController {
     @RequestMapping(value = "/private/rollCall.web",
             method = RequestMethod.GET)
     public String rollCall(@RequestParam(value = "classId")Integer classId,
+                           ModelMap map,
                            HttpServletRequest request)
     {
         request.setAttribute("classId",classId);
+        try{
+            map.addAttribute("classList",
+                    JsonStringToObjectConvereter.getInstance().objectToJson(clazzService.getClassList()));
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         return "class/RollCall";
     }
 
     @RequestMapping(value = "/private/classList.web",
             method = RequestMethod.GET)
-    public String classList()
+    public String classList(ModelMap map)
     {
+        map.addAttribute("studentCountMap",clazzService.getClassStudentCount());
+        map.addAttribute("clazzList",clazzService.getClassList());
         return "class/ClassList";
     }
     @RequestMapping(value = "/private/AttendanceHistory.web",

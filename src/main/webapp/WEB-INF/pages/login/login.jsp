@@ -23,7 +23,7 @@
                         </a>
                     </div>
                 </header>
-                <div class="panel panel-primary">
+                <div class="panel panel-primary" style="min-height: 0px">
                     <div class="panel-heading">
                         <h3 class="panel-title">
                             Sign In

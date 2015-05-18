@@ -51,10 +51,12 @@ public class UserService {
         return daoResult;
     }
 
+    @Transactional(readOnly = false)
     public List<CommonUser> getUserList(Class entityClass){
         return userDAO.getAll(entityClass);
     }
 
+    @Transactional(readOnly = false)
     public Teacher getTeacherByUserId(Integer id){
         try{
             return userDAO.getUniqueByHql("from " + Teacher.class.getSimpleName() + " where userId = " + id);
@@ -63,6 +65,14 @@ public class UserService {
         }
 
         return null;
+    }
+
+    public CommonUser getUserByUserId(Integer id, Class clazz){
+        CommonUser commonUser = userDAO.getById(clazz,id);
+        if(commonUser!=null){
+            commonUser.setLogin((Login)userDAO.getById(Login.class, commonUser.getId()));
+        }
+        return commonUser;
     }
 
 }

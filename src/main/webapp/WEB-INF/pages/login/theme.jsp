@@ -106,7 +106,7 @@
                             <span class="avatar">
                                 <img src="./NeuBoard_blank_files/profile.jpg" class="img-circle" alt="">
                             </span>
-                        <span class="text">Mike Adams</span>
+                        <span class="text">Admin</span>
                         <span class="caret"></span>
                         </span>
             </a>

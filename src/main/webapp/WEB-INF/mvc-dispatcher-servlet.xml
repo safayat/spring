@@ -15,7 +15,18 @@
         >
 
     <context:annotation-config />
-    <mvc:annotation-driven />
+    <context:component-scan base-package="com.mkyong.global.controller" />
+
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <!-- Use the HibernateAware mapper instead of the default -->
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                    <bean class="com.mkyong.util.HibernateAwareObjectMapper" />
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
     <context:component-scan base-package="com.mkyong.login.controller" />
     <context:component-scan base-package="com.mkyong.login.service" />
     <context:component-scan base-package="com.mkyong.login.dao" />
@@ -27,6 +38,21 @@
     <context:component-scan base-package="com.mkyong.clazz.controller" />
     <context:component-scan base-package="com.mkyong.clazz.service" />
     <context:component-scan base-package="com.mkyong.clazz.dao" />
+    <context:component-scan base-package="com.mkyong.course.controller" />
+    <context:component-scan base-package="com.mkyong.course.service" />
+    <context:component-scan base-package="com.mkyong.course.dao" />
+    <context:component-scan base-package="com.mkyong.assignment.controller" />
+    <context:component-scan base-package="com.mkyong.assignment.service" />
+    <context:component-scan base-package="com.mkyong.assignment.dao" />
+    <context:component-scan base-package="com.mkyong.message.controller" />
+    <context:component-scan base-package="com.mkyong.message.service" />
+    <context:component-scan base-package="com.mkyong.message.dao" />
+    <context:component-scan base-package="com.mkyong.menu.controller" />
+    <context:component-scan base-package="com.mkyong.menu.service" />
+    <context:component-scan base-package="com.mkyong.menu.dao" />
+    <context:component-scan base-package="com.mkyong.exam.controller" />
+    <context:component-scan base-package="com.mkyong.exam.service" />
+    <context:component-scan base-package="com.mkyong.exam.dao" />
 
 
     <bean class="com.mkyong.login.validator.LoginValidator" />
@@ -51,6 +77,23 @@
           </property>
     </bean>
 
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
+        <!-- one of the properties available; the maximum file size in bytes -->
+    </bean>
+
+    <!-- Tiles configuration -->
+
+    <bean id="tilesConfigurer"
+          class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/tiles/tiles-definitions.xml</value>
+            </list>
+        </property>
+    </bean>
+
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
@@ -58,6 +101,7 @@
             </list>
         </property>
     </bean>
+
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="${jdbc.driver}" />
@@ -68,7 +112,7 @@
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.mkyong.login.model, com.mkyong.profile.model, com.mkyong.clazz.model, com.mkyong.user.model" />
+        <property name="packagesToScan" value="com.mkyong.login.model, com.mkyong.profile.model, com.mkyong.clazz.model, com.mkyong.user.model, com.mkyong.course.model, com.mkyong.assignment.model, com.mkyong.message.model, com.mkyong.menu.model,com.mkyong.exam.model" />
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
@@ -78,6 +122,8 @@
         </property>
 
     </bean>
+
+
 
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"  />
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager" >

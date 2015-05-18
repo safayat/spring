@@ -51,6 +51,24 @@ public abstract class CommonDaoImpl{
         return getCurrentSession().createQuery(" from " + entityClass.getSimpleName()).list();
     }
 
+    public<E> List<E> getAllWithOpenSession(Class entityClass) {
+        Session session = sessionFactory.openSession();
+        try{
+            return session.createQuery(" from " + entityClass.getSimpleName()).list();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
+            try{
+                session.close();
+
+            }catch (Exception e){
+            }
+        }
+        return null;
+    }
+
     public<E> List<E> getByHql(String hql) {
         return getCurrentSession().createQuery(hql).list();
     }

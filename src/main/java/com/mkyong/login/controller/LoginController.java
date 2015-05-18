@@ -110,6 +110,41 @@ public class LoginController {
         return "common/home";
     }
 
+    @RequestMapping(value = "/private/dashboard.web",
+            method = RequestMethod.GET)
+    public String dashboard(HttpServletRequest request,Principal principal)
+    {
+        return "common/dashboard";
+    }
+
+    @RequestMapping(value = "/private/gallery.web",
+            method = RequestMethod.GET)
+    public String gallery(HttpServletRequest request,Principal principal)
+    {
+        return "common/gallery";
+    }
+
+    @RequestMapping(value = "/private/noticeBoard.web",
+            method = RequestMethod.GET)
+    public String noticeBoard(HttpServletRequest request,Principal principal)
+    {
+        return "common/noticeBoard";
+    }
+
+    @RequestMapping(value = "/private/admission.web",
+            method = RequestMethod.GET)
+    public String admissionInfo(HttpServletRequest request,Principal principal)
+    {
+        return "common/admission";
+    }
+
+    @RequestMapping(value = "/private/history.web",
+            method = RequestMethod.GET)
+    public String history(HttpServletRequest request,Principal principal)
+    {
+        return "common/history";
+    }
+
 
 }
 

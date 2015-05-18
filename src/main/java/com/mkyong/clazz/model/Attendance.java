@@ -1,6 +1,6 @@
 package com.mkyong.clazz.model;
 
-import org.codehaus.jackson.annotate.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
@@ -97,7 +97,7 @@ public class Attendance implements Serializable{
     @JsonBackReference
     @JoinColumns({
             @JoinColumn(name = "att_date", referencedColumnName = "rc_date" , insertable = false, updatable = false),
-            @JoinColumn(name = "att_class_id", referencedColumnName = "rc_class_id", insertable = false, updatable = false)
+            @JoinColumn(name = "att_class_id", referencedColumnName = "rc_class_id",insertable = false, updatable = false)
 
     })
     public RollCall getRollCall() {

@@ -22,18 +22,7 @@
     <!--main content start-->
     <section class="main-content-wrapper">
         <div class="pageheader">
-            <h1>Home</h1>
-
-            <div class="breadcrumb-wrapper hidden-xs">
-                <span class="label">Classes</span>
-                <ol class="breadcrumb">
-                    <li>
-                        <a href="http://authenticgoods.co/wrapbootstrap/themes/neuboard-v1.4/HTML_full_version/index.html">Dashboard</a>
-                    </li>
-                    <li>Pages</li>
-                    <li class="active">Blank Page</li>
-                </ol>
-            </div>
+            <h1>Class Management</h1>
         </div>
         <section id="main-content" class="animated fadeInUp">
             <div class="row" data-ng-app="myApp">
@@ -41,7 +30,7 @@
 
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Responsive table</h3>
+                            <h3 class="panel-title">Class List</h3>
 
                             <div class="actions pull-right">
                                 <i class="fa fa-chevron-down"></i>
@@ -51,16 +40,22 @@
                         <div class="panel-body" data-ng-controller="MyController">
                             <table class="table table-striped table-bordered dataTable no-footer">
                                 <thead>
-                                <tr>
-                                    <th>Class Name</th>
-                                    <th>Class Teacher name</th>
-                                </tr>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Class Name</th>
+                                        <th>Class Teacher name</th>
+                                        <th>Count</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="item in clazzList">
-                                    <td>{{item.className}}</td>
-                                    <td>{{item.classTeacherName}}</td>
-                                </tr>
+                                <c:forEach items="${clazzList}" var="clazz">
+                                    <tr>
+                                        <td>${clazz.classId}</td>
+                                        <td><a href="${appBaseUrl}/private/classDetail.web?classId=${clazz.classId}">${clazz.className}</a></td>
+                                        <td>${clazz.classTeacher.profile.firstName}&nbsp;${clazz.classTeacher.profile.lastName}</td>
+                                        <td>${studentCountMap[clazz.classId]}</td>
+                                    </tr>
+                                </c:forEach>
                                 </tbody>
                             </table>
                         </div>

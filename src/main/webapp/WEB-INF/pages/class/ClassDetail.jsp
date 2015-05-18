@@ -20,46 +20,43 @@
     <jsp:include page="/WEB-INF/pages/common/menu.jsp?v=2"/>
 
     <!--main content start-->
-    <section class="main-content-wrapper">
+    <section class="main-content-wrapper"  data-ng-app="myApp">
         <div class="pageheader">
-            <h1>Home</h1>
-
-            <div class="breadcrumb-wrapper hidden-xs">
-                <span class="label">Roll Call</span>
-                <ol class="breadcrumb">
-                    <li>
-                        <a href="http://authenticgoods.co/wrapbootstrap/themes/neuboard-v1.4/HTML_full_version/index.html">Dashboard</a>
-                    </li>
-                    <li>Pages</li>
-                    <li class="active">Blank Page</li>
-                </ol>
-            </div>
+            <h1>Class Management</h1>
         </div>
-        <section id="main-content" class="animated fadeInUp">
-            <div class="row" data-ng-app="myApp">
+        <section id="main-content" class="animated fadeInUp"  data-ng-controller="MyController">
+            <div class="row">
                 <div class="col-md-12">
 
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Responsive table</h3>
-
-                            <div class="actions pull-right">
-                                <i class="fa fa-chevron-down"></i>
-                                <i class="fa fa-times"></i>
-                            </div>
+                            <h3 class="panel-title">{{clazz.className}}</h3>
                         </div>
-                        <div class="panel-body" data-ng-controller="MyController">
+                        <div class="panel-body">
+                            <div class=" pull-right">
+                                <a href="${appBaseUrl}/private/rollCall.web?classId={{clazz.classId}}" class="btn btn-success btn-lg">Roll Call</a>
+                                &nbsp;&nbsp;<a href="${appBaseUrl}/private/classCourses.web?classId={{clazz.classId}}" class="btn btn-primary btn-lg">Course List</a>
+                                &nbsp;&nbsp;<a href="${appBaseUrl}/private/CourseRoutine.web?classId={{clazz.classId}}" class="btn btn-primary btn-lg">Course Routine</a>
+                            </div>
+
+                            <label class="control-label">Class teacher &nbsp;:&nbsp; </label>{{clazz.classTeacher.profile.firstName}}
+                            <br/>
+                            <label class="control-label">Total Student &nbsp;:&nbsp; </label>{{clazz.studentList.length}}
+                            <br/>
+                            <label class="control-label">Student List</label>
                             <table class="table table-striped table-bordered dataTable no-footer">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
                                         <th>Role</th>
+                                        <th>Admission Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="item in clazz.studentList">
-                                        <td></td>
+                                        <td>{{item.profile.firstName}}&nbsp;{{item.profile.lastName}}</td>
                                         <td>{{item.rollNumber}}</td>
+                                        <td>{{item.admissionDate | date:'fullDate'}}</td>
                                     </tr>
                                 </tbody>
                             </table>

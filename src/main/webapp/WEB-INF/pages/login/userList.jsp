@@ -32,18 +32,7 @@
     <!--main content start-->
     <section class="main-content-wrapper">
         <div class="pageheader">
-            <h1>Home</h1>
-
-            <div class="breadcrumb-wrapper hidden-xs">
-                <span class="label">You are here:</span>
-                <ol class="breadcrumb">
-                    <li>
-                        <a href="http://authenticgoods.co/wrapbootstrap/themes/neuboard-v1.4/HTML_full_version/index.html">Dashboard</a>
-                    </li>
-                    <li>Pages</li>
-                    <li class="active">Blank Page</li>
-                </ol>
-            </div>
+            <h1>User Management</h1>
         </div>
         <section id="main-content" class="animated fadeInUp">
             <%-- <div data-ng-app="myApp">
@@ -51,17 +40,22 @@
             <div class="row" data-ng-app="myApp">
                 <div class="col-md-12">
 
-                    <div class="panel panel-primary">
+                    <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Responsive table</h3>
-
-                            <div class="actions pull-right">
-                                <i class="fa fa-chevron-down"></i>
-                                <i class="fa fa-times"></i>
-                            </div>
+                            <h3 class="panel-title">User List</h3>
                         </div>
                         <div class="panel-body" data-ng-controller="MyController">
-                            <table class="table table-striped table-bordered dataTable no-footer">
+
+                            <select ng-model="search.userType" style="float: right" class="input-sm">
+                                <option value="">ALL</option>
+                                <option value="teacher">Teacher</option>
+                                <option value="student">Student</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                            <br/>
+                            <br/>
+<%--
+                            <table class="table table-striped table-bordered">
                                 <thead>
                                 <tr>
                                     <th>Username</th>
@@ -69,18 +63,35 @@
                                     <th>Lastname</th>
                                     <th>Email</th>
                                     <th>Date of birth</th>
+                                    <th>User Type</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="item in usersInfo">
+                                <tr ng-repeat="item in usersInfo | filter:search">
                                     <td>{{item.username}}</td>
-                                    <td>{{item.profile.firstname}}</td>
+                                    <td>{{item.profile.firstName}}</td>
                                     <td>{{item.profile.lastName}}</td>
                                     <td>{{item.email}}</td>
                                     <td>{{item.profile.dateOfBirth | date:'yyyy-MM-dd'}}</td>
+                                    <td>{{item.userType}}</td>
                                 </tr>
                                 </tbody>
                             </table>
+--%>
+                            <div class="row">
+                                <div class="col-md-2" ng-repeat="item in usersInfo | filter:search" style="width: 11%;padding: 5px">
+                                    <div class="thumbnail" style="margin-bottom: 0px">
+                                        <img ng-if="item.profile.profileImageUrl == 'image/Default_Profile_Picture.png'" src="${appBaseUrl}/{{item.profile.profileImageUrl}}" alt="..." height="50px">
+                                        <img ng-if="item.profile.profileImageUrl != 'image/Default_Profile_Picture.png'" src="{{item.profile.profileImageUrl}}" alt="..." height="50px">
+                                        <div class="caption">
+                                            <h4 style="overflow-x: hidden;overflow-y: hidden">{{item.profile.firstName}}</h4>
+                                            <p>{{item.userType}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
                 </div>

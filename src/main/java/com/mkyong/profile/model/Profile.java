@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import org.hibernate.annotations.Parameter;
 import java.util.Date;
-import org.codehaus.jackson.annotate.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -22,6 +22,7 @@ public class Profile implements Serializable{
     private String lastName;
     private String mobileNo;
     private Date dateOfBirth;
+    private String profileImageUrl;
     private Login login;
 
     public Profile() {
@@ -87,6 +88,14 @@ public class Profile implements Serializable{
 
     public void setProfileId(int profileId) {
         this.profileId = profileId;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     @Override

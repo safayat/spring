@@ -10,6 +10,10 @@
         // create a blank object to hold our form information
         // $scope will allow this to pass between controller and view
         $scope.formData = {};
+        $http({method: 'GET', url: 'getStudentList.web'}).
+                success(function(data, status, headers, config) {
+                    $scope.studentList = data;
+                });
         // process the form
         $scope.processForm = function() {
             $scope.formData.attendancedateFrom = $('#attendancedateFrom').val();
@@ -67,9 +71,7 @@
                                 <div class="form-group">
                                     <label>Student</label>
                                     <select name = "studentId" value="2" ng-model = "formData.studentId" >
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
+                                        <option value="2" ng-repeat = "student in studentList" value="{{student.studentId}}">{{student.profile.firstName}}</option>
                                     </select>
                                 </div>
 
@@ -92,18 +94,11 @@
                             </form>
 
 
-                            <div class="cal-month-box">
-
-
-                                <div class="cal-row-fluid cal-before-eventlist">
-                                    <div class="cal-cell1 cal-cell" data-cal-row="-day1" ng-repeat="item in absentDateList">
-                                        <div class="cal-month-day cal-day-outmonth cal-day-weekend cal-month-first-row">
-                                            <span class="pull-right" data-cal-date="2013-02-24" data-cal-view="day"
-                                                  data-toggle="tooltip" title="" data-original-title="">{{item}}</span>
-
-                                        </div>
-                                    </div>
-                                </div>
+                            <br/>
+                            <br/>
+                            <div class="cal-month-box" style="padding: 20px;display: inline;background-color: palevioletred"  ng-repeat="item in absentDateList">
+                                   <b>{{item | date:'fullDate'}}</b>
+                            </div>
 
 
                             </div>

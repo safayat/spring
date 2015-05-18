@@ -1,10 +1,11 @@
 package com.mkyong.login.model;
 
 import com.mkyong.profile.model.Profile;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import org.codehaus.jackson.annotate.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.mkyong.util.JsonStringToObjectConvereter;
 
 /**
  * Created by safayat on 4/24/14.
@@ -21,6 +22,7 @@ public class Login implements Serializable{
     private String password;
     private String confirmPassword;
     private String email;
+    private String userType;
     private Profile profile;
     public Login() {
 		// TODO Auto-generated constructor stub
@@ -81,6 +83,25 @@ public class Login implements Serializable{
     @Transient
     public String getConfirmPassword() {
         return confirmPassword;
+    }
+
+    @Transient
+    public static Integer getLoginIdFromPrincipal(String loginString) {
+        return ((Login) JsonStringToObjectConvereter.getInstance().getObject(loginString,Login.class)).getUserId();
+    }
+
+    @Transient
+    public static Login getLoginFromPrincipal(String loginString) {
+        return ((Login) JsonStringToObjectConvereter.getInstance().getObject(loginString,Login.class));
+    }
+
+    @Column(name = "userType",unique = false,nullable = false,length =16)
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     public void setConfirmPassword(String confirmPassword) {
