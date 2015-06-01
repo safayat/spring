@@ -145,6 +145,13 @@ public class LoginController {
         return "common/history";
     }
 
+    @RequestMapping(value = "/downloads.web",
+            method = RequestMethod.GET)
+    public String downloads()
+    {
+        return "common/downloads";
+    }
+
 
 }
 

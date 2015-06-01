@@ -52,8 +52,19 @@ public class LoginService{
         return null;
     }
 
+    @Transactional
     public List<Login> getAllUsers() {
         return loginDAO.getAll(Login.class);
+    }
+
+    @Transactional
+    public List<Login> getUsersByType(String userType) {
+        return loginDAO.getByHql(" from " + Login.class.getSimpleName() + " where userType = '" +userType + "'");
+    }
+
+    @Transactional
+    public List<Login> getEmployeeUsers() {
+        return loginDAO.getByHql(" from " + Login.class.getSimpleName() + " where userType = 'teacher' or userType = 'staff' ");
     }
 
 

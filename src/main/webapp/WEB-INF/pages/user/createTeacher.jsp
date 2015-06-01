@@ -50,8 +50,7 @@
                 <span class="label">You are here:</span>
                 <ol class="breadcrumb">
                     <li>
-                        <a href="http://authenticgoods.co/wrapbootstrap/themes/neuboard-v1.4/HTML_full_version/index.html">Dashboard</a>
-                    </li>
+                        <a href="http://authenticgoods.co/wrapbootstrap/themes/neuboard-v1.4/HTML_full_version/index.html">Dashboard</a> </li>
                     <li>Pages</li>
                     <li class="active">Blank Page</li>
                 </ol>
@@ -72,6 +71,7 @@
                         <div class="panel-body">
                             <form:form method="POST" commandName="teacher" action="${appBaseUrl}/private/createTeacher.web" cssClass="form-horizontal form-border" >
                                 <jsp:include page="/WEB-INF/pages/user/loginInfo.jsp" />
+                                <form:hidden path="teacherId"/>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Designation</label>
                                     <div class="col-sm-6">

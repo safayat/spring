@@ -1,6 +1,7 @@
 package com.mkyong.exam.service;
 
 import com.mkyong.exam.dao.ExamDAO;
+import com.mkyong.exam.model.AddmissionExamSeatplan;
 import com.mkyong.exam.model.ExamGroup;
 import com.mkyong.exam.model.ExamResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,10 @@ public class ExamService {
         return examDAO.getByHql("from " + ExamResult.class.getSimpleName() + " where examGroupId=" + examGroupId + " and studentId=" + studentId);
     }
 
+    @Transactional
+    public List<AddmissionExamSeatplan> getAllAdmissionSeatPlan(Integer examId){
+        return examDAO.getByHql(" from " + AddmissionExamSeatplan.class.getSimpleName() + " where examId = " + examId);
+    }
 
 
 }

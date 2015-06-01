@@ -43,6 +43,15 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label class="col-sm-3 control-label">Course Syllabus</label>
+
+                                        <div class="col-sm-6">
+                                            <form:textarea path="syllabus" cssClass="form-control" rows="10"/>
+                                            <form:errors path="syllabus" cssClass="has-error"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label class="col-sm-3 control-label">Class Name</label>
 
                                         <div class="col-sm-6">

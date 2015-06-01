@@ -27,6 +27,7 @@ public class Course {
     private String courseName;
     private Integer teacherId;
     private String courseCode;
+    private String syllabus;
     private Teacher teacher;
     private List<CourseRoutine> courseRoutineList;
 
@@ -89,5 +90,13 @@ public class Course {
 
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
+    }
+
+    public String getSyllabus() {
+        return syllabus;
+    }
+
+    public void setSyllabus(String syllabus) {
+        this.syllabus = syllabus;
     }
 }

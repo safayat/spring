@@ -8,6 +8,7 @@ import com.mkyong.login.service.LoginService;
 import com.mkyong.login.validator.LoginValidator;
 import com.mkyong.login.validator.SignupValidator;
 import com.mkyong.user.model.CommonUser;
+import com.mkyong.user.model.Staff;
 import com.mkyong.user.model.Student;
 import com.mkyong.user.model.Teacher;
 import com.mkyong.user.service.UserService;
@@ -72,6 +73,19 @@ public class UserController {
         return "user/createTeacher";
     }
 
+    @RequestMapping(value = "/private/createStaff.web", method = RequestMethod.GET)
+    public String initStaff(ModelMap map, @RequestParam(value = "staffId", required = false) Integer staffId){
+        CommonUser commonUser = null;
+        if(staffId == null){
+            commonUser = new Staff();
+        }else {
+            commonUser = userService.getUserByUserId(staffId, Staff.class);
+
+        }
+        map.addAttribute("staff", commonUser);
+        return "user/createStaff";
+    }
+
     @RequestMapping(value = "/private/createTeacher.web", method = RequestMethod.POST)
     public String processTeacherFormSubmit(@ModelAttribute("teacher")Teacher teacher,
                                 BindingResult result,
@@ -87,6 +101,17 @@ public class UserController {
             userService.saveOrUpdate(commonUser);
         }
         return "redirect:createTeacher.web?teacherId=" + teacher.getTeacherId();
+    }
+
+    @RequestMapping(value = "/private/createStaff.web", method = RequestMethod.POST)
+    public String createStaff(@ModelAttribute("staff")Staff staff,
+                                RedirectAttributes redirectAttributes
+                                ){
+        staff.setStartingDesignation(staff.getStartingDesignation());
+        CommonUser commonUser = staff;
+        commonUser.setUserType("staff");
+        userService.saveOrUpdate(commonUser);
+        return "redirect:createStaff.web?staffId=" + staff.getStaffId();
     }
 
     @RequestMapping(value = "/private/createStudent.web", method = RequestMethod.GET)
@@ -118,12 +143,6 @@ public class UserController {
         return "redirect:createStudent.web?studentId=" + student.getStudentId();
     }
 
-   /* @ModelAttribute("classList")
-    public List<Clazz> populateClassList() {
-        List<Clazz> classList = clazzService.getClassList();
-        return classList;
-    }*/
-
     @RequestMapping(value = "/private/getTeacherList.web", method = RequestMethod.GET)
     public @ResponseBody
     List getTeacherList(){
@@ -151,5 +170,6 @@ public class UserController {
 
 
 }
+
 
 

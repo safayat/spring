@@ -51,38 +51,15 @@
                                 <option value="teacher">Teacher</option>
                                 <option value="student">Student</option>
                                 <option value="admin">Admin</option>
+                                <option value="staff">Staff</option>
                             </select>
                             <br/>
                             <br/>
-<%--
-                            <table class="table table-striped table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>Username</th>
-                                    <th>Firstname</th>
-                                    <th>Lastname</th>
-                                    <th>Email</th>
-                                    <th>Date of birth</th>
-                                    <th>User Type</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="item in usersInfo | filter:search">
-                                    <td>{{item.username}}</td>
-                                    <td>{{item.profile.firstName}}</td>
-                                    <td>{{item.profile.lastName}}</td>
-                                    <td>{{item.email}}</td>
-                                    <td>{{item.profile.dateOfBirth | date:'yyyy-MM-dd'}}</td>
-                                    <td>{{item.userType}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
---%>
                             <div class="row">
                                 <div class="col-md-2" ng-repeat="item in usersInfo | filter:search" style="width: 11%;padding: 5px">
                                     <div class="thumbnail" style="margin-bottom: 0px">
-                                        <img ng-if="item.profile.profileImageUrl == 'image/Default_Profile_Picture.png'" src="${appBaseUrl}/{{item.profile.profileImageUrl}}" alt="..." height="50px">
-                                        <img ng-if="item.profile.profileImageUrl != 'image/Default_Profile_Picture.png'" src="{{item.profile.profileImageUrl}}" alt="..." height="50px">
+                                        <img ng-if="item.profile.profileImageUrl == 'image/Default_Profile_Picture.png'" src="${appBaseUrl}/{{item.profile.profileImageUrl}}" alt="..." height="50px" class="img-circle">
+                                        <img ng-if="item.profile.profileImageUrl != 'image/Default_Profile_Picture.png'" src="{{item.profile.profileImageUrl}}" alt="..." height="50px" class="img-circle">
                                         <div class="caption">
                                             <h4 style="overflow-x: hidden;overflow-y: hidden">{{item.profile.firstName}}</h4>
                                             <p>{{item.userType}}</p>

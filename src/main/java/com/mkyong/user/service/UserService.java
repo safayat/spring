@@ -38,6 +38,7 @@ public class UserService {
             Login login = user.getLogin();
             Profile profile = new Profile();
             profile.setLogin(login);
+            profile.setProfileImageUrl("image/Default_Profile_Picture.png");
             login.setProfile(profile);
             login.setPassword(new BCryptPasswordEncoder().encode(login.getPassword()));
             userDAO.saveOrUpdate(login);

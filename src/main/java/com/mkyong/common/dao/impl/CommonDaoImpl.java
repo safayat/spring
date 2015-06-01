@@ -79,12 +79,14 @@ public abstract class CommonDaoImpl{
         return data.size()==1? (E)data.get(0):null;
     }
 
-     public<E> E findByUniqueCriteria(Class entityClass,Criterion criterion) {
+   public<E> E findByUniqueCriteria(Class entityClass,Criterion criterion) {
 
         Criteria criteria = getCurrentSession().createCriteria(entityClass);
         criteria.add(criterion);
         return  (E)criteria.uniqueResult();
     }
+
+
 
 
 }

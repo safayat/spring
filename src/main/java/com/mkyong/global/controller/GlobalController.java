@@ -61,6 +61,10 @@ public class GlobalController {
         menuIconMap.put(11,"fa fa-archive");
         menuIconMap.put(13,"fa fa-asterisk");
         menuIconMap.put(14,"fa fa-clock-o");
+        menuIconMap.put(20,"fa fa-home");
+        menuIconMap.put(24,"fa fa-calendar");
+        menuIconMap.put(24,"fa fa-calendar");
+        menuIconMap.put(27,"fa fa-money");
         return menuIconMap;
     }
 

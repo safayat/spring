@@ -53,6 +53,21 @@
     <context:component-scan base-package="com.mkyong.exam.controller" />
     <context:component-scan base-package="com.mkyong.exam.service" />
     <context:component-scan base-package="com.mkyong.exam.dao" />
+    <context:component-scan base-package="com.mkyong.leave.controller" />
+    <context:component-scan base-package="com.mkyong.leave.service" />
+    <context:component-scan base-package="com.mkyong.leave.dao" />
+    <context:component-scan base-package="com.mkyong.attendance.controller" />
+    <context:component-scan base-package="com.mkyong.attendance.service" />
+    <context:component-scan base-package="com.mkyong.attendance.dao" />
+    <context:component-scan base-package="com.mkyong.calender.controller" />
+    <context:component-scan base-package="com.mkyong.calender.service" />
+    <context:component-scan base-package="com.mkyong.calender.dao" />
+    <context:component-scan base-package="com.mkyong.accounting.controller" />
+    <context:component-scan base-package="com.mkyong.accounting.service" />
+    <context:component-scan base-package="com.mkyong.accounting.dao" />
+    <context:component-scan base-package="com.mkyong.admission.controller" />
+    <context:component-scan base-package="com.mkyong.admission.service" />
+    <context:component-scan base-package="com.mkyong.admission.dao" />
 
 
     <bean class="com.mkyong.login.validator.LoginValidator" />
@@ -112,7 +127,7 @@
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.mkyong.login.model, com.mkyong.profile.model, com.mkyong.clazz.model, com.mkyong.user.model, com.mkyong.course.model, com.mkyong.assignment.model, com.mkyong.message.model, com.mkyong.menu.model,com.mkyong.exam.model" />
+        <property name="packagesToScan" value="com.mkyong.login.model, com.mkyong.profile.model, com.mkyong.clazz.model, com.mkyong.user.model, com.mkyong.course.model, com.mkyong.assignment.model, com.mkyong.message.model, com.mkyong.menu.model,com.mkyong.exam.model,com.mkyong.leave.model,com.mkyong.attendance.model,com.mkyong.calender.model,com.mkyong.accounting.model,com.mkyong.admission.model" />
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>

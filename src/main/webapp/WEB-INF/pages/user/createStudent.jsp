@@ -53,7 +53,7 @@
                         <div class="panel-body">
                                 <form:form method="POST" commandName="student" action="/private/createStudent.web" cssClass="form-horizontal form-border" >
                                     <jsp:include page="/WEB-INF/pages/user/loginInfo.jsp" />
-
+                                    <form:hidden path="studentId"/>
                                     <div class="form-group" >
                                         <label class="col-sm-3 control-label">Class Name</label>
                                         <div class="col-sm-6">

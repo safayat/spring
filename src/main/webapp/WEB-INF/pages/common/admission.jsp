@@ -13,7 +13,7 @@
                     <h3 class="panel-title">Admission Notice</h3>
                 </div>
                 <div class="panel-body">
-                    <h2 style="text-align: center">ADMISSION NOTICE FOR CLASS KINDERGARTEN (2015-2016) <p>Online Admission for KINDERGARTEN. <a style="float: right" class="btn btn-success" href="#">Apply Online</a></p></h2><br/><br/>
+                    <h2 style="text-align: center">ADMISSION NOTICE FOR CLASS KINDERGARTEN (2015-2016) <p>Online Admission for KINDERGARTEN. <a style="float: right" class="btn btn-success" href="${appBaseUrl}/addmissionForm.web">Apply Online</a></p></h2><br/><br/>
 
 
                     <p style="text-align: justify;">

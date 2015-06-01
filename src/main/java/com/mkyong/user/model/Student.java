@@ -162,7 +162,7 @@ public class Student extends CommonUser{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(insertable = false, updatable = false, name = "st_class_id", referencedColumnName = "cs_class_id", nullable = true)
-    @JsonManagedReference
+    @JsonBackReference
     public Clazz getClazz() {
         return clazz;
     }

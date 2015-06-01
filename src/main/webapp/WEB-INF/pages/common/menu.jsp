@@ -48,17 +48,39 @@
             </a>
         </li>
         <li>
-            <a href="${appBaseUrl}/private/gallery.web" title="dashboard">
+            <a href="${appBaseUrl}/private/gallery.web">
                 <i class="fa fa-picture-o"></i> Galery
             </a>
         </li>
         <li>
-            <a href="${appBaseUrl}/private/admission.web" title="dashboard">
-                <i class="fa fa-plus"></i> Admission
+            <a href="${appBaseUrl}/downloads.web">
+                <i class="fa fa-download"></i> Downloads
             </a>
         </li>
+        <li class="nav-dropdown">
+            <a href="#" title="UI Elements"><span></span>
+                <i class="fa fa-plus"></i> Admission
+            </a>
+            <ul class="nav-sub" data-index="0" style="display: none;">
+                    <li>
+                        <a href="${appBaseUrl}/admission.web" title="">
+                               Admission Notice
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${appBaseUrl}/addmissionForm.web" title="">
+                               Apply Online
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${appBaseUrl}/viewAddmissionApplications.web" title="">
+                               View Applications
+                        </a>
+                    </li>
+            </ul>
+        </li>
         <li>
-            <a href="${appBaseUrl}/private/noticeBoard.web" title="dashboard">
+            <a href="${appBaseUrl}/private/noticeBoard.web">
                 <i class="fa fa-newspaper-o"></i> Notices
             </a>
         </li>
