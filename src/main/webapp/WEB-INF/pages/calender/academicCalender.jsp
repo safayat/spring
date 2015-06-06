@@ -19,46 +19,57 @@
 
 //        d.setFullYear(2020, 0, 14);
         function MyController($scope){
-            var months = [{"month":{"name":"January","value":0,"days":31}},{"month":{"name":"February","value":1,"days":28}},{"month":{"name":"March","value":2,"days":31}},{"month":{"name":"April","value":3,"days":30}},{"month":{"name":"May","value":4,"days":31}},{"month":{"name":"June","value":5,"days":30}},{"month":{"name":"July","value":6,"days":31}},{"month":{"name":"August","value":7,"days":30}},{"month":{"name":"September","value":8,"days":31}},{"month":{"name":"October","value":9,"days":30}},{"month":{"name":"November","value":10,"days":30}},{"month":{"name":"December","value":11,"days":31}}];
-            console.log($scope.months);
-//            $scope.parsedMonths = JSON.parse(months);
-            $scope.parsedMonths = months;
-            console.log($scope.parsedMonths);
-/*
- {{myVar === "two" ? "it's true" : "it's false"}}
-* */
-            $scope.defaultDate = new Date();
-            $scope.defaultDate.setDate(1);
-            console.log("$scope.defaultDate " + $scope.defaultDate.getDay());
-            $scope.academicMonth = $scope.defaultDate.getMonth();
-            $scope.academicDayOffset = $scope.defaultDate.getDay();
-            $scope.academicMonthDays = getDaysInAMonth($scope.academicMonth);
-            if($scope.academicMonthDays>0)
-                $scope.academicPreviousMonthDays = getDaysInAMonth($scope.academicMonth-1);
-            else
-                $scope.academicPreviousMonthDays = getDaysInAMonth(11);
-            $scope.weekArray = [0,1,2,3,4,5];
 
-            function getDaysInAMonth(monthNo){
-                return months.filter(function(item){
-                    return item.month.value ==  monthNo
-                }).map(function(item){
-                            return item.month.days;
-                        }).pop();
-            }
-            console.log($scope.academicMonthDays);
+            var months = [{"month":{"name":"January","value":0,"days":31}},{"month":{"name":"February","value":1,"days":28}},{"month":{"name":"March","value":2,"days":31}},{"month":{"name":"April","value":3,"days":30}},{"month":{"name":"May","value":4,"days":31}},{"month":{"name":"June","value":5,"days":30}},{"month":{"name":"July","value":6,"days":31}},{"month":{"name":"August","value":7,"days":31}},{"month":{"name":"September","value":8,"days":30}},{"month":{"name":"October","value":9,"days":31}},{"month":{"name":"November","value":10,"days":30}},{"month":{"name":"December","value":11,"days":31}}];
+            var defaultDate = new Date();
+            $scope.academicMonth = defaultDate.getMonth();
             $scope.updateCalender = function(){
 
-                $scope.academicMonthDays = months.filter(function(item){
-                    return item.month.value ==  $scope.academicMonth
-                }).map(function(item){
-                            return item.month.days;
-                        }).pop();
-                console.log($scope.academicMonthDays);
+                defaultDate.setMonth($scope.academicMonth);
+                defaultDate.setDate(1);
+                $scope.academicMonthDays = getDaysInAMonth($scope.academicMonth);
+                $scope.academicPreviousMonthDays = getDaysInAMonth($scope.academicMonth-1);
+                $scope.dayIndex= $scope.academicPreviousMonthDays-defaultDate.getDay();
 
+                var totoalRow = parseInt(($scope.academicMonthDays+defaultDate.getDay())/7);
+                if(($scope.academicMonthDays+defaultDate.getDay())%7>0){
+                    totoalRow++;
+                }
+                $scope.weekArray = [];
+                for(var i=0;i<totoalRow;i++){
+                    $scope.weekArray.push(i);
+                }
 
             }
+
+            $scope.updateCalender();
+
+            function getDaysInAMonth(monthNo){
+              if(monthNo<0)monthNo=11;
+              if(monthNo>11)monthNo=monthNo%12;
+              return months.filter(function(item){
+                  return item.month.value ==  monthNo
+              }).map(function(item){
+                          return item.month.days;
+                      }).pop();
+            }
         }
+        app.filter("datePosition", function() {
+            return function(input,pmdays,mdays,week,day) {
+                input = input + 7*week + day;
+                if(week ==0){
+                    if(input<=pmdays)
+                       return input;
+                }
+                input = input - pmdays;
+                if(input>mdays)
+                    return input%mdays;
+                return input;
+
+            }
+
+        });
+
 
     </script>
 </head>
@@ -69,27 +80,35 @@
     <!--main content start-->
     <section class="main-content-wrapper">
         <div class="pageheader">
-            <h1>Academic Calender</h1>
+            <h1>Academic Calender 2015</h1>
         </div>
         <section id="main-content" class="animated fadeInUp">
             <div class="row" data-ng-app="myApp">
                 <div class="col-md-12">
 
                     <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Calender</h3>
-                        </div>
                         <div class="panel-body" ng-controller="MyController">
 
-                            <select ng-model="academicMonth" ng-change="updateCalender()">
-                                <option ng-repeat="item in parsedMonths" value="{{item.month.value}}">{{item.month.name}}</option>
-                            </select>
-                            <%--<select ng-model="academicYear">
-                            </select>--%>
 
+                            <select class="input-sm" ng-model="academicMonth" ng-change="updateCalender()">
+                                <option value="0">January</option>
+                                <option value="1">February</option>
+                                <option value="2">March</option>
+                                <option value="3">April</option>
+                                <option value="4">May</option>
+                                <option value="5">June</option>
+                                <option value="6">July</option>
+                                <option value="7">August</option>
+                                <option value="8">September</option>
+                                <option value="9">October</option>
+                                <option value="10">November</option>
+                                <option value="11">December</option>
+                            </select>
+                            <br/>
+                             <br/>
                             <table class="table tab-bottom table-bordered">
                                 <thead>
-                                    <tr>
+                                    <tr style="background-color: rgba(139, 139, 169, 0.99)">
                                         <th>Sun</th>
                                         <th>MON</th>
                                         <th>Tues</th>
@@ -97,30 +116,18 @@
                                         <th>Thurs</th>
                                         <th>Fri</th>
                                         <th>Sat</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <%--<c:forEach begin="0" end="4" var="week" varStatus="status">
-                                        <tr>
-                                            <td>${(week*7+1)%30}</td>
-                                            <td>${(week*7+2)%30}</td>
-                                            <td>${(week*7+3)%30}</td>
-                                            <td>${(week*7+4)%30}</td>
-                                            <td>${(week*7+5)%30}</td>
-                                            <td>${(week*7+6)%30}</td>
-                                            <td>${(week*7+7)%30}</td>
-                                        </tr>
-                                    </c:forEach>--%>
-                                       <tr ng-repeat = "n in weekArray">
-                                            <td>{{(n*7+1)%(academicMonthDays)+1}}</td>
-                                            <td>{{(n*7+2)%(academicMonthDays)+1}}</td>
-                                            <td>{{(n*7+3)%(academicMonthDays)+1}}</td>
-                                            <td>{{(n*7+4)%(academicMonthDays)+1}}</td>
-                                            <td>{{(n*7+5)%(academicMonthDays)+1}}</td>
-                                            <td>{{(n*7+6)%(academicMonthDays)+1}}</td>
-                                            <td>{{(n*7+7)%(academicMonthDays)+1}}</td>
-                                       </tr>
+                                   <tr ng-repeat = "n in weekArray" style="height: 100px;line-height: normal;font-weight: bold;font-size: 25px;text-align: center">
+                                       <td>{{ (dayIndex)  |  datePosition:academicPreviousMonthDays:academicMonthDays:n:1 }}</td>
+                                       <td>{{ (dayIndex)  |  datePosition:academicPreviousMonthDays:academicMonthDays:n:2 }}</td>
+                                       <td>{{ (dayIndex)  |  datePosition:academicPreviousMonthDays:academicMonthDays:n:3 }}</td>
+                                       <td>{{ (dayIndex)  |  datePosition:academicPreviousMonthDays:academicMonthDays:n:4 }}</td>
+                                       <td>{{ (dayIndex)  |  datePosition:academicPreviousMonthDays:academicMonthDays:n:5 }}</td>
+                                       <td style="color: red">{{ (dayIndex)  | datePosition:academicPreviousMonthDays:academicMonthDays:n:6 }}</td>
+                                       <td style="color: red">{{ (dayIndex)  | datePosition:academicPreviousMonthDays:academicMonthDays:n:7 }}</td>
+                                   </tr>
                                 </tbody>
                             </table>
                         </div>
