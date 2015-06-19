@@ -2,6 +2,7 @@ package com.mkyong.accounting.controller;
 
 import com.mkyong.accounting.model.SalaryInfo;
 import com.mkyong.accounting.service.AccountingService;
+import com.mkyong.common.service.CommonService;
 import com.mkyong.login.service.LoginService;
 import com.mkyong.menu.model.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,32 +27,32 @@ import java.util.List;
 public class AccountingController {
 
    @Autowired
-   AccountingService accountingService;
+   CommonService commonService;
 
    @Autowired
    LoginService loginService;
 
-    @RequestMapping(value = "/private/addUpdateSalary.web", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/private/addUpdateSalary.web", method = RequestMethod.GET)
     public String initSalary(@RequestParam(value = "userId", required = false)Integer userId,ModelMap map){
         SalaryInfo salaryInfo = null;
         if(userId==null){
             salaryInfo = new SalaryInfo();
         }else {
-            salaryInfo = accountingService.getSalary(userId);
+            salaryInfo = commonService.getById(SalaryInfo.class,userId);
         }
         map.addAttribute("salaryInfo",salaryInfo);
         map.addAttribute("employeeList",loginService.getEmployeeUsers());
         return "accounting/addUpdateSalary";
     }
-    @RequestMapping(value = "/private/addUpdateSalary.web", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/private/addUpdateSalary.web", method = RequestMethod.POST)
     public String addUpdateSalary(@ModelAttribute("salaryInfo")SalaryInfo salaryInfo, RedirectAttributes redirectAttributes){
-        accountingService.saveOrUpdate(salaryInfo);
+        commonService.saveOrUpdate(salaryInfo);
         return "redirect:addUpdateSalary.web?userId=" + salaryInfo.getUserId();
     }
 
-    @RequestMapping(value = "/private/viewSalary.web", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/private/viewSalary.web", method = RequestMethod.GET)
     public String viewSalary(ModelMap map){
-        map.addAttribute("salaryList", accountingService.getSalaryList());
+        map.addAttribute("salaryList", commonService.getAll(SalaryInfo.class));
         return "accounting/viewSalary";
     }
 

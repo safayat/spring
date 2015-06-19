@@ -33,28 +33,30 @@ public class AttendanceController {
     @Autowired
     LoginService loginService;
 
-    @RequestMapping(value = "/private/attendance.web", method = RequestMethod.GET)
+    private final String ROLE_PREFIX = "/admin";
+
+    @RequestMapping(value = ROLE_PREFIX + "/private/attendance.web", method = RequestMethod.GET)
     public String initAttendance(ModelMap map){
 
         map.addAttribute("empolyeeUserList",loginService.getEmployeeUsers());
         return "attendance/employeeRollCall";
     }
 
-    @RequestMapping(value = "/private/viewAttendance.web", method = RequestMethod.GET)
+    @RequestMapping(value =  ROLE_PREFIX + "/private/viewAttendance.web", method = RequestMethod.GET)
     public String viewAttendance(ModelMap map){
 
         map.addAttribute("userList",loginService.getEmployeeUsers());
         return "attendance/viewAttendance";
     }
 
-    @RequestMapping(value = "/private/getFilteredAttendance.web", method = RequestMethod.POST,
+    @RequestMapping(value =  ROLE_PREFIX + "/private/getFilteredAttendance.web", method = RequestMethod.POST,
             produces = "application/json")
     public @ResponseBody
     List<EmployeeAttendance> getFilteredAttendance(@RequestParam("fromDate")String fromDate, @RequestParam("toDate")String toDate, @RequestParam(value = "userId", required = false)Integer userId  ){
         return attendanceService.getAttendanceList(Utility.toDate(fromDate), Utility.toDate(toDate), userId);
     }
 
-    @RequestMapping(value = "/private/attendance.web", method = RequestMethod.POST)
+    @RequestMapping(value =  ROLE_PREFIX + "/private/attendance.web", method = RequestMethod.POST)
     public String saveAttendance(@RequestParam("presentEmployeeList")String[]presentEmployeeList, RedirectAttributes redirectAttributes){
 
         List<EmployeeAttendance> attendanceList = new ArrayList<>();

@@ -39,7 +39,7 @@ public class CourseController {
     AssignmentService assignmentService;
 
 
-    @RequestMapping(value = "/private/addUpdateCourse.web",
+    @RequestMapping(value = "/edu/private/addUpdateCourse.web",
             method = RequestMethod.GET)
     public String initCourse(ModelMap map, @RequestParam(value = "courseId",required = false)Integer courseId)
     {
@@ -80,7 +80,7 @@ public class CourseController {
         map.addAttribute("courseList",courseService.getCourseListByClassId(classId));
         return "course/courses";
     }
-    @RequestMapping(value = "/private/addUpdateCourse.web",
+    @RequestMapping(value = "/edu/private/addUpdateCourse.web",
             method = RequestMethod.POST)
     public String saveCourse(@ModelAttribute("course")Course course, RedirectAttributes redirectAttributes )
     {
@@ -92,7 +92,7 @@ public class CourseController {
         return "redirect:addUpdateCourse.web";
     }
 
-    @RequestMapping(value = "/private/addUpdateCourseRoutine.web",
+    @RequestMapping(value = "/edu/private/addUpdateCourseRoutine.web",
             method = RequestMethod.GET)
     public String initClassRoutine(@RequestParam("classId") Integer classId, ModelMap map, HttpServletRequest request)
     {
@@ -118,11 +118,10 @@ public class CourseController {
         return "course/manageRoutine";
     }
 
-    @RequestMapping(value = "/private/CourseRoutine.web",method = RequestMethod.POST)
-    public String updateCourseRoutine(@RequestParam("classId") Integer classId, ModelMap map,@RequestParam("courseRoutineList")String[] courseRoutineArray,RedirectAttributes redirectAttributes)
+    @RequestMapping(value = "/edu/private/CourseRoutine.web",method = RequestMethod.POST)
+    public String updateCourseRoutine(@RequestParam("classId") Integer classId, ModelMap map,@RequestParam("courseRoutineList")String[] courseRoutineArray,RedirectAttributes redirectAttributes, HttpServletRequest request)
     {
         ClassRoutineConfiguration crConf = clazzService.getClassRoutineConfigByClassId(classId);
-        int breakIndex = (crConf.getBreakStartTime()-crConf.getStartTime())/crConf.getClassUnitTime()+1;
         Map<String,String> dayIndexMap = new HashMap();
         dayIndexMap.put("1","sun");
         dayIndexMap.put("2","mon");
@@ -134,7 +133,7 @@ public class CourseController {
             if(routineInfo == null || routineInfo.trim().isEmpty())continue;
             String[] split = routineInfo.split("_");
             int pos = Integer.parseInt(split[1]);
-            if(pos>=breakIndex)pos--;
+            if(pos>=crConf.getBreakIndex())pos--;
             CourseRoutine courseRoutine = new CourseRoutine();
             courseRoutine.setDay(dayIndexMap.get(split[0]));
             courseRoutine.setPosition(pos);
@@ -143,87 +142,27 @@ public class CourseController {
 
             courseRoutineList.add(courseRoutine);
         }
-        System.out.println("courseRoutineList size:" + courseRoutineList.size());
+        System.out.println( request.getScheme() + "://"  + request.getServerName()+":" + request.getServerPort() +  request.getContextPath()  +"/private/CourseRoutine.web?classId=" + classId);
         courseService.saveOrUpdate(courseRoutineList);
-        return "redirect:CourseRoutine.web?classId=" + classId;
+
+        return "redirect:"  + request.getScheme() + "://"  + request.getServerName()+":" + request.getServerPort() +  request.getContextPath()  +"/private/CourseRoutine.web?classId=" + classId;
     }
     @RequestMapping(value = "/private/CourseRoutine.web",
             method = RequestMethod.GET)
     public String getCourseRoutine(@RequestParam("classId") Integer classId, ModelMap map, HttpServletRequest request)
     {
         List<Course> courseList = courseService.getCourseListByClassId(classId, true);
-        Map<String, List<CourseRoutine>> routineListByDay = new HashMap<>();
+        String[][] classRoutine = clazzService.populateCourseRoutine(courseList,classId);
         Map<String,Course> courseMap = new HashMap<>();
-         for(Course course:courseList){
-            for(CourseRoutine routine:course.getCourseRoutineList()){
-                List<CourseRoutine> courseRoutines = routineListByDay.get(routine.getDay());
-                if(courseRoutines ==null){
-                    courseRoutines = new ArrayList<>();
-                    routineListByDay.put(routine.getDay(), courseRoutines);
-                }
-                courseRoutines.add(routine);
-            }
+        for(Course course:courseList){
             courseMap.put(course.getCourseId()+"",course);
         }
-        Map<String,Integer> dayIndexMap = new HashMap();
-        dayIndexMap.put("sun",1);
-        dayIndexMap.put("mon",2);
-        dayIndexMap.put("tue",3);
-        dayIndexMap.put("wed",4);
-        dayIndexMap.put("thu",5);
-        String[][] classRoutine = new String[6][];
-        ClassRoutineConfiguration crConf = clazzService.getClassRoutineConfigByClassId(classId);
-        int clazzCount = (crConf.getEndTime() - crConf.getBreakLength() - crConf.getStartTime())/crConf.getClassUnitTime();
-        int breakIndex = (crConf.getBreakStartTime()-crConf.getStartTime())/crConf.getClassUnitTime()+1;
-        System.out.println("clazzCount:" + clazzCount);
-        classRoutine[0]=new String[clazzCount+2];
-        classRoutine[1]=new String[clazzCount+2];
-        classRoutine[2]=new String[clazzCount+2];
-        classRoutine[3]=new String[clazzCount+2];
-        classRoutine[4]=new String[clazzCount+2];
-        classRoutine[5]=new String[clazzCount+2];
-        classRoutine[0][0]="";
-        classRoutine[1][0]="sun";
-        classRoutine[2][0]="mon";
-        classRoutine[3][0]="tue";
-        classRoutine[4][0]="wed";
-        classRoutine[5][0]="thu";
-        classRoutine[1][breakIndex]="-1";
-        classRoutine[2][breakIndex]="-1";
-        classRoutine[3][breakIndex]="-1";
-        classRoutine[4][breakIndex]="-1";
-        classRoutine[5][breakIndex]="-1";
-
-
-
-        int j=1;
-        for(int i=crConf.getStartTime();i<crConf.getBreakStartTime();i+=crConf.getClassUnitTime()){
-            classRoutine[0][j++]= Utility.convertMinutesToHourAndMinutes(i) + "<------>" + Utility.convertMinutesToHourAndMinutes(i+crConf.getClassUnitTime());
-        }
-        classRoutine[0][j++]= Utility.convertMinutesToHourAndMinutes(crConf.getBreakStartTime()) + "<------>" + Utility.convertMinutesToHourAndMinutes(crConf.getBreakStartTime()+crConf.getBreakLength());
-
-        for(int i=crConf.getBreakStartTime()+crConf.getBreakLength();i<crConf.getEndTime();i+=crConf.getClassUnitTime()){
-            classRoutine[0][j++]= Utility.convertMinutesToHourAndMinutes(i) + "<------>" + Utility.convertMinutesToHourAndMinutes(i+crConf.getClassUnitTime());
-        }
-
-        Iterator<String> itr = routineListByDay.keySet().iterator();
-        while (itr.hasNext()){
-            String key = itr.next();
-            List<CourseRoutine> courseRoutineList = routineListByDay.get(key);
-            int routineIndex = dayIndexMap.get(key);
-            for(CourseRoutine courseRoutine:courseRoutineList){
-                int pos = courseRoutine.getPosition();
-                if(pos>=breakIndex)pos++;
-                classRoutine[routineIndex][pos] = courseRoutine.getCourse().getCourseId()+"";
-            }
-        }
-
         map.addAttribute("clazz", clazzService.getClassById(classId));
         map.addAttribute("classRoutine", classRoutine);
         map.addAttribute("courseMap", courseMap);
         return "course/ClazzRoutine";
     }
-    @RequestMapping(value = "/private/addUpdateCourseRoutine.web",
+    @RequestMapping(value = "/edu/private/addUpdateCourseRoutine.web",
             method = RequestMethod.POST)
     public String saveCourseRoutine(@ModelAttribute("courseRoutine") CourseRoutine courseRoutine, RedirectAttributes redirectAttributes,@RequestParam("classId") Integer classId)
     {

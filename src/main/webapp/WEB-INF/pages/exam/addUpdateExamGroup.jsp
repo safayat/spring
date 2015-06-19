@@ -2,27 +2,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<tiles:insertDefinition name="defaultTemplate">
+<tiles:insertDefinition name="aircraftTemplate">
     <tiles:putAttribute name="body">
 
-        <section class="main-content-wrapper">
-            <div class="pageheader">
-                <h1>Exam Management</h1>
+        <div class="content">
+            <div class="header">
+                <h1>Add/Update Exam</h1>
             </div>
-            <section id="main-content" class="animated fadeInUp">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Add/Update Exam</h3>
-
-                                <div class="actions pull-right">
-                                    <i class="fa fa-chevron-down"></i>
-                                    <i class="fa fa-times"></i>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <form:form method="POST" commandName="examGroup" action="${appBaseUrl}/private/addUpdateExamGroup.web"
+            <div class="main-content">
+                <div>
+                    <form:form method="POST" commandName="examGroup" action="${appBaseUrl}/edu/private/addUpdateExamGroup.web"
                                            cssClass="form-horizontal form-border">
                                     <form:hidden path="examGroupId" />
                                     <div class="form-group">
@@ -79,19 +68,9 @@
                                         </div>
                                     </div>
                                 </form:form>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-            </section>
-        </section>
-        <script type="text/javascript">
-            angular.element(document).ready(function () {
-                $('#examStartDate').datepicker();
-                $('#examEndDate').datepicker();
-            });
-        </script>
-
+            </div>
+        </div>
     </tiles:putAttribute>
 </tiles:insertDefinition>
 

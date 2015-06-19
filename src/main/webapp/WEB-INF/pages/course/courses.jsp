@@ -1,42 +1,17 @@
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<jsp:include page="/WEB-INF/pages/common/head.jsp"/>
-<script>
-    angular.element(document).ready(function () {
-        $("#syllabusAnchor").click(function () {
-            $(this).parent().addClass('active');
-            $('#courseInfoAnchor').parent().removeClass('active');
-            $("#courseInfoTable").hide();
-            $("#accordion").show();
-        });
-        $("#courseInfoAnchor").click(function () {
-            $(this).parent().addClass('active');
-            $('#syllabusAnchor').parent().removeClass('active');
-            $("#accordion").hide();
-            $("#courseInfoTable").show();
-        });
-    });
-
-
-</script>
-<section id="main-wrapper" class="theme-default">
-    <jsp:include page="/WEB-INF/pages/common/header.jsp?v=2"/>
-    <jsp:include page="/WEB-INF/pages/common/menu.jsp?v=2"/>
+<tiles:insertDefinition name="aircraftTemplate">
+    <tiles:putAttribute name="body">
 
     <!--main content start-->
-    <section class="main-content-wrapper">
-        <div class="pageheader">
-            <h1>Course Management</h1>
+    <div class="content">
+        <div class="header">
+            <h1>Course List</h1>
         </div>
-        <section id="main-content" class="animated fadeInUp">
-            <div class="row">
-                <div class="col-md-12">
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Course List</h3>
-                        </div>
-                        <div class="panel-body">
+        <div  class="main-content">
+            <div>
                             <ul class="nav nav-tabs">
                                 <li role="presentation" class="active"><a id="courseInfoAnchor" href="#">Course Info</a>
                                 </li>
@@ -91,10 +66,8 @@
                                 </c:forEach>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </section>
+        </div>
+    </div>
     <!--main content end-->
-</section>
+    </tiles:putAttribute>
+</tiles:insertDefinition>

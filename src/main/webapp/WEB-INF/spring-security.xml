@@ -10,6 +10,11 @@
     <!-- enable use-expressions -->
     <http auto-config="true" use-expressions="true">
         <intercept-url pattern="/private/*" access= "hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/admin/private/*" access= "hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/edu/private/*" access= "hasRole('ROLE_TEACHER')"/>
+        <intercept-url pattern="/stu/private/*" access= "hasRole('ROLE_STUDENT')"/>
+        <intercept-url pattern="/stff/private/*" access= "hasRole('ROLE_STAFF')"/>
+        <intercept-url pattern="/grd/private/*" access= "hasRole('ROLE_GUARDIAN')"/>
 
         <!-- access denied page -->
         <access-denied-handler error-page="/403" />

@@ -33,7 +33,6 @@
     <context:component-scan base-package="com.mkyong.profile.controller" />
     <context:component-scan base-package="com.mkyong.profile.service" />
     <context:component-scan base-package="com.mkyong.profile.dao" />
-    <context:component-scan base-package="com.mkyong.common.dao" />
     <context:component-scan base-package="com.mkyong.user.controller" />
     <context:component-scan base-package="com.mkyong.clazz.controller" />
     <context:component-scan base-package="com.mkyong.clazz.service" />
@@ -68,6 +67,8 @@
     <context:component-scan base-package="com.mkyong.admission.controller" />
     <context:component-scan base-package="com.mkyong.admission.service" />
     <context:component-scan base-package="com.mkyong.admission.dao" />
+    <context:component-scan base-package="com.mkyong.common.service" />
+    <context:component-scan base-package="com.mkyong.common.dao" />
 
 
     <bean class="com.mkyong.login.validator.LoginValidator" />

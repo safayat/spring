@@ -42,7 +42,7 @@ public class ExamController {
     @Autowired
     CourseService courseService;
 
-    @RequestMapping(value = "/private/addUpdateExamGroup.web",
+    @RequestMapping(value = "/edu/private/addUpdateExamGroup.web",
             method = RequestMethod.GET)
     public String initExamGroup(@RequestParam(value = "examGroupId", required = false)Integer examGroupId, ModelMap map)
     {
@@ -56,7 +56,7 @@ public class ExamController {
         return "exam/addUpdateExamGroup";
     }
 
-    @RequestMapping(value = "/private/viewExamList.web",
+    @RequestMapping(value = "/edu/private/viewExamList.web",
             method = RequestMethod.GET)
     public String viewExamList(ModelMap map)
     {
@@ -64,7 +64,7 @@ public class ExamController {
         return "exam/viewExamList";
     }
 
-    @RequestMapping(value = "/private/addUpdateMarkParam.web",
+    @RequestMapping(value = "/edu/private/addUpdateMarkParam.web",
             method = RequestMethod.GET)
     public String addUpdateMarkParam(ModelMap map)
     {
@@ -81,7 +81,7 @@ public class ExamController {
         return "exam/markParam";
     }
 
-    @RequestMapping(value = "/private/viewResultParam.web",
+    @RequestMapping(value = "/edu/private/viewResultParam.web",
             method = RequestMethod.GET)
     public String viewResultParam(ModelMap map)
     {
@@ -92,7 +92,7 @@ public class ExamController {
         return "exam/viewResultParam";
     }
 
-    @RequestMapping(value = "/private/addUpdateExamGroup.web",
+    @RequestMapping(value = "/edu/private/addUpdateExamGroup.web",
             method = RequestMethod.POST)
     public String addUpdateExamGroup(@ModelAttribute("examGroup")ExamGroup examGroup, RedirectAttributes redirectAttributes)
     {
@@ -100,7 +100,7 @@ public class ExamController {
         return "redirect:addUpdateExamGroup.web?examGroupId=" + examGroup.getExamGroupId();
     }
 
-    @RequestMapping(value = "/private/addUpdateExamResult.web",
+    @RequestMapping(value = "/edu/private/addUpdateExamResult.web",
             method = RequestMethod.GET)
     public String initExamResult(@RequestParam(value = "courseId")Integer courseId,@RequestParam(value = "examGroupId")Integer examGroupId,ModelMap map)
     {
@@ -130,7 +130,7 @@ public class ExamController {
 
         return "exam/addUpdateExamResult";
     }
-    @RequestMapping(value = "/private/viewExamResult.web",
+    @RequestMapping(value = "/edu/private/viewExamResult.web",
             method = RequestMethod.GET)
     public String viewExamResult(@RequestParam(value = "classId")Integer classId,@RequestParam(value = "examGroupId")Integer examGroupId,ModelMap map)
     {
@@ -170,7 +170,7 @@ public class ExamController {
         return "exam/viewExamResult";
     }
 
-    @RequestMapping(value = "/private/addUpdateExamResult.web",
+    @RequestMapping(value = "/edu/private/addUpdateExamResult.web",
             method = RequestMethod.POST)
     public String addUpdateExamResult(@RequestParam(value = "courseId")Integer courseId,@RequestParam(value = "examGroupId")Integer examGroupId, RedirectAttributes redirectAttributes,HttpServletRequest httpServletRequest)
     {

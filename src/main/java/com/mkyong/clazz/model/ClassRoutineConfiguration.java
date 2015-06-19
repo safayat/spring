@@ -83,6 +83,17 @@ public class ClassRoutineConfiguration{
     public void setBreakLength(Integer breakLength) {
         this.breakLength = breakLength;
     }
+    
+    @Transient
+    public int getClazzCount(){
+        return (getEndTime() - getBreakLength() - getStartTime())/getClassUnitTime();
+    }
 
+    @Transient
+    public int getBreakIndex(){
+        return (getBreakStartTime()-getStartTime())/getClassUnitTime()+1;
+
+    }
+    
 }
 

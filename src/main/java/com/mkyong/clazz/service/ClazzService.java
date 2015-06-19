@@ -5,8 +5,11 @@ import com.mkyong.clazz.model.Attendance;
 import com.mkyong.clazz.model.ClassRoutineConfiguration;
 import com.mkyong.clazz.model.Clazz;
 import com.mkyong.clazz.model.RollCall;
+import com.mkyong.course.model.Course;
+import com.mkyong.course.model.CourseRoutine;
 import com.mkyong.login.model.Login;
 import com.mkyong.user.model.Student;
+import com.mkyong.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -147,6 +150,73 @@ public class ClazzService {
         System.out.println(dateList);
         return dateList;
     }
+
+    public String[][] getInitializedCourseRoutine(ClassRoutineConfiguration crConf){
+        String[] dayList = {"","sun","mon","tue","wed","thu"};
+        String[][] classRoutine = new String[6][];
+        int clazzCount = crConf.getClazzCount();
+        final int TH = 0;
+        final int COL1 = 0;
+        for(int i=0;i<6;i++)
+            classRoutine[i]=new String[clazzCount+2];
+        int breakIndex = crConf.getBreakIndex();
+        for(int i=1;i<6;i++)
+            classRoutine[i][breakIndex]="-1";
+        for(int i=0;i<6;i++)
+            classRoutine[i][COL1]= dayList[i];
+        int col=1;
+        final String INTERVAL =  "<------>";
+        for(int min=crConf.getStartTime();min<crConf.getBreakStartTime();min+=crConf.getClassUnitTime()){
+            classRoutine[TH][col++]= Utility.toHourMinutes(min) + INTERVAL + Utility.toHourMinutes(min+crConf.getClassUnitTime());
+        }
+        classRoutine[TH][col++]= Utility.toHourMinutes(crConf.getBreakStartTime()) + INTERVAL + Utility.toHourMinutes(crConf.getBreakStartTime()+crConf.getBreakLength());
+
+        for(int min=crConf.getBreakStartTime()+crConf.getBreakLength();min<crConf.getEndTime();min+=crConf.getClassUnitTime()){
+            classRoutine[TH][col++]= Utility.toHourMinutes(min) + INTERVAL + Utility.toHourMinutes(min+crConf.getClassUnitTime());
+        }
+        return classRoutine;
+    }
+
+    @Transactional
+    public String[][] populateCourseRoutine(List<Course> courseList, int classId){
+        ClassRoutineConfiguration crConf = getClassRoutineConfigByClassId(classId);
+        String[][] classRoutine = getInitializedCourseRoutine(crConf);
+        Map<String,Integer> dayIndexMap = new HashMap();
+        dayIndexMap.put("sun",1);
+        dayIndexMap.put("mon",2);
+        dayIndexMap.put("tue",3);
+        dayIndexMap.put("wed",4);
+        dayIndexMap.put("thu",5);
+
+        Map<String, List<CourseRoutine>> routineListByDay = new HashMap<>();
+        for(Course course:courseList){
+            for(CourseRoutine routine:course.getCourseRoutineList()){
+                List<CourseRoutine> courseRoutines = routineListByDay.get(routine.getDay());
+                if(courseRoutines ==null){
+                    courseRoutines = new ArrayList<>();
+                    routineListByDay.put(routine.getDay(), courseRoutines);
+                }
+                courseRoutines.add(routine);
+            }
+        }
+
+        Iterator<String> itr = routineListByDay.keySet().iterator();
+        while (itr.hasNext()){
+            String key = itr.next();
+            List<CourseRoutine> courseRoutineList = routineListByDay.get(key);
+            int routineIndex = dayIndexMap.get(key);
+            for(CourseRoutine courseRoutine:courseRoutineList){
+                int pos = courseRoutine.getPosition();
+                if(pos>=crConf.getBreakIndex())pos++;
+                classRoutine[routineIndex][pos] = courseRoutine.getCourse().getCourseId()+"";
+            }
+        }
+
+        return classRoutine;
+    }
+
+
+
 
 
 

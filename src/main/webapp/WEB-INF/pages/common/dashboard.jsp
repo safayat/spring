@@ -2,13 +2,13 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <script src="${appBaseUrl}/js/neuboard/pieChart.js"></script>
 
-<tiles:insertDefinition name="defaultTemplate">
+<tiles:insertDefinition name="aircraftTemplate">
     <tiles:putAttribute name="body">
-        <section class="main-content-wrapper">
-            <div class="pageheader">
+        <div class="content">
+            <div class="header">
                 <h1>Dashboard</h1>
             </div>
-            <section id="main-content" class="animated fadeInUp">
+            <div id="main-content" class="main-content">
                 <div class="row">
                     <div class="col-md-12">
 
@@ -86,8 +86,8 @@
                         </div>
                     </div>
                 </div>
-            </section>
-        </section>
+            </div>
+        </div>
         <script type="text/javascript">
             var app = angular.module('myApp', []);
 

@@ -107,6 +107,11 @@ public class LoginController {
         Gson gson = new Gson();
         Login login = gson.fromJson(principal.getName(), Login.class);
         System.out.println("principal login:" + login);
+        System.out.println("principal login:" + request.getContextPath());
+        System.out.println("principal login:" + request.getScheme());
+        System.out.println("principal login:" + request.getServerName());
+        System.out.println("principal login:" + request.getServerPort());
+
         return "common/home";
     }
 

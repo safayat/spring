@@ -24,7 +24,7 @@ public class CalenderController {
    @Autowired
    CalenderService calenderService;
 
-    @RequestMapping(value = "/private/addUpdateVaction.web", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/private/addUpdateVaction.web", method = RequestMethod.GET)
     public String initVacation(@RequestParam(value = "vacationId", required = false)Integer vacationId, ModelMap map){
         Vacation vacation = null;
         if(vacationId==null){
@@ -47,7 +47,7 @@ public class CalenderController {
         return "calender/academicCalender";
     }
 
-    @RequestMapping(value = "/private/addUpdateVaction.web", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/private/addUpdateVaction.web", method = RequestMethod.POST)
     public String saveVacation(@ModelAttribute("vacation")Vacation vacation,RedirectAttributes redirectAttributes){
 
         calenderService.saveOrUpdate(vacation);

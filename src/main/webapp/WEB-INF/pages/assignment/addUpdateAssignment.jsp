@@ -10,7 +10,7 @@
                 <h1>Assignment Management</h1>
             </div>
             <section id="main-content" class="animated fadeInUp" data-ng-app="myApp">
-                <div class="row">
+                <div>
                     <div class="col-md-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">

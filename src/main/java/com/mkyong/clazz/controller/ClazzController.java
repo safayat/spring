@@ -55,7 +55,7 @@ public class ClazzController {
         return "class/ClassDetail";
     }
 
-    @RequestMapping(value = "/private/rollCall.web",
+    @RequestMapping(value = "/edu/private/rollCall.web",
             method = RequestMethod.POST)
     public String rollCall(@RequestParam(value = "classId")Integer classId,
                            @RequestParam(value = "presentStudentList")String[] studentList,
@@ -72,7 +72,7 @@ public class ClazzController {
         return "class/ClassDetail";
     }
     
-    @RequestMapping(value = "/private/rollCall.web",
+    @RequestMapping(value = "/edu/private/rollCall.web",
             method = RequestMethod.GET)
     public String rollCall(@RequestParam(value = "classId")Integer classId,
                            ModelMap map,

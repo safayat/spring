@@ -5,53 +5,23 @@
   Time: 11:51 AM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<jsp:include page="/WEB-INF/pages/common/head.jsp"/>
-<script type="text/javascript">
-    var app = angular.module('myApp', []);
+<tiles:insertDefinition name="aircraftTemplate">
 
-    angular.element(document).ready(function () {
-        $('#admissionDate').datepicker();
-    });
-</script>
-<body>
-<section id="main-wrapper" class="theme-default">
-    <jsp:include page="/WEB-INF/pages/common/header.jsp"/>
-    <jsp:include page="/WEB-INF/pages/common/menu.jsp"/>
 
+
+    <tiles:putAttribute name="body">    <!--main content start-->
     <!--main content start-->
-    <section class="main-content-wrapper">
-        <div class="pageheader">
-            <h1>User Management</h1>
-
-            <div class="breadcrumb-wrapper hidden-xs">
-                <span class="label">You are here:</span>
-                <ol class="breadcrumb">
-                    <li>
-                        <a href="http://authenticgoods.co/wrapbootstrap/themes/neuboard-v1.4/HTML_full_version/index.html">Dashboard</a>
-                    </li>
-                    <li>Pages</li>
-                    <li class="active">Blank Page</li>
-                </ol>
-            </div>
+    <div class="content">
+        <div class="header">
+            <h1>Add Update Student</h1>
         </div>
-        <section id="main-content" class="animated fadeInUp" data-ng-app="myApp">
+        <div class="main-content" data-ng-app="myApp">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Add Update Student</h3>
-                            <div class="actions pull-right">
-                                <i class="fa fa-chevron-down"></i>
-                                <i class="fa fa-times"></i>
-                            </div>
-                        </div>
-                        <div class="panel-body">
-                                <form:form method="POST" commandName="student" action="/private/createStudent.web" cssClass="form-horizontal form-border" >
+                    <form:form method="POST" commandName="student" action="/admin/private/createStudent.web" cssClass="form-horizontal form-border" >
                                     <jsp:include page="/WEB-INF/pages/user/loginInfo.jsp" />
                                     <form:hidden path="studentId"/>
                                     <div class="form-group" >
@@ -93,13 +63,10 @@
                                         </div>
                                     </div>
                                  </form:form>
-                        </div>
-                    </div>
                 </div>
             </div>
-        </section>
-    </section>
+        </div>
+    </div>
     <!--main content end-->
-</section>
-</body>
-</html>
+    </tiles:putAttribute>
+</tiles:insertDefinition>

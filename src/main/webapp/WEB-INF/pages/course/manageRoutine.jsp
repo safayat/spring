@@ -2,26 +2,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<tiles:insertDefinition name="defaultTemplate">
+<tiles:insertDefinition name="aircraftTemplate">
     <tiles:putAttribute name="body">
 
-        <section class="main-content-wrapper" data-ng-app="myApp">
-            <div class="pageheader">
-                <h1>Course Management</h1>
+        <div class="content" data-ng-app="myApp">
+            <div class="header">
+                <h1>Add Course</h1>
             </div>
-            <section id="main-content" class="animated fadeInUp">
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Add Course</h3>
-                            </div>
-                            <div class="panel-body">
-
-
+            <div class="main-content">
+                <div >
                                 <form:form method="POST" commandName="courseRoutine"
-                                           action="/private/addUpdateCourseRoutine.web?classId=${clazz.classId}"
+                                           action="/edu/private/addUpdateCourseRoutine.web?classId=${clazz.classId}"
                                            cssClass="form-horizontal form-border" name="courseRoutineForm">
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Course Name</label>
@@ -122,19 +113,8 @@
 
 
                             </div>
-                        </div>
-
-
-                    </div>
-                </div>
-
-            </section>
-        </section>
-        <script type="text/javascript">
-            var app = angular.module('myApp', []);
-
-        </script>
-
+            </div>
+        </div>
     </tiles:putAttribute>
 </tiles:insertDefinition>
 

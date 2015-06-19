@@ -43,7 +43,7 @@ public class Utility {
       return calendar.get(param);
    }
 
-    public static String convertMinutesToHourAndMinutes(int minutes){
+    public static String toHourMinutes(int minutes){
         String h = minutes/60 + "";
         String m = minutes%60 + "";
         System.out.println("h:" + h + " m:" + m);

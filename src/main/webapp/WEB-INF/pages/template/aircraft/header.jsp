@@ -6,7 +6,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="" href="index.html"><span class="navbar-brand"><span class="fa fa-paper-plane"></span> Aircraft</span></a>
+        <a class="" href="${appBaseUrl}/private/home.web"><span class="navbar-brand"><span class="fa fa-graduation-cap"></span> School Management</span></a>
     </div>
 
     <div class="navbar-collapse collapse" style="height: 1px;">
@@ -14,19 +14,19 @@
             <li class="dropdown hidden-xs">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <span class="glyphicon glyphicon-user padding-right-small"
-                          style="position:relative;top: 3px;"></span> Jack Smith
+                          style="position:relative;top: 3px;"></span> ${loginInfo.username}
                     <i class="fa fa-caret-down"></i>
                 </a>
 
                 <ul class="dropdown-menu">
-                    <li><a href="./">My Account</a></li>
+                    <li><a href="${appBaseUrl}/private/profile.web">My Account</a></li>
                     <li class="divider"></li>
                     <li class="dropdown-header">Admin Panel</li>
                     <li><a href="./">Users</a></li>
                     <li><a href="./">Security</a></li>
                     <li><a tabindex="-1" href="./">Payments</a></li>
                     <li class="divider"></li>
-                    <li><a tabindex="-1" href="sign-in.html">Logout</a></li>
+                    <li><a tabindex="-1" href="${appBaseUrl}/j_spring_security_logout">Logout</a></li>
                 </ul>
             </li>
         </ul>

@@ -2,21 +2,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<tiles:insertDefinition name="defaultTemplate">
+<tiles:insertDefinition name="aircraftTemplate">
     <tiles:putAttribute name="body">
-
-        <section class="main-content-wrapper">
-            <div class="pageheader">
-                <h1>Course Management</h1>
+        <div class="content">
+            <div class="header">
+                <h1>Course Info</h1>
             </div>
-            <section id="main-content" class="animated fadeInUp">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Course Info</h3>
-                            </div>
-                            <div class="panel-body">
+            <div class="main-content">
+                <div>
                                 <label class="control-label">Course Name &nbsp;:&nbsp;${course.courseName}</label><br/>
                                 <label class="control-label">Course Code &nbsp;:&nbsp;${course.courseCode}</label><br/>
                                 <label class="control-label">Class Name</label><br/>
@@ -44,13 +37,8 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </section>
-
-
+            </div>
+        </div>
     </tiles:putAttribute>
 </tiles:insertDefinition>
 

@@ -1,26 +1,16 @@
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="input" uri="http://www.springframework.org/tags/form" %>
 
-<jsp:include page="/WEB-INF/pages/common/head.jsp"/>
-<script type="text/javascript">
-    var app = angular.module('myApp', []);
-
-    /*angular.element(document).ready(function () {
-     $('#admissionDate').datepicker();
-     });*/
-</script>
-<section id="main-wrapper" class="theme-default">
-    <jsp:include page="/WEB-INF/pages/common/header.jsp?v=2"/>
-    <jsp:include page="/WEB-INF/pages/common/menu.jsp?v=2"/>
+<tiles:insertDefinition name="aircraftTemplate">
+    <tiles:putAttribute name="body">
 
     <!--main content start-->
-    <section class="main-content-wrapper">
-        <div class="pageheader">
+    <div class="content">
+        <div class="header">
             <h1>${examGroup.examName}</h1>
         </div>
-        <section id="main-content" class="animated fadeInUp"  >
-            <div class="row">
-                <div class="col-md-12">
+        <div  class="main-content"  >
+            <div>
 
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -30,7 +20,7 @@
 
 
                             <label class="control-label">Student List</label>
-                            <form method="post" action="${appBaseUrl}/private/addUpdateExamResult.web">
+                            <form method="post" action="${appBaseUrl}/edu/private/addUpdateExamResult.web">
                                 <button class="btn btn-primary">Update Marks</button>
                                 <input type="hidden" name="examGroupId" value="${examGroup.examGroupId}">
                                 <input type="hidden" name="courseId" value="${course.courseId}">
@@ -59,9 +49,9 @@
                             </form>
                         </div>
                     </div>
-                </div>
             </div>
-        </section>
-    </section>
+        </div>
+    </div>
     <!--main content end-->
-</section>
+    </tiles:putAttribute>
+</tiles:insertDefinition>

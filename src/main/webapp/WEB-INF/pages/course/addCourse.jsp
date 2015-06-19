@@ -2,27 +2,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<tiles:insertDefinition name="defaultTemplate">
+<tiles:insertDefinition name="aircraftTemplate">
     <tiles:putAttribute name="body">
 
-        <section class="main-content-wrapper">
-            <div class="pageheader">
-                <h1>Course Management</h1>
+        <div class="content">
+            <div class="header">
+                <h1>Add Course</h1>
             </div>
-            <section id="main-content" class="animated fadeInUp">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Add Course</h3>
-
-                                <div class="actions pull-right">
-                                    <i class="fa fa-chevron-down"></i>
-                                    <i class="fa fa-times"></i>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <form:form method="POST" commandName="course" action="/private/addUpdateCourse.web"
+            <div  class="main-content">
+                <form:form method="POST" commandName="course" action="/edu/private/addUpdateCourse.web"
                                            cssClass="form-horizontal form-border">
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Course Name</label>
@@ -80,14 +68,8 @@
                                         </div>
                                     </div>
                                 </form:form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </section>
-
-
+            </div>
+        </div>
     </tiles:putAttribute>
 </tiles:insertDefinition>
 

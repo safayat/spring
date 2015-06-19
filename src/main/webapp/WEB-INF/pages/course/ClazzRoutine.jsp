@@ -2,23 +2,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<tiles:insertDefinition name="defaultTemplate">
+<tiles:insertDefinition name="aircraftTemplate">
     <tiles:putAttribute name="body">
 
-        <section class="main-content-wrapper">
-            <div class="pageheader">
-                <h1>Course Management</h1>
+        <div class="content">
+            <div class="header">
+                <h1>Course Routine</h1>
             </div>
-            <section id="main-content" class="animated fadeInUp" data-ng-app="myApp">
+            <div class="main-content" data-ng-app="myApp">
 
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Course Routine</h3>
-                            </div>
-                            <div class="panel-body">
+                <div>
                                 <a id="toggleViewEditeMode" class="btn btn-primary pull-right"><span>Edit</span><span style="display: none">View</span>&nbsp;Mode</a>
                                 <table class="table table-bordered table-striped classRoutineListDisplay">
                                     <c:forEach items="${classRoutine}" var="outerTtem" varStatus="outerStatus">
@@ -37,7 +30,7 @@
                                         </tr>
                                     </c:forEach>
                                 </table>
-                                <form class="classRoutineListDisplay" action="${appBaseUrl}/private/CourseRoutine.web" method="post" style="display: none">
+                                <form class="classRoutineListDisplay" action="${appBaseUrl}/edu/private/CourseRoutine.web" method="post" style="display: none">
                                     <input type="hidden" name="classId" value="${clazz.classId}">
                                     <button class="btn btn-success">Update Routine</button>
                                     <table class="table table-bordered table-striped">
@@ -67,29 +60,8 @@
                                 </form>
 
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-
-        </section>
-        <script type="text/javascript">
-            var app = angular.module('myApp', []);
-
-            angular.element(document).ready(function () {
-                $("#toggleViewEditeMode").click(function()
-                {
-                    console.log("1111");
-                    $(this).children("span").toggle();
-                    $(".classRoutineListDisplay").toggle();
-                });
-            });
-
-
-
-        </script>
-
+            </div>
+        </div>
     </tiles:putAttribute>
 
 </tiles:insertDefinition>

@@ -41,7 +41,7 @@ public class LoginAuthenticationService implements UserDetailsService{
             String loginInfo = null;
             login.setProfile(null);
             loginInfo = mapper.writeValueAsString(login);
-            userDetails = new User(loginInfo, login.getPassword(), true, true, true, true, buildAuthority());
+            userDetails = new User(loginInfo, login.getPassword(), true, true, true, true, buildAuthority(login.getUserType()));
 
         }catch (Exception e){
 
@@ -49,9 +49,24 @@ public class LoginAuthenticationService implements UserDetailsService{
         return userDetails;
     }
 
-    public List <GrantedAuthority> buildAuthority(){
+    public List <GrantedAuthority> buildAuthority(String userType){
         Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
         setAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
+        if(userType.equals("admin")){
+            setAuths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            setAuths.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
+            setAuths.add(new SimpleGrantedAuthority("ROLE_TEACHER"));
+            setAuths.add(new SimpleGrantedAuthority("ROLE_STAFF"));
+            setAuths.add(new SimpleGrantedAuthority("ROLE_GUARDIAN"));
+        }else if(userType.equals("student")){
+            setAuths.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
+        }else if(userType.equals("teacher")){
+            setAuths.add(new SimpleGrantedAuthority("ROLE_TEACHER"));
+        }else if(userType.equals("staff")){
+            setAuths.add(new SimpleGrantedAuthority("ROLE_STAFF"));
+        }else if(userType.equals("guardian")){
+            setAuths.add(new SimpleGrantedAuthority("ROLE_GUARDIAN"));
+        }
         return  new ArrayList<>(setAuths);
 
     }

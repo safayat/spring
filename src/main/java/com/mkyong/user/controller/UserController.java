@@ -59,7 +59,7 @@ public class UserController {
     SignupValidator signupValidator;
 
 
-    @RequestMapping(value = "/private/createTeacher.web", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/private/createTeacher.web", method = RequestMethod.GET)
     public String initTeacherForm(ModelMap map, @RequestParam(value = "teacherId", required = false) Integer teacherId){
         CommonUser commonUser = null;
         System.out.println("teacherId:" + teacherId);
@@ -73,7 +73,7 @@ public class UserController {
         return "user/createTeacher";
     }
 
-    @RequestMapping(value = "/private/createStaff.web", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/private/createStaff.web", method = RequestMethod.GET)
     public String initStaff(ModelMap map, @RequestParam(value = "staffId", required = false) Integer staffId){
         CommonUser commonUser = null;
         if(staffId == null){
@@ -86,7 +86,7 @@ public class UserController {
         return "user/createStaff";
     }
 
-    @RequestMapping(value = "/private/createTeacher.web", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/private/createTeacher.web", method = RequestMethod.POST)
     public String processTeacherFormSubmit(@ModelAttribute("teacher")Teacher teacher,
                                 BindingResult result,
                                 SessionStatus status,
@@ -103,7 +103,7 @@ public class UserController {
         return "redirect:createTeacher.web?teacherId=" + teacher.getTeacherId();
     }
 
-    @RequestMapping(value = "/private/createStaff.web", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/private/createStaff.web", method = RequestMethod.POST)
     public String createStaff(@ModelAttribute("staff")Staff staff,
                                 RedirectAttributes redirectAttributes
                                 ){
@@ -114,7 +114,7 @@ public class UserController {
         return "redirect:createStaff.web?staffId=" + staff.getStaffId();
     }
 
-    @RequestMapping(value = "/private/createStudent.web", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/private/createStudent.web", method = RequestMethod.GET)
     public String initStudentForm(ModelMap map, @RequestParam(value = "studentId", required = false) Integer studentId){
 
         CommonUser commonUser = null;
@@ -128,7 +128,7 @@ public class UserController {
         return "user/createStudent";
     }
 
-    @RequestMapping(value = "/private/createStudent.web", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/private/createStudent.web", method = RequestMethod.POST)
     public String processStudentFormSubmit(@ModelAttribute("student")Student student,
                                 BindingResult result,
                                 SessionStatus status,

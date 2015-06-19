@@ -2,6 +2,7 @@
 <html>
     <header>
         <tiles:insertAttribute name="head"/>
+        <tiles:insertAttribute name="inlineJs"/>
     </header>
     <body class="theme-default">
 

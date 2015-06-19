@@ -1,52 +1,20 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<jsp:include page="/WEB-INF/pages/common/head.jsp"/>
-<script type="text/javascript">
-    var app = angular.module('myApp', []);
-    function MyController($scope, $http){
-        <%--$scope.clazzList = '${classList}';--%>
-        $scope.clazzList = '${classList}';
-        $scope.clazzList = JSON.parse($scope.clazzList);
-        console.log($scope.clazzList);
-        $scope.getStudentInfo = function(){
+<tiles:insertDefinition name="aircraftTemplate">
 
-        $http({method: 'GET', url: 'getClass.web?classId='+$('#classIdSelect').val()}).
-         success(function(data, status, headers, config) {
-         $scope.clazz = data;
-
-         });
-        };
-
-    }
-
-    angular.element(document).ready(function () {
-        $("#selectAll").click(function(){
-            $(".presentBox").prop('checked',$(this).prop('checked'));
-        });
-    });
-
-</script>
-<section id="main-wrapper" class="theme-default">
-    <jsp:include page="/WEB-INF/pages/common/header.jsp?v=2"/>
-    <jsp:include page="/WEB-INF/pages/common/menu.jsp?v=2"/>
-
-    <!--main content start-->
-    <section class="main-content-wrapper">
+    <tiles:putAttribute name="body">    <!--main content start-->
+        <!--main content start-->
+    <div class="content">
         <div class="pageheader">
             <h1>Attendance</h1>
         </div>
-        <section id="main-content" class="animated fadeInUp">
-            <div class="row" data-ng-app="myApp">
-                <div class="col-md-12">
+        <div class="main-content">
+            <div  data-ng-app="myApp">
+                <div data-ng-controller="MyController">
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Roll Call</h3>
-                        </div>
-                        <div class="panel-body" data-ng-controller="MyController">
-
-                            <form method="post" action="${appBaseUrl}/private/rollCall.web">
+                            <form method="post" action="${appBaseUrl}/edu/private/rollCall.web">
 
                                 <div class="form-group" >
                                     <label class="col-sm-2 control-label">Class Name</label>
@@ -91,10 +59,10 @@
                                 <%--<input type="hidden" name="classId" value="${requestScope.classId}"/>--%>
                             </form>
                         </div>
-                    </div>
-                </div>
             </div>
-        </section>
-    </section>
+        </div>
+    </div>
     <!--main content end-->
-</section>
+    </tiles:putAttribute>
+</tiles:insertDefinition>
+

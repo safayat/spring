@@ -2,17 +2,13 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <script src="${appBaseUrl}/js/neuboard/pieChart.js"></script>
 
-<tiles:insertDefinition name="defaultTemplate">
+<tiles:insertDefinition name="aircraftTemplate">
     <tiles:putAttribute name="body">
-        <section class="main-content-wrapper">
-            <div class="pageheader">
-                <h1>Notice Board</h1>
+        <div class="content">
+            <div class="header">
+                Admission Notice
             </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Admission Notice</h3>
-                </div>
-                <div class="panel-body">
+            <div class="main-content">
                     <h2 style="text-align: center">ADMISSION NOTICE FOR CLASS KINDERGARTEN (2015-2016) <p>Online Admission for KINDERGARTEN. <a style="float: right" class="btn btn-success" href="${appBaseUrl}/addmissionForm.web">Apply Online</a></p></h2><br/><br/>
 
 
@@ -66,10 +62,8 @@
 
                 </div>
 
-                </div>
-            </div>
+        </div>
 
-        </section>
     </tiles:putAttribute>
 </tiles:insertDefinition>
 

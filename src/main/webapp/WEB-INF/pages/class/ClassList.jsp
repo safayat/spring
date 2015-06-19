@@ -1,43 +1,20 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<jsp:include page="/WEB-INF/pages/common/head.jsp"/>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 
-<script type="text/javascript">
-    var app = angular.module('myApp', []);
-    function MyController($scope, $http){
-        $http({method: 'GET', url: 'getClassList.web'}).
-                success(function(data, status, headers, config) {
-                    $scope.clazzList = data;
+<tiles:insertDefinition name="aircraftTemplate">
 
-                });
-
-    }
-</script>
-
-
-<section id="main-wrapper" class="theme-default">
-    <jsp:include page="/WEB-INF/pages/common/header.jsp?v=2"/>
-    <jsp:include page="/WEB-INF/pages/common/menu.jsp?v=2"/>
+    <tiles:putAttribute name="body">    <!--main content start-->
+        <!--main content start-->
 
     <!--main content start-->
-    <section class="main-content-wrapper">
+    <div class="content">
         <div class="pageheader">
-            <h1>Class Management</h1>
+            <h1>Class List</h1>
         </div>
-        <section id="main-content" class="animated fadeInUp">
-            <div class="row" data-ng-app="myApp">
-                <div class="col-md-12">
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Class List</h3>
-
-                            <div class="actions pull-right">
-                                <i class="fa fa-chevron-down"></i>
-                                <i class="fa fa-times"></i>
-                            </div>
-                        </div>
-                        <div class="panel-body" data-ng-controller="MyController">
+        <div class="main-content">
+            <div data-ng-app="myApp">
+                        <div data-ng-controller="MyController">
                             <table class="table table-striped table-bordered dataTable no-footer">
                                 <thead>
                                     <tr>
@@ -59,10 +36,8 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                </div>
             </div>
-        </section>
-    </section>
-    <!--main content end-->
-</section>
+        </div>
+    </div>
+    </tiles:putAttribute>
+</tiles:insertDefinition>

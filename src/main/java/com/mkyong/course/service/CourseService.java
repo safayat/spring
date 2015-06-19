@@ -2,12 +2,14 @@ package com.mkyong.course.service;
 
 import com.mkyong.clazz.dao.ClazzDAO;
 import com.mkyong.clazz.model.Attendance;
+import com.mkyong.clazz.model.ClassRoutineConfiguration;
 import com.mkyong.clazz.model.Clazz;
 import com.mkyong.clazz.model.RollCall;
 import com.mkyong.course.dao.CourseDAO;
 import com.mkyong.course.model.Course;
 import com.mkyong.course.model.CourseRoutine;
 import com.mkyong.user.model.Student;
+import com.mkyong.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,6 +81,7 @@ public class CourseService {
         }
         return courseList;
     }
+
 
 
 

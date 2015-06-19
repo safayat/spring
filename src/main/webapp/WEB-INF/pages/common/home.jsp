@@ -1,26 +1,20 @@
 
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<tiles:insertDefinition name="defaultTemplate">
+<tiles:insertDefinition name="aircraftTemplate">
     <tiles:putAttribute name="body">
-        <section class="main-content-wrapper">
-            <div class="pageheader">
-               Home
+        <div class="content">
+            <div class="header">
+                Home
             </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"> <h1>Welcome To School</h1></h3>
-                </div>
-                <div class="panel-body">
-
-
-                </div>
+            <div class="main-content">
+                    ${pageContext.request.requestURL}<br/>
+                    ${pageContext.request.requestURI}<br/>
             </div>
+        </div>
 
 
-
-        </section>
     </tiles:putAttribute>
 </tiles:insertDefinition>
 

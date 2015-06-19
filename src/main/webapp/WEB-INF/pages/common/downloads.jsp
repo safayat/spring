@@ -1,21 +1,18 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <script src="${appBaseUrl}/js/neuboard/pieChart.js"></script>
 
-<tiles:insertDefinition name="defaultTemplate">
+<tiles:insertDefinition name="aircraftTemplate">
     <tiles:putAttribute name="body">
-        <section class="main-content-wrapper">
-            <div class="pageheader">
+        <div class="content">
+            <div class="header">
                 <h1>Download Section</h1>
             </div>
-            <div class="panel panel-default">
-                <div class="panel-body">
+            <div class="main-content">
                     <button class="btn btn-success input-lg"><i class="fa fa-download"></i> Prospectus</button>
                     <button class="btn btn-primary input-lg"><i class="fa fa-download"></i> Syllabus</button>
-                </div>
             </div>
-            </div>
+        </div>
 
-        </section>
     </tiles:putAttribute>
 </tiles:insertDefinition>
 

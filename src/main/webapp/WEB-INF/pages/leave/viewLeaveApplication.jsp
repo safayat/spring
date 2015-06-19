@@ -5,45 +5,20 @@
   Time: 11:51 AM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<jsp:include page="/WEB-INF/pages/common/head.jsp"/>
-<script type="text/javascript">
-    var app = angular.module('myApp', []);
-    function MyController($scope, $http){
-
-        $http({method: 'GET', url: '${appBaseUrl}/private/getLeaveApplicationData.web'}).
-        success(function(data, status, headers, config) {
-            $scope.leaveApplications = data;
-
-        });
-
-    }
-    angular.element(document).ready(function () {
-    });
-</script>
-<body>
-<section id="main-wrapper" class="theme-default">
-    <jsp:include page="/WEB-INF/pages/common/header.jsp"/>
-    <jsp:include page="/WEB-INF/pages/common/menu.jsp"/>
-
+<tiles:insertDefinition name="aircraftTemplate">
+    <tiles:putAttribute name="body">
     <!--main content start-->
-    <section class="main-content-wrapper">
-        <div class="pageheader">
-            <h1>Leave Management</h1>
-
+    <div class="content">
+        <div class="header">
+            <h1>Leave Application List</h1>
         </div>
-        <section id="main-content" class="animated fadeInUp" data-ng-app="myApp">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Leave Application List</h3>
-                        </div>
-                        <div class="panel-body" ng-controller = "MyController">
+        <div id="main-content" class="main-content" data-ng-app="myApp">
+            <div>
+                <div ng-controller = "MyController">
 
                             <select ng-model="leaveType"  class="input-sm">
                                 <option value="">Select Leave Type</option>
@@ -82,12 +57,9 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                </div>
             </div>
-        </section>
-    </section>
+        </div>
+    </div>
     <!--main content end-->
-</section>
-</body>
-</html>
+    </tiles:putAttribute>
+</tiles:insertDefinition>
