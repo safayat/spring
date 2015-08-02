@@ -60,13 +60,12 @@ public class UserController {
 
 
     @RequestMapping(value = "/admin/private/createTeacher.web", method = RequestMethod.GET)
-    public String initTeacherForm(ModelMap map, @RequestParam(value = "teacherId", required = false) Integer teacherId){
+    public String initTeacherForm(ModelMap map, @RequestParam(value = "userId", required = false) Integer userId){
         CommonUser commonUser = null;
-        System.out.println("teacherId:" + teacherId);
-        if(teacherId == null){
+        if(userId == null){
             commonUser = new Teacher();
         }else {
-            commonUser = userService.getUserByUserId(teacherId, Teacher.class);
+            commonUser = userService.getUserByUserId(userId, Teacher.class);
 
         }
         map.addAttribute("teacher", commonUser);
@@ -74,12 +73,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/admin/private/createStaff.web", method = RequestMethod.GET)
-    public String initStaff(ModelMap map, @RequestParam(value = "staffId", required = false) Integer staffId){
+    public String initStaff(ModelMap map, @RequestParam(value = "userId", required = false) Integer userId){
         CommonUser commonUser = null;
-        if(staffId == null){
+        if(userId == null){
             commonUser = new Staff();
         }else {
-            commonUser = userService.getUserByUserId(staffId, Staff.class);
+            commonUser = userService.getUserByUserId(userId, Staff.class);
 
         }
         map.addAttribute("staff", commonUser);
@@ -100,7 +99,7 @@ public class UserController {
             status.setComplete();
             userService.saveOrUpdate(commonUser);
         }
-        return "redirect:createTeacher.web?teacherId=" + teacher.getTeacherId();
+        return "redirect:createTeacher.web?userId=" + teacher.getUserId();
     }
 
     @RequestMapping(value = "/admin/private/createStaff.web", method = RequestMethod.POST)
@@ -111,17 +110,19 @@ public class UserController {
         CommonUser commonUser = staff;
         commonUser.setUserType("staff");
         userService.saveOrUpdate(commonUser);
-        return "redirect:createStaff.web?staffId=" + staff.getStaffId();
+        return "redirect:createStaff.web?userId=" + staff.getUserId();
     }
 
     @RequestMapping(value = "/admin/private/createStudent.web", method = RequestMethod.GET)
-    public String initStudentForm(ModelMap map, @RequestParam(value = "studentId", required = false) Integer studentId){
+    public String initStudentForm(ModelMap map,
+                                  @RequestParam(value = "userId", required = false) Integer userId){
 
         CommonUser commonUser = null;
-        if(studentId ==null){
+        if(userId ==null){
             commonUser = new Student();
         }else{
-            commonUser = userService.getUserByUserId(studentId, Student.class);
+
+            commonUser = userService.getUserByUserId(userId, Student.class);
         }
         map.addAttribute("student", commonUser);
         map.addAttribute("classList",clazzService.getClassList());
@@ -140,7 +141,7 @@ public class UserController {
             status.setComplete();
             userService.saveOrUpdate(commonUser);
         }
-        return "redirect:createStudent.web?studentId=" + student.getStudentId();
+        return "redirect:createStudent.web?userId=" + student.getUserId();
     }
 
     @RequestMapping(value = "/private/getTeacherList.web", method = RequestMethod.GET)

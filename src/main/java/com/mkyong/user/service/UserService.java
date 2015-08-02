@@ -4,6 +4,8 @@ import com.mkyong.login.model.Login;
 import com.mkyong.profile.model.Profile;
 import com.mkyong.user.dao.UserDAO;
 import com.mkyong.user.model.CommonUser;
+import com.mkyong.user.model.Staff;
+import com.mkyong.user.model.Student;
 import com.mkyong.user.model.Teacher;
 import com.mkyong.util.DaoResult;
 import com.mkyong.util.Utility;
@@ -69,9 +71,13 @@ public class UserService {
     }
 
     public CommonUser getUserByUserId(Integer id, Class clazz){
-        CommonUser commonUser = userDAO.getById(clazz,id);
-        if(commonUser!=null){
-            commonUser.setLogin((Login)userDAO.getById(Login.class, commonUser.getId()));
+        CommonUser commonUser = null;
+        try {
+            Login login = userDAO.getById(Login.class,id);
+            commonUser = userDAO.getUniqueByHql("from " + clazz.getSimpleName() + " where userId = " + id);
+            commonUser.setLogin(login);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return commonUser;
     }

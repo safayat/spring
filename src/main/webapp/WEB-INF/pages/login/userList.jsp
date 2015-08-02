@@ -37,6 +37,11 @@
                                         <div class="caption">
                                             <h4 style="overflow-x: hidden;overflow-y: hidden">{{item.profile.firstName}}</h4>
                                             <p>{{item.userType}}</p>
+                                            <%--<c:if test="${loginInfo.userType == 'admin'}">--%>
+                                                <a ng-if = "item.userType == 'teacher' "  href="${appBaseUrl}/admin/private/createTeacher.web?userId={{item.userId}}">Edit</a>
+                                                <a ng-if = "item.userType == 'student' "  href="${appBaseUrl}/admin/private/createStudent.web?userId={{item.userId}}">Edit</a>
+                                                <a ng-if = "item.userType == 'staff' "  href="${appBaseUrl}/admin/private/createStaff.web?userId={{item.userId}}">Edit</a>
+                                            <%--</c:if>--%>
                                         </div>
                                     </div>
                                 </div>
