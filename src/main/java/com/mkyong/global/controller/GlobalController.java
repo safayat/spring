@@ -1,6 +1,7 @@
 package com.mkyong.global.controller;
 
 import com.mkyong.clazz.model.Clazz;
+import com.mkyong.clazz.service.ClazzService;
 import com.mkyong.login.model.Login;
 import com.mkyong.menu.model.Menu;
 import com.mkyong.menu.service.MenuService;
@@ -27,6 +28,8 @@ public class GlobalController {
 
    @Autowired
    MenuService menuService;
+   @Autowired
+   ClazzService clazzService;
 
     List<Menu> menuTree;
 
@@ -50,6 +53,7 @@ public class GlobalController {
 
 
     }
+
 
     @ModelAttribute(value = "menuIconMap")
     public Map getMenuIconMap()
@@ -76,12 +80,11 @@ public class GlobalController {
     @ModelAttribute(value = "currentClazzMap")
     public Map getCurrentClazzMap()
     {
+        List<Clazz> clazzList = clazzService.getClassListWithOpenSession();
         Map<Integer,String> currentClazzMap = new HashMap();
-        currentClazzMap.put(1,"Class 1");
-        currentClazzMap.put(2,"Class 2");
-        currentClazzMap.put(3,"Class 3");
-        currentClazzMap.put(4,"Class 4");
-        currentClazzMap.put(5,"Class 5");
+        for(Clazz clazz : clazzList){
+            currentClazzMap.put(clazz.getClassId(), clazz.getClassName());
+        }
         return  currentClazzMap;
     }
 

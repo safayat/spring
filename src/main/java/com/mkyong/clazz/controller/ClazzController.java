@@ -5,6 +5,7 @@ import com.mkyong.clazz.model.Clazz;
 import com.mkyong.clazz.model.RollCall;
 import com.mkyong.clazz.service.ClazzService;
 import com.mkyong.login.model.Login;
+import com.mkyong.user.model.Teacher;
 import com.mkyong.user.service.UserService;
 import com.mkyong.util.JsonStringToObjectConvereter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -23,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by safayat on 2/3/15.
@@ -133,5 +133,28 @@ public class ClazzController {
     Clazz getClass(@RequestParam(value = "classId")Integer classId)
     {
         return clazzService.getClassById(classId);
+    }
+
+    @RequestMapping(value = "/admin/private/addUpdateClass.web",
+            method = RequestMethod.GET)
+    public String initClassForm(@RequestParam(value = "classId", required = false)Integer classId, ModelMap map)
+    {
+        Clazz clazz = null;
+        if(classId == null){
+            clazz = new Clazz();
+        }else{
+            clazz = clazzService.getClassById(classId);
+        }
+        map.addAttribute("clazz",clazz);
+        map.addAttribute("teacherList", userService.getUserList(Teacher.class));
+        return "class/addUpdateClass";
+    }
+    @RequestMapping(value = "/admin/private/addUpdateClass.web",
+            method = RequestMethod.POST)
+    public String processClassForm(RedirectAttributes redirectAttributes, @ModelAttribute("clazz")Clazz clazz, @ModelAttribute("currentClazzMap")Map currentClazzMap)
+    {
+        clazzService.saveOrUpdate(clazz);
+        currentClazzMap.put(clazz.getClassId(), clazz.getClassName());
+        return "redirect:addUpdateClass.web?classId=" + clazz.getClassId();
     }
 }

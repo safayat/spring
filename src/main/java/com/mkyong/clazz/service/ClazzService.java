@@ -31,6 +31,10 @@ public class ClazzService {
     public List<Clazz> getClassList(){
         return clazzDAO.getAll(Clazz.class);
     }
+    @Transactional
+    public List<Clazz> getClassListWithOpenSession(){
+        return clazzDAO.getAllWithOpenSession(Clazz.class);
+    }
 
     @Transactional
     public Map getClassStudentCount(){
@@ -215,6 +219,17 @@ public class ClazzService {
         return classRoutine;
     }
 
+    @Transactional
+    public boolean saveOrUpdate(Clazz clazz){
+
+        try {
+            clazzDAO.saveOrUpdate(clazz);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return  false;
+        }
+        return true;
+    }
 
 
 
