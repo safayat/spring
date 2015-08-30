@@ -19,7 +19,8 @@ public class TeacherValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         Teacher teacher = (Teacher)target;
-        SignupValidator.signupValidate(teacher, errors);
+        if(teacher.getUserId() == 0)
+            SignupValidator.signupValidate(teacher, errors);
         if(errors.hasErrors())return;
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "joiningDate",
                 "required.joiningDate","default msg for user");

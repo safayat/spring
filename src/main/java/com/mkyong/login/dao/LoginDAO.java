@@ -1,6 +1,5 @@
 package com.mkyong.login.dao;
 
-import com.mkyong.common.dao.impl.AbstractDaoImpl;
 import com.mkyong.common.dao.impl.CommonDaoImpl;
 import com.mkyong.login.dao.LoginDAO;
 import com.mkyong.login.model.Login;

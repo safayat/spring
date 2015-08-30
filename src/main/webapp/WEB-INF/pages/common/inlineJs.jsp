@@ -16,6 +16,7 @@
             </c:when>
             <c:when test="${fn:endsWith(pageReqUri, 'user/createStudent.jsp')}">
                 $('#admissionDate').datepicker();
+
             </c:when>
             <c:when test="${fn:endsWith(pageReqUri, 'user/createStaff.jsp')}">
                 $('#dateOfJoin').datepicker();
@@ -140,7 +141,7 @@
                 $scope.clazzList = JSON.parse($scope.clazzList);
                 console.log($scope.clazzList);
                 $scope.getStudentInfo = function(){
-                    $http({method: 'GET', url: 'getClass.web?classId='+$('#classIdSelect').val()}).
+                    $http({method: 'GET', url: '${appBaseUrl}/private/getClass.web?classId='+$('#classIdSelect').val()}).
                             success(function(data, status, headers, config) {
                                 $scope.clazz = data;
 
@@ -278,7 +279,101 @@
                         });
             }
         </c:when>
-        <c:otherwise>
+        <c:when test="${fn:endsWith(pageReqUri, 'user/createStudent.jsp')}">
+            function MyController($scope, $http) {
+                $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+                $scope.updateUserPassword = function(){
+                    if($scope.userPassword != '' && $scope.userPassword == $scope.confirmPassword){
+                        var formdata = {
+                            userId : $("#userId").val(),
+                            password : $scope.userPassword
+                        };
+                        console.log(formdata);
+                        $http.post('updatePassword.web',$.param(formdata)).
+                                success(function(data){
+                                    console.log(data);
+                                    if(data.successful){
+                                        $("#updateUserPasswordSuccesMsg").show();
+                                        $("#updateUserPasswordErrorMsg").hide();
+                                    }else{
+                                        $("#updateUserPasswordErrorMsg").show();
+                                        $("#updateUserPasswordSuccesMsg").hide();
+                                    }
+                                }).error(function(data){
+                                    console.log("error");
+                                });
+                    }
+                };
+            }
+
+        </c:when>
+
+        <c:when test="${fn:endsWith(pageReqUri, 'user/createStaff.jsp')}">
+            console.log("user/createStaff.jsp");
+            function MyController($scope, $http) {
+                $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+                $scope.updateUserPassword = function(){
+                    console.log("user/createStaff.jsp");
+
+                    if($scope.userPassword != '' && $scope.userPassword == $scope.confirmPassword){
+                        var formdata = {
+                            userId : $("#userId").val(),
+                            password : $scope.userPassword
+                        };
+                        console.log(formdata);
+                        $http.post('updatePassword.web',$.param(formdata)).
+                                success(function(data){
+                                    console.log(data);
+                                    if(data.successful){
+                                        $("#updateUserPasswordSuccesMsg").show();
+                                        $("#updateUserPasswordErrorMsg").hide();
+                                    }else{
+                                        $("#updateUserPasswordErrorMsg").show();
+                                        $("#updateUserPasswordSuccesMsg").hide();
+                                    }
+                                }).error(function(data){
+                                    console.log("error");
+                                });
+                    }
+                };
+            }
+
+        </c:when>
+
+        <c:when test="${fn:endsWith(pageReqUri, 'user/createTeacher.jsp')}">
+            function MyController($scope, $http) {
+                $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+                $scope.updateUserPassword = function(){
+                    if($scope.userPassword != ''
+                            && $scope.userPassword == $scope.confirmPassword){
+                        var formdata = {
+                            userId : $("#userId").val(),
+                            password : $scope.userPassword
+                        };
+                        console.log(formdata);
+                        $http.post('updatePassword.web',$.param(formdata)).
+                                success(function(data){
+                                    console.log(data);
+                                    if(data.successful){
+                                        $("#updateUserPasswordSuccesMsg").show();
+                                        $("#updateUserPasswordErrorMsg").hide();
+                                    }else{
+                                        $("#updateUserPasswordErrorMsg").show();
+                                        $("#updateUserPasswordSuccesMsg").hide();
+                                    }
+                                }).error(function(data){
+                                    console.log("error");
+                                });
+                    }
+                };
+            }
+
+        </c:when>
+
+
+
+
+    <c:otherwise>
             console.log("${pageContext.request.requestURI}");
         </c:otherwise>
     </c:choose>

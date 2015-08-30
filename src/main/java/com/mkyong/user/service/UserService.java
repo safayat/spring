@@ -37,14 +37,16 @@ public class UserService {
     public DaoResult saveOrUpdate(CommonUser user){
         DaoResult daoResult = new DaoResult();
         try{
-            Login login = user.getLogin();
-            Profile profile = new Profile();
-            profile.setLogin(login);
-            profile.setProfileImageUrl("image/Default_Profile_Picture.png");
-            login.setProfile(profile);
-            login.setPassword(new BCryptPasswordEncoder().encode(login.getPassword()));
-            userDAO.saveOrUpdate(login);
-            user.setId(login.getUserId());
+            if(user.getId() == 0){
+                Login login = user.getLogin();
+                Profile profile = new Profile();
+                profile.setLogin(login);
+                profile.setProfileImageUrl("image/Default_Profile_Picture.png");
+                login.setProfile(profile);
+                login.setPassword(new BCryptPasswordEncoder().encode(login.getPassword()));
+                userDAO.saveOrUpdate(login);
+                user.setId(login.getUserId());
+            }
             userDAO.saveOrUpdate(user);
             daoResult.setValues(true,"", DaoResult.DONE);
         }catch (Exception e){

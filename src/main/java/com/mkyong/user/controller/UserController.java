@@ -144,6 +144,7 @@ public class UserController {
         return "redirect:createStudent.web?userId=" + student.getUserId();
     }
 
+
     @RequestMapping(value = "/private/getTeacherList.web", method = RequestMethod.GET)
     public @ResponseBody
     List getTeacherList(){

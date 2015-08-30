@@ -1,6 +1,5 @@
 package com.mkyong.profile.dao;
 
-import com.mkyong.common.dao.impl.AbstractDaoImpl;
 import com.mkyong.common.dao.impl.CommonDaoImpl;
 import com.mkyong.profile.dao.ProfileDAO;
 import com.mkyong.profile.model.Profile;

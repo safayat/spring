@@ -19,12 +19,7 @@
                 </a>
 
                 <ul class="dropdown-menu">
-                    <li><a href="${appBaseUrl}/private/profile.web">My Account</a></li>
-                    <li class="divider"></li>
-                    <li class="dropdown-header">Admin Panel</li>
-                    <li><a href="./">Users</a></li>
-                    <li><a href="./">Security</a></li>
-                    <li><a tabindex="-1" href="./">Payments</a></li>
+                    <li><a href="${appBaseUrl}/private/profile.web">Profile</a></li>
                     <li class="divider"></li>
                     <li><a tabindex="-1" href="${appBaseUrl}/j_spring_security_logout">Logout</a></li>
                 </ul>

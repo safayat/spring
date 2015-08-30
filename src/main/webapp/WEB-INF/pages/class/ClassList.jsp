@@ -22,6 +22,7 @@
                                         <th>Class Name</th>
                                         <th>Class Teacher name</th>
                                         <th>Count</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -31,6 +32,7 @@
                                         <td><a href="${appBaseUrl}/private/classDetail.web?classId=${clazz.classId}">${clazz.className}</a></td>
                                         <td>${clazz.classTeacher.profile.firstName}&nbsp;${clazz.classTeacher.profile.lastName}</td>
                                         <td>${studentCountMap[clazz.classId]}</td>
+                                        <td><a href="${appBaseUrl}/admin/private/addUpdateClass.web?classId=${clazz.classId}">Edit</a></td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

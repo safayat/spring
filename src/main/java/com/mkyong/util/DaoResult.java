@@ -12,12 +12,16 @@ public class DaoResult {
     private int status;
 
     public DaoResult() {
+        message = "operation successfule";
+        isSuccessful = true;
+        status = 1;
     }
 
-    public void setValues(boolean isSuccessful, String message, int status) {
+    public DaoResult setValues(boolean isSuccessful, String message, int status) {
         this.message = message;
         this.isSuccessful = isSuccessful;
         this.status = status;
+        return this;
     }
 
     public String getMessage() {

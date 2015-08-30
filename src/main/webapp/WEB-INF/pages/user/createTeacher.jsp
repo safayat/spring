@@ -15,6 +15,7 @@
 --%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <tiles:insertDefinition name="aircraftTemplate">
 
@@ -28,10 +29,13 @@
 
         <div class="main-content"  data-ng-app="myApp">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12" data-ng-controller="MyController">
                     <form:form method="POST" commandName="teacher" action="${appBaseUrl}/admin/private/createTeacher.web" cssClass="form-horizontal form-border" >
+                        <c:set var="readOnly" value="${teacher.id > 0}" scope="request"/>
+
                                 <jsp:include page="/WEB-INF/pages/user/loginInfo.jsp" />
                                 <form:hidden path="teacherId"/>
+                                <form:hidden path="userId"/>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Designation</label>
                                     <div class="col-sm-6">

@@ -20,10 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.mkyong.login.model.Login;
@@ -93,6 +90,15 @@ public class LoginController {
     {
         return "login/userList";
     }
+
+    @RequestMapping(value = "/admin/private/updatePassword", method = RequestMethod.POST)
+    public @ResponseBody
+    DaoResult updatePassword(@RequestParam("password") String password, @RequestParam("userId") int userId){
+        return loginService.updatePassword(userId,password);
+    }
+
+
+
     @RequestMapping(value = "/theme.web",
             method = RequestMethod.GET)
     public String getTheme()
@@ -106,11 +112,6 @@ public class LoginController {
     {
         Gson gson = new Gson();
         Login login = gson.fromJson(principal.getName(), Login.class);
-        System.out.println("principal login:" + login);
-        System.out.println("principal login:" + request.getContextPath());
-        System.out.println("principal login:" + request.getScheme());
-        System.out.println("principal login:" + request.getServerName());
-        System.out.println("principal login:" + request.getServerPort());
 
         return "common/home";
     }

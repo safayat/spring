@@ -17,7 +17,8 @@ public class StudentValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         Student student = (Student)target;
-        SignupValidator.signupValidate(student, errors);
+        if(student.getUserId() == 0)
+            SignupValidator.signupValidate(student, errors);
         if(errors.hasErrors())return;
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "classId",
                 "required.className","default msg for user");

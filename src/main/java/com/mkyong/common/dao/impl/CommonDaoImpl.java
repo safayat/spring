@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -45,7 +46,16 @@ public abstract class CommonDaoImpl{
         return (List<E>)criteria.list();
     }
 
-    
+    public<E> List<E> findByCriteriaList(Class entityClass, List<Criterion> criterionList) {
+
+        Criteria criteria = getCurrentSession().createCriteria(entityClass);
+        for(Criterion criterion : criterionList){
+            criteria.add(criterion);
+        }
+        return (List<E>)criteria.list();
+    }
+
+
     public<E> List<E> getAll(Class entityClass) {
         return getCurrentSession().createQuery(" from " + entityClass.getSimpleName()).list();
     }
@@ -82,6 +92,16 @@ public abstract class CommonDaoImpl{
 
         Criteria criteria = getCurrentSession().createCriteria(entityClass);
         criteria.add(criterion);
+
+        return  (E)criteria.uniqueResult();
+    }
+
+   public<E> E findByUniqueCriteriaList(Class entityClass,List<Criterion> criterionList) {
+
+        Criteria criteria = getCurrentSession().createCriteria(entityClass);
+        for(Criterion criterion : criterionList){
+            criteria.add(criterion);
+        }
         return  (E)criteria.uniqueResult();
     }
 

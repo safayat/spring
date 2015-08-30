@@ -2,8 +2,11 @@ package com.mkyong.login.service;
 
 import java.util.*;
 
+import com.google.common.base.Strings;
 import com.mkyong.profile.model.Profile;
+import com.mkyong.util.CriteriaContainer;
 import com.mkyong.util.DaoResult;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,6 +17,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +49,19 @@ public class LoginService{
         profile.setLogin(login);
         login.setProfile(profile);
         return loginDAO.saveUser(login);
+    }
+
+    @Transactional
+    public DaoResult updatePassword(int userId, String password) {
+        DaoResult daoResult = new DaoResult();
+        if(Strings.isNullOrEmpty(password))return daoResult.setValues(false,"",DaoResult.VALIDATION_ERROR);
+        try{
+            Login login = loginDAO.getById(Login.class,userId);
+            login.setPassword(new BCryptPasswordEncoder().encode(password));
+        }catch (Exception e){
+            daoResult.setValues(false,e.getLocalizedMessage(),DaoResult.EXCEPTION);
+        }
+        return daoResult;
     }
 
     @Transactional
