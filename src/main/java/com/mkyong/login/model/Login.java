@@ -1,8 +1,12 @@
 package com.mkyong.login.model;
 
+import com.mkyong.menu.model.Menu;
 import com.mkyong.profile.model.Profile;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mkyong.util.JsonStringToObjectConvereter;
@@ -24,6 +28,8 @@ public class Login implements Serializable{
     private String email;
     private String userType;
     private Profile profile;
+    private Map<Integer,Integer> permissionMap;
+
     public Login() {
 		// TODO Auto-generated constructor stub
 	}
@@ -106,6 +112,15 @@ public class Login implements Serializable{
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    @Transient
+    public Map<Integer, Integer> getPermissionMap() {
+        return permissionMap;
+    }
+
+    public void setPermissionMap(Map<Integer, Integer> permissionMap) {
+        this.permissionMap = permissionMap;
     }
 
     @Override

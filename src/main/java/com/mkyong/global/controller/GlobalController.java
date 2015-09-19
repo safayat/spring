@@ -31,34 +31,11 @@ public class GlobalController {
    @Autowired
    ClazzService clazzService;
 
-    List<Menu> menuTree;
+   Map<Integer,String> menuIconMap;
+   Map<String,String[]> menuUrlMap;
 
-
-    @RequestMapping(value = "/private/init.web",
-            method = RequestMethod.GET,
-            produces = "application/json")
-    public @ResponseBody
-    String getInitApp()
-    {
-        menuTree = menuService.getMenuTree();
-        return "success";
-    }
-
-    @ModelAttribute(value = "menuTree")
-    public List<Menu> getMenuTree()
-    {
-        if(menuTree == null)
-            menuTree = menuService.getMenuTree();
-        return menuTree;
-
-
-    }
-
-
-    @ModelAttribute(value = "menuIconMap")
-    public Map getMenuIconMap()
-    {
-        Map<Integer,String> menuIconMap = new HashMap();
+    public GlobalController() {
+        menuIconMap = new HashMap();
         menuIconMap.put(1,"fa fa-user");
         menuIconMap.put(5,"fa fa-group");
         menuIconMap.put(8,"fa fa-book");
@@ -74,7 +51,46 @@ public class GlobalController {
         menuIconMap.put(36,"fa fa-picture-o");
         menuIconMap.put(37,"fa fa-download");
         menuIconMap.put(38,"fa fa-newspaper-o");
+
+
+        menuUrlMap = new HashMap<>();
+        String[] teacherMap ={"private/","edu/private/"};
+        String[] studentMap ={"private/,stu/private/"};
+        String[] staffMap ={"private/","stff/private/"};
+        String[] adminMap ={"private/","edu/private/","stu/private/","stff/private/"};
+        menuUrlMap.put("teacher",teacherMap);
+        menuUrlMap.put("student",studentMap);
+        menuUrlMap.put("staff",staffMap);
+        menuUrlMap.put("admin",adminMap);
+    }
+
+    @RequestMapping(value = "/private/init.web",
+            method = RequestMethod.GET,
+            produces = "application/json")
+    public @ResponseBody
+    String getInitApp()
+    {
+        menuService.getMenuTree();
+        return "success";
+    }
+
+    @ModelAttribute(value = "menuTree")
+    public List<Menu> getMenuTree()
+    {
+        return menuService.getMenuTree();
+    }
+
+
+    @ModelAttribute(value = "menuIconMap")
+    public Map getMenuIconMap()
+    {
         return menuIconMap;
+    }
+
+    @ModelAttribute(value = "menuUrlMap")
+    public Map getMenuUrlMap()
+    {
+        return menuUrlMap;
     }
 
     @ModelAttribute(value = "currentClazzMap")

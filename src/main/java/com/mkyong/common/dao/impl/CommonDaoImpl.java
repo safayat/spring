@@ -3,7 +3,9 @@ package com.mkyong.common.dao.impl;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -103,6 +105,17 @@ public abstract class CommonDaoImpl{
             criteria.add(criterion);
         }
         return  (E)criteria.uniqueResult();
+    }
+
+   public<E,I>  List<E> in(Class entityClass, String fieldName, List<I> values) {
+
+        Criteria criteria = getCurrentSession().createCriteria(entityClass);
+        Conjunction conjunction = Restrictions.conjunction();
+        for( I i: values){
+            conjunction.add(Restrictions.eq(fieldName,i));
+        }
+        criteria.add(conjunction);
+        return  (List<E>)criteria.list();
     }
 
 

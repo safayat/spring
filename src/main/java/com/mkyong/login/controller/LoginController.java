@@ -99,12 +99,6 @@ public class LoginController {
 
 
 
-    @RequestMapping(value = "/theme.web",
-            method = RequestMethod.GET)
-    public String getTheme()
-    {
-        return "login/theme";
-    }
 
     @RequestMapping(value = "/private/home.web",
             method = RequestMethod.GET)
@@ -137,26 +131,7 @@ public class LoginController {
         return "common/noticeBoard";
     }
 
-    @RequestMapping(value = "/private/admission.web",
-            method = RequestMethod.GET)
-    public String admissionInfo(HttpServletRequest request,Principal principal)
-    {
-        return "common/admission";
-    }
 
-    @RequestMapping(value = "/private/history.web",
-            method = RequestMethod.GET)
-    public String history(HttpServletRequest request,Principal principal)
-    {
-        return "common/history";
-    }
-
-    @RequestMapping(value = "/downloads.web",
-            method = RequestMethod.GET)
-    public String downloads()
-    {
-        return "common/downloads";
-    }
 
 
 }

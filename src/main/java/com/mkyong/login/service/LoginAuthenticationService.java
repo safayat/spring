@@ -1,8 +1,12 @@
 package com.mkyong.login.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mkyong.global.controller.GlobalController;
 import com.mkyong.login.dao.LoginDAO;
 import com.mkyong.login.model.Login;
+import com.mkyong.menu.dao.MenuDAO;
+import com.mkyong.menu.model.Menu;
+import com.mkyong.menu.service.MenuService;
 import com.mkyong.profile.model.Profile;
 import com.mkyong.util.DaoResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +20,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by safayat on 4/25/14.
@@ -30,6 +32,8 @@ public class LoginAuthenticationService implements UserDetailsService{
 
     @Autowired
     private LoginDAO loginDAO;
+    @Autowired
+    private MenuService menuService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -40,11 +44,12 @@ public class LoginAuthenticationService implements UserDetailsService{
             ObjectMapper mapper = new ObjectMapper();
             String loginInfo = null;
             login.setProfile(null);
+            login.setPermissionMap(menuService.getPermissionMap(login.getUserType()));
             loginInfo = mapper.writeValueAsString(login);
             userDetails = new User(loginInfo, login.getPassword(), true, true, true, true, buildAuthority(login.getUserType()));
 
         }catch (Exception e){
-
+            e.printStackTrace();
         }
         return userDetails;
     }
