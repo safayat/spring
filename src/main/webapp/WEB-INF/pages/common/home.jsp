@@ -9,8 +9,6 @@
                 Home
             </div>
             <div class="main-content">
-                    ${pageContext.request.requestURL}<br/>
-                    ${pageContext.request.requestURI}<br/>
             </div>
         </div>
 

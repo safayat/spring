@@ -34,7 +34,7 @@
         </authentication-provider>
     </authentication-manager>
 
-    <beans:bean id="loginAuthenticationService" class="com.mkyong.login.service.LoginAuthenticationService">
+    <beans:bean id="loginAuthenticationService" class="com.school.login.service.LoginAuthenticationService">
     </beans:bean>
     <beans:bean id="encoder"
         class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">

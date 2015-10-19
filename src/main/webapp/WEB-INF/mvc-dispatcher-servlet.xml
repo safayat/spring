@@ -15,66 +15,66 @@
         >
 
     <context:annotation-config />
-    <context:component-scan base-package="com.mkyong.global.controller" />
+    <context:component-scan base-package="com.school.global.controller" />
 
     <mvc:annotation-driven>
         <mvc:message-converters>
             <!-- Use the HibernateAware mapper instead of the default -->
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="objectMapper">
-                    <bean class="com.mkyong.util.HibernateAwareObjectMapper" />
+                    <bean class="com.school.util.HibernateAwareObjectMapper" />
                 </property>
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-    <context:component-scan base-package="com.mkyong.login.controller" />
-    <context:component-scan base-package="com.mkyong.login.service" />
-    <context:component-scan base-package="com.mkyong.login.dao" />
-    <context:component-scan base-package="com.mkyong.profile.controller" />
-    <context:component-scan base-package="com.mkyong.profile.service" />
-    <context:component-scan base-package="com.mkyong.profile.dao" />
-    <context:component-scan base-package="com.mkyong.user.controller" />
-    <context:component-scan base-package="com.mkyong.clazz.controller" />
-    <context:component-scan base-package="com.mkyong.clazz.service" />
-    <context:component-scan base-package="com.mkyong.clazz.dao" />
-    <context:component-scan base-package="com.mkyong.course.controller" />
-    <context:component-scan base-package="com.mkyong.course.service" />
-    <context:component-scan base-package="com.mkyong.course.dao" />
-    <context:component-scan base-package="com.mkyong.assignment.controller" />
-    <context:component-scan base-package="com.mkyong.assignment.service" />
-    <context:component-scan base-package="com.mkyong.assignment.dao" />
-    <context:component-scan base-package="com.mkyong.message.controller" />
-    <context:component-scan base-package="com.mkyong.message.service" />
-    <context:component-scan base-package="com.mkyong.message.dao" />
-    <context:component-scan base-package="com.mkyong.menu.controller" />
-    <context:component-scan base-package="com.mkyong.menu.service" />
-    <context:component-scan base-package="com.mkyong.menu.dao" />
-    <context:component-scan base-package="com.mkyong.exam.controller" />
-    <context:component-scan base-package="com.mkyong.exam.service" />
-    <context:component-scan base-package="com.mkyong.exam.dao" />
-    <context:component-scan base-package="com.mkyong.leave.controller" />
-    <context:component-scan base-package="com.mkyong.leave.service" />
-    <context:component-scan base-package="com.mkyong.leave.dao" />
-    <context:component-scan base-package="com.mkyong.attendance.controller" />
-    <context:component-scan base-package="com.mkyong.attendance.service" />
-    <context:component-scan base-package="com.mkyong.attendance.dao" />
-    <context:component-scan base-package="com.mkyong.calender.controller" />
-    <context:component-scan base-package="com.mkyong.calender.service" />
-    <context:component-scan base-package="com.mkyong.calender.dao" />
-    <context:component-scan base-package="com.mkyong.accounting.controller" />
-    <context:component-scan base-package="com.mkyong.accounting.service" />
-    <context:component-scan base-package="com.mkyong.accounting.dao" />
-    <context:component-scan base-package="com.mkyong.admission.controller" />
-    <context:component-scan base-package="com.mkyong.admission.service" />
-    <context:component-scan base-package="com.mkyong.admission.dao" />
-    <context:component-scan base-package="com.mkyong.common.service" />
-    <context:component-scan base-package="com.mkyong.common.dao" />
+    <context:component-scan base-package="com.school.login.controller" />
+    <context:component-scan base-package="com.school.login.service" />
+    <context:component-scan base-package="com.school.login.dao" />
+    <context:component-scan base-package="com.school.profile.controller" />
+    <context:component-scan base-package="com.school.profile.service" />
+    <context:component-scan base-package="com.school.profile.dao" />
+    <context:component-scan base-package="com.school.user.controller" />
+    <context:component-scan base-package="com.school.clazz.controller" />
+    <context:component-scan base-package="com.school.clazz.service" />
+    <context:component-scan base-package="com.school.clazz.dao" />
+    <context:component-scan base-package="com.school.course.controller" />
+    <context:component-scan base-package="com.school.course.service" />
+    <context:component-scan base-package="com.school.course.dao" />
+    <context:component-scan base-package="com.school.assignment.controller" />
+    <context:component-scan base-package="com.school.assignment.service" />
+    <context:component-scan base-package="com.school.assignment.dao" />
+    <context:component-scan base-package="com.school.message.controller" />
+    <context:component-scan base-package="com.school.message.service" />
+    <context:component-scan base-package="com.school.message.dao" />
+    <context:component-scan base-package="com.school.menu.controller" />
+    <context:component-scan base-package="com.school.menu.service" />
+    <context:component-scan base-package="com.school.menu.dao" />
+    <context:component-scan base-package="com.school.exam.controller" />
+    <context:component-scan base-package="com.school.exam.service" />
+    <context:component-scan base-package="com.school.exam.dao" />
+    <context:component-scan base-package="com.school.leave.controller" />
+    <context:component-scan base-package="com.school.leave.service" />
+    <context:component-scan base-package="com.school.leave.dao" />
+    <context:component-scan base-package="com.school.attendance.controller" />
+    <context:component-scan base-package="com.school.attendance.service" />
+    <context:component-scan base-package="com.school.attendance.dao" />
+    <context:component-scan base-package="com.school.calender.controller" />
+    <context:component-scan base-package="com.school.calender.service" />
+    <context:component-scan base-package="com.school.calender.dao" />
+    <context:component-scan base-package="com.school.accounting.controller" />
+    <context:component-scan base-package="com.school.accounting.service" />
+    <context:component-scan base-package="com.school.accounting.dao" />
+    <context:component-scan base-package="com.school.admission.controller" />
+    <context:component-scan base-package="com.school.admission.service" />
+    <context:component-scan base-package="com.school.admission.dao" />
+    <context:component-scan base-package="com.school.common.service" />
+    <context:component-scan base-package="com.school.common.dao" />
 
 
-    <bean class="com.mkyong.login.validator.LoginValidator" />
-    <bean class="com.mkyong.login.validator.SignupValidator" />
-    <bean class="com.mkyong.user.validator.TeacherValidator" />
-    <bean class="com.mkyong.user.validator.StudentValidator" />
+    <bean class="com.school.login.validator.LoginValidator" />
+    <bean class="com.school.login.validator.SignupValidator" />
+    <bean class="com.school.user.validator.TeacherValidator" />
+    <bean class="com.school.user.validator.StudentValidator" />
  	<!-- Register the Customer.properties -->
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
@@ -128,7 +128,7 @@
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.mkyong.login.model, com.mkyong.profile.model, com.mkyong.clazz.model, com.mkyong.user.model, com.mkyong.course.model, com.mkyong.assignment.model, com.mkyong.message.model, com.mkyong.menu.model,com.mkyong.exam.model,com.mkyong.leave.model,com.mkyong.attendance.model,com.mkyong.calender.model,com.mkyong.accounting.model,com.mkyong.admission.model" />
+        <property name="packagesToScan" value="com.school.login.model, com.school.profile.model, com.school.clazz.model, com.school.user.model, com.school.course.model, com.school.assignment.model, com.school.message.model, com.school.menu.model,com.school.exam.model,com.school.leave.model,com.school.attendance.model,com.school.calender.model,com.school.accounting.model,com.school.admission.model" />
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
