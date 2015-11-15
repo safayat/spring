@@ -5,6 +5,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
+
+import org.hibernate.annotations.Index;
+import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Parameter;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -17,29 +20,21 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "profile")
 public class Profile implements Serializable{
 
-    private int profileId;
+    private long profileId;
+    private long userId;
     private String firstName;
     private String lastName;
+    private String fatherName;
+    private String  motherName;
     private String mobileNo;
     private Date dateOfBirth;
     private String profileImageUrl;
     private Login login;
 
+
     public Profile() {
         // TODO Auto-generated constructor stub
     }
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
-    @JsonBackReference
-    public Login getLogin() {
-        return login;
-    }
-
-    public void setLogin(Login login) {
-        this.login = login;
-    }
-
 
     @Column(name = "dateOfBirth",nullable = true)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -77,16 +72,14 @@ public class Profile implements Serializable{
         this.firstName = firstName;
     }
 
-    @GenericGenerator(name = "generator", strategy = "foreign",
-            parameters = @Parameter(name = "property", value = "login"))
     @Id
-    @GeneratedValue(generator = "generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "profileId",unique = true,nullable = false)
-    public int getProfileId() {
+    public long getProfileId() {
         return profileId;
     }
 
-    public void setProfileId(int profileId) {
+    public void setProfileId(long profileId) {
         this.profileId = profileId;
     }
 
@@ -94,8 +87,46 @@ public class Profile implements Serializable{
         return profileImageUrl;
     }
 
+    @Transient
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public String getFatherName() {
+        return fatherName;
+    }
+
+    public void setFatherName(String fatherName) {
+        this.fatherName = fatherName;
+    }
+
+    public String getMotherName() {
+        return motherName;
+    }
+
+    public void setMotherName(String motherName) {
+        this.motherName = motherName;
+    }
+
+    @Transient
+    public Login getLogin() {
+        return login;
+    }
+
+    public void setLogin(Login login) {
+        this.login = login;
     }
 
     @Override

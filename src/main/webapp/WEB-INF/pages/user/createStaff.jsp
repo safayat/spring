@@ -15,11 +15,10 @@
             <div class="row">
                 <div class="col-md-12" data-ng-controller="MyController">
                             <form:form method="POST" commandName="staff" action="${appBaseUrl}/admin/private/createStaff.web" cssClass="form-horizontal form-border" >
-                                <c:set var="readOnly" value="${staff.id > 0}" scope="request"/>
+                                <c:set var="readOnly" value="${staff.staffId > 0}" scope="request"/>
 
                                 <jsp:include page="/WEB-INF/pages/user/loginInfo.jsp" />
                                 <form:hidden path="staffId"/>
-                                <form:hidden path="userId"/>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Designation</label>
                                     <div class="col-sm-6">

@@ -3,6 +3,7 @@ package com.school.exam.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.school.admission.model.AdmissionApplication;
 import com.school.user.model.Student;
+import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
 
@@ -43,6 +44,7 @@ public class AddmissionExamSeatplan {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "examRoomId", nullable = true, referencedColumnName = "examRoomId", insertable = false, updatable = false)
+    @ForeignKey(name="none")
     @JsonManagedReference
     public ExamRoom getExamRoom() {
         return examRoom;
@@ -54,6 +56,7 @@ public class AddmissionExamSeatplan {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(insertable = false, updatable = false, name = "applicantId", referencedColumnName = "admissionApplicationId")
+    @ForeignKey(name="none")
     @JsonManagedReference
     public AdmissionApplication getAdmissionApplication() {
         return admissionApplication;

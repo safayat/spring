@@ -38,21 +38,21 @@ public class LoginService{
     public Login findByUserName(String username) {
         return loginDAO.findUserByUserName(username);
     }
-
-    public Login findById(Integer id) {
+    public Login findById(Long id) {
         return loginDAO.getById(Login.class, id);
+    }
+
+    public Login findByEmail(String email) {
+        return (Login)loginDAO.getQuery(" from " + Login.class.getSimpleName() + " where email=" + email).uniqueResult();
     }
 
     @Transactional
     public DaoResult saveUser(Login login) {
-        Profile profile = new Profile();
-        profile.setLogin(login);
-        login.setProfile(profile);
         return loginDAO.saveUser(login);
     }
 
     @Transactional
-    public DaoResult updatePassword(int userId, String password) {
+    public DaoResult updatePassword(Long userId, String password) {
         DaoResult daoResult = new DaoResult();
         if(Strings.isNullOrEmpty(password))return daoResult.setValues(false,"",DaoResult.VALIDATION_ERROR);
         try{

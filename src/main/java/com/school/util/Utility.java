@@ -1,5 +1,9 @@
 package com.school.util;
 
+import com.google.common.base.Strings;
+import com.school.user.model.Staff;
+import com.school.user.model.Student;
+import com.school.user.model.Teacher;
 import org.springframework.http.HttpRequest;
 
 import javax.servlet.http.HttpServlet;
@@ -29,6 +33,24 @@ public class Utility {
         return null;
 
    }
+
+   public static Object getStringToPreferredObject(String data, String type){
+       Object convertedValue = null;
+       if(Strings.isNullOrEmpty(type)){
+           convertedValue = data;
+       }
+       if("date".equalsIgnoreCase(type)){
+           convertedValue = Utility.toDate(data);
+       }else if("int".equalsIgnoreCase(type)){
+           convertedValue = Integer.parseInt(data);
+       }else if("long".equalsIgnoreCase(type)){
+           convertedValue = Long.parseLong(data);
+       }
+       return convertedValue;
+   }
+
+
+
    public static String getUniqueKey(){
        Random r = new SecureRandom();
        byte[] b = new byte[16];
@@ -50,6 +72,16 @@ public class Utility {
         if(h.length()<2)h="0"+h;
         if(m.length()<2)m=m+"0";
         return h + " : " + m;
+    }
+
+    public static Class getUserEntityClass(String userType){
+        if("student".equalsIgnoreCase(userType))
+            return Student.class;
+        if("teacher".equalsIgnoreCase(userType))
+            return Teacher.class;
+        if("staff".equalsIgnoreCase(userType))
+            return Staff.class;
+        return null;
     }
 
    public static void main(String[] args){

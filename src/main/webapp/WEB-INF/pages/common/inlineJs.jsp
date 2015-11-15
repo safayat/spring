@@ -1,3 +1,4 @@
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -7,15 +8,13 @@
     var app = angular.module('myApp', []);
     angular.element(document).ready(function () {
         <c:choose>
-            <c:when test="${fn:endsWith(pageReqUri, 'user/students.jsp')}">
-            </c:when>
             <c:when test="${fn:endsWith(pageReqUri, 'user/teachers.jsp')}">
             </c:when>
             <c:when test="${fn:endsWith(pageReqUri, 'user/createTeacher.jsp')}">
                 $('#joiningDate').datepicker();
             </c:when>
             <c:when test="${fn:endsWith(pageReqUri, 'user/createStudent.jsp')}">
-                $('#admissionDate').datepicker();
+//                $('#admissionDate').datepicker();
 
             </c:when>
             <c:when test="${fn:endsWith(pageReqUri, 'user/createStaff.jsp')}">
@@ -90,14 +89,6 @@
 
     });
     <c:choose>
-        <c:when test="${fn:endsWith(pageReqUri, 'user/students.jsp')}">
-            function MyController($scope, $http) {
-                $http({method: 'GET', url: 'getStudentList.web'}).
-                        success(function (data, status, headers, config) {
-                            $scope.students = data;
-                        });
-            }
-        </c:when>
         <c:when test="${fn:endsWith(pageReqUri, 'user/teachers.jsp')}">
             function MyController($scope, $http){
                 $http({method: 'GET', url: 'getTeacherList.web'}).
@@ -130,7 +121,7 @@
                 $http({method: 'GET', url: 'getClass.web?classId=${requestScope.classId}'}).
                         success(function(data, status, headers, config) {
                             $scope.clazz = data;
-
+                            console.log(data);
                         });
             }
         </c:when>
@@ -280,6 +271,7 @@
             }
         </c:when>
         <c:when test="${fn:endsWith(pageReqUri, 'user/createStudent.jsp')}">
+/*
             function MyController($scope, $http) {
                 $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
                 $scope.updateUserPassword = function(){
@@ -304,7 +296,8 @@
                                 });
                     }
                 };
-            }
+
+            }*/
 
         </c:when>
 
@@ -341,33 +334,6 @@
         </c:when>
 
         <c:when test="${fn:endsWith(pageReqUri, 'user/createTeacher.jsp')}">
-            function MyController($scope, $http) {
-                $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
-                $scope.updateUserPassword = function(){
-                    if($scope.userPassword != ''
-                            && $scope.userPassword == $scope.confirmPassword){
-                        var formdata = {
-                            userId : $("#userId").val(),
-                            password : $scope.userPassword
-                        };
-                        console.log(formdata);
-                        $http.post('updatePassword.web',$.param(formdata)).
-                                success(function(data){
-                                    console.log(data);
-                                    if(data.successful){
-                                        $("#updateUserPasswordSuccesMsg").show();
-                                        $("#updateUserPasswordErrorMsg").hide();
-                                    }else{
-                                        $("#updateUserPasswordErrorMsg").show();
-                                        $("#updateUserPasswordSuccesMsg").hide();
-                                    }
-                                }).error(function(data){
-                                    console.log("error");
-                                });
-                    }
-                };
-            }
-
         </c:when>
 
 

@@ -23,21 +23,140 @@
 
             <div class="main-content" >
                 <div class="row" data-ng-controller="MyController">
-                    <div class="col-sm-2" ng-repeat="student in students" >
-                        <div class="thumbnail">
-                            <a href="${appBaseUrl}/private/profileView.web?profileId={{student.profile.profileId}}">
-                                <img ng-if="student.profile.profileImageUrl == 'image/Default_Profile_Picture.png'" src="${appBaseUrl}/{{student.profile.profileImageUrl}}" alt="..." height="50px">
-                                <img ng-if="student.profile.profileImageUrl != 'image/Default_Profile_Picture.png'" src="{{student.profile.profileImageUrl}}" alt="..." height="50px">
-                                <div class="caption">
-                                    <h4 style="overflow-x: hidden;overflow-y: hidden">{{student.profile.firstName}}</h4>
-                                    <p>Roll:{{student.rollNumber}} &nbsp; Class:{{student.clazz.className}}</p>
-                                </div>
-                            </a>
+                    <div class="col-md-10 col-md-offset-1">
+
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label class="sr-only"></label>
+                            <select ng-model="s_className" class="form-control" required="true" ng-change="filterClass()">
+                                <option value="">select class name</option>
+                                <option  ng-repeat="className in classInfo.classNames" value="{{className}}" ng-selected="{{s_className == className}}">{{className}}</option>
+                            </select>
+
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <label class="sr-only"></label>
+                            <select class="form-control" ng-model="s_sectionName" required="true" ng-change="filterClass()">
+                                <option value="">select section</option>
+                                <option ng-repeat="section in classInfo.sections" value="{{section}}" ng-selected="{{s_sectionName == section}}">{{section}}</option>
+                            </select>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only"></label>
+                            <select class="form-control" ng-model="s_shiftName" required="true" ng-change="filterClass()">
+                                <option value="">select shift</option>
+                                <option ng-repeat="shift in classInfo.shifts" value="{{shift}}" ng-selected="{{s_shiftName == shift}}">{{shift}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only"></label>
+                            <input type="text" class="form-control" ng-model="rollNumber" placeholder="Roll Number" ng-change="loadNewStudentList(0)" ng-model-options="{updateOn: 'blur'}">
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only"></label>
+                            <input type="text" class="form-control" ng-model="fullName" placeholder="Name" ng-change="loadNewStudentList(0)" ng-model-options="{updateOn: 'blur'}">
+                        </div>
+                        <a href="${appBaseUrl}/admin/private/createStudent.web" target="_blank" class="btn btn-success pull-right" >New Student</a>
+
+
+                    </form>
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="width: 50px;"></th>
+                            <th>Name</th>
+                            <th>Class</th>
+                            <th>Roll number</th>
+                            <th>Admission Date</th>
+                            <th>Birth Date</th>
+                            <th>Mobile No</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr ng-repeat="student in students">
+                            <td><img class="user" src="${appBaseUrl}/{{student.profile.profileImageUrl}}"></td>
+                            <td>{{student.fullName}}</td>
+                            <td>{{classInfo.clazzMap[student.classId].className}}&nbsp;{{classInfo.clazzMap[student.classId].sectionName}}&nbsp;{{classInfo.clazzMap[student.classId].shiftName}}</td>
+                            <td>{{student.rollNumber}}</td>
+                            <td>{{student.admissionDate | date : 'shortDate'}}</td>
+                            <td>{{student.profile.dateOfBirth | date : 'shortDate'}}</td>
+                            <td>{{student.profile.mobileNo}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                        <nav>
+                            <ul class="pagination">
+                                <li>
+                                    <a href aria-label="Previous" ng-click="loadNewStudentList(offset-limit)">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li  ng-repeat="pageIndex in [0,1,2,3,4]">
+                                    <a href ng-click="loadNewStudentList(limit*pageIndex)">
+                                        {{pageIndex}}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href aria-label="Next" ng-click="loadNewStudentList(offset+limit)">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+</div>
                 </div>
             </div>
         </div>
+        <script src="${appBaseUrl}/js/class.js"></script>
+        <script>
+
+            var app = angular.module('myApp', []);
+            app.controller("MyController", MyController);
+            function MyController($scope, $http) {
+                $scope.classInfo = {};
+                $scope.classIds = [];
+                $scope.limit = 10;
+                $scope.offset = 0;
+                $scope.rollNumber = "";
+                $scope.fullName = "";
+
+                initClazzList($http,'${appBaseUrl}/private/getClassList.web', function(data){
+                    $scope.classInfo= data;
+                });
+                $scope.filterClass = function(){
+                    $scope.classIds = filterClazz($scope.classInfo.classList, $scope.s_className, $scope.s_sectionName, $scope.s_shiftName);
+                    $scope.loadNewStudentList(0);
+
+                };
+
+                $scope.loadNewStudentList = function(offset){
+                    $scope.offset = offset;
+                    var param = {};
+                    param.limit = $scope.limit;
+                    param.rollNumber = $scope.rollNumber;
+                    param.name = $scope.fullName;
+                    param.offset = $scope.offset;
+                    param.classIds = $scope.classIds.toString();
+
+
+                    $http({
+                        method: 'POST',
+                        url: "${appBaseUrl}/private/getStudentList.web",
+                        data: $.param(param),
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    }).success(function (data) {
+                                $scope.students = data;
+                                console.log($scope.students);
+
+                            }).error(function (data) {
+                            });
+
+                }
+            }
+        </script>
 
     </tiles:putAttribute>
 </tiles:insertDefinition>

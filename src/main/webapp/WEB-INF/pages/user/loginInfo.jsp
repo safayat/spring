@@ -9,49 +9,52 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<form:hidden path="login.userId"/>
+
 <div class="form-group">
-    <label class="col-sm-3 control-label"></label>
+    <label class="col-sm-3 control-label">First Name</label>
     <div class="col-sm-6">
-        <div id="updateUserPasswordSuccesMsg" style="display: none" class="alert alert-success">Password update successful</div>
-        <div id="updateUserPasswordErrorMsg" style="display: none" class="alert alert-danger">Password update failed</div>
+        <form:input path="profile.firstName" cssClass="form-control" />
+        <form:errors path="profile.firstName" cssClass="error"/>
     </div>
 </div>
-
+<div class="form-group">
+    <label class="col-sm-3 control-label">Last Name</label>
+    <div class="col-sm-6">
+        <form:input path="profile.lastName" cssClass="form-control" />
+        <form:errors path="profile.lastName" cssClass="error"/>
+    </div>
+</div>
 <div class="form-group">
     <label class="col-sm-3 control-label">UserName</label>
     <div class="col-sm-6">
-        <c:if test="${readOnly == 'true'}"><form:input path="username" cssClass="form-control" readonly="true" /></c:if>
-        <c:if test="${readOnly != 'true'}"><form:input path="username" cssClass="form-control" /></c:if>
-        <form:errors path="username" cssClass="error"/>
+        <form:input path="login.username" cssClass="form-control"  ng-model="loginUsername" ng-change="verifyUserName()"/>
+        <span ng-if="usernameNotUnique == true" style="color: red">username exists</span>
+        <span ng-if="loginUsername.length < 3" style="color: red">username should have at least 3 chars</span>
+        <form:errors path="login.username" cssClass="error"/>
     </div>
 </div>
 
 <div class="form-group">
     <label class="col-sm-3 control-label">Password</label>
     <div class="col-sm-6">
-        <form:password path="password" cssClass="form-control" ng-model="userPassword"/>
-        <form:errors path="password" cssClass="error"/>
+        <form:password path="login.password" cssClass="form-control" ng-model="userPassword" required="true"/>
+        <form:errors path="login.password" cssClass="error"/>
     </div>
-    <c:if test="${readOnly == 'true'}">
-        <div class="col-sm-2">
-            <button type="button" class="btn btn-primary" ng-click="updateUserPassword()">Update</button>
-        </div>
-    </c:if>
 </div>
 
 <div class="form-group">
     <label class="col-sm-3 control-label">Confirm Password</label>
     <div class="col-sm-6">
-        <form:password path="confirmPassword" class="form-control" ng-model="confirmPassword" />
+        <form:password path="login.confirmPassword" class="form-control" ng-model="confirmPassword" required="true"/>
     </div>
 </div>
 
 <div class="form-group">
     <label class="col-sm-3 control-label">Email Address</label>
     <div class="col-sm-6">
-        <c:if test="${readOnly == 'true'}"><form:input path="email" cssClass="form-control" readonly="true" /></c:if>
-        <c:if test="${readOnly != 'true'}"><form:input path="email" cssClass="form-control"/></c:if>
-        <form:errors path="email" cssClass="error"/>
+        <form:input path="login.email" cssClass="form-control"  />
+        <form:errors path="login.email" cssClass="error"/>
     </div>
 </div>
 

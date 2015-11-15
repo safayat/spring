@@ -2,6 +2,7 @@ package com.school.user.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.school.login.model.Login;
 import com.school.profile.model.Profile;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,68 +14,18 @@ import java.util.List;
 @Table(name = "staff")
 public class Staff extends CommonUser{
     private Integer staffId;
-    private Integer userId;
     private String designation;
     private String startingDesignation;
     private String employeeLevel;
     private Date dateOfJoin;
-    private Profile profile;
+    private  String fullName;
 
-    @OneToOne(fetch = FetchType.EAGER, targetEntity = Profile.class)
-    @JoinColumn(name = "userId",referencedColumnName = "profileId",insertable = false, updatable = false)
-    @JsonManagedReference
-    public Profile getProfile() {
-        return profile;
+    public Staff() {
+        super();
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
-
-
-    @Override
-    public void setUsername(String username) {
-        login.setUsername(username);
-    }
-
-    @Override
-    public void setPassword(String password) {
-        login.setPassword(password);
-
-    }
-
-    @Override
-    public void setEmail(String email) {
-        login.setEmail(email);
-    }
-
-    @Override
-    public void setConfirmPassword(String confirmPassword) {
-        login.setConfirmPassword(confirmPassword);
-    }
-
-
-    @Transient
-    @Override
-    public String getUsername() {
-        return getLogin().getUsername();
-    }
-
-    @Transient
-    @Override
-    public String getConfirmPassword() {
-        return getLogin().getConfirmPassword();
-    }
-
-    @Transient
-    @Override
-    public String getPassword() {
-        return getLogin().getPassword();
-    }
-    @Transient
-    @Override
-    public String getEmail() {
-        return getLogin().getEmail();
+    public Staff(Login user) {
+        super();
     }
 
     @Id
@@ -85,14 +36,6 @@ public class Staff extends CommonUser{
 
     public void setStaffId(Integer staffId) {
         this.staffId = staffId;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 
     public String getDesignation() {
@@ -128,28 +71,11 @@ public class Staff extends CommonUser{
         this.dateOfJoin = dateOfJoin;
     }
 
-
-    @Transient
-    @Override
-    public int getId() {
-        return userId;
+    public String getFullName() {
+        return fullName;
     }
 
-    @Override
-    public void setId(int id) {
-        userId = id;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
-
-    @Transient
-    @Override
-    public String getUserType() {
-        return getLogin().getUserType();
-    }
-
-    @Override
-    public void setUserType(String userType) {
-        getLogin().setUserType(userType);
-    }
-
-
 }

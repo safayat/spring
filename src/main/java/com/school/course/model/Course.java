@@ -2,6 +2,7 @@ package com.school.course.model;
 
 
 import com.school.user.model.Teacher;
+import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
 import java.util.List;
@@ -73,6 +74,7 @@ public class Course {
         this.courseCode = courseCode;
     }
 
+    @ForeignKey(name="none")
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
     public List<CourseRoutine> getCourseRoutineList() {
         return courseRoutineList;
@@ -83,6 +85,7 @@ public class Course {
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @ForeignKey(name="none")
     @JoinColumn(name = "teacherId", nullable = true, referencedColumnName = "tr_teacher_id", insertable = false, updatable = false)
     public Teacher getTeacher() {
         return teacher;

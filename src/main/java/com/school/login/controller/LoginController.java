@@ -1,5 +1,6 @@
 package com.school.login.controller;
 
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.school.login.service.LoginService;
 import com.school.login.validator.SignupValidator;
@@ -81,7 +82,29 @@ public class LoginController {
     ArrayList getUserData()
     {
         System.out.println("users: " + (ArrayList)loginService.getAllUsers());
+
         return (ArrayList)loginService.getAllUsers();
+    }
+
+    @RequestMapping(value = "/private/search/login.web",
+            method = RequestMethod.GET,
+            produces = "application/json")
+    public @ResponseBody
+    Login getLogininfos(@RequestParam(value = "username", required = false)String username,@RequestParam(value = "email", required = false)String email, @RequestParam(value = "userId", required = false)Long userId)
+    {
+        if(!Strings.isNullOrEmpty(username)){
+            return loginService.findByUserName(username);
+        }
+
+        if(!Strings.isNullOrEmpty(email)){
+            return loginService.findByEmail(email);
+        }
+
+        if(userId != null){
+            return loginService.findById(userId);
+        }
+
+        return null;
     }
 
     @RequestMapping(value = "/private/userData.web",
@@ -91,22 +114,18 @@ public class LoginController {
         return "login/userList";
     }
 
-    @RequestMapping(value = "/admin/private/updatePassword", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/private/updatePassword.web", method = RequestMethod.POST)
     public @ResponseBody
-    DaoResult updatePassword(@RequestParam("password") String password, @RequestParam("userId") int userId){
+    DaoResult updatePassword(@RequestParam("password") String password, @RequestParam("userId") Long userId){
         return loginService.updatePassword(userId,password);
     }
-
-
 
 
     @RequestMapping(value = "/private/home.web",
             method = RequestMethod.GET)
     public String home(HttpServletRequest request,Principal principal)
     {
-        Gson gson = new Gson();
-        Login login = gson.fromJson(principal.getName(), Login.class);
-
+        System.out.println("=================" + ApplicationConstants.APP_URL(request));
         return "common/home";
     }
 

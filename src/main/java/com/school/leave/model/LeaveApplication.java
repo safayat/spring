@@ -3,6 +3,7 @@ package com.school.leave.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.school.login.model.Login;
+import org.hibernate.annotations.ForeignKey;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -104,6 +105,7 @@ public class LeaveApplication {
 //    @Transient
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "applicantUserId", nullable = true, referencedColumnName = "userId", insertable = false, updatable = false)
+    @ForeignKey(name="none")
     @JsonManagedReference
     public Login getApplicantUser() {
         return applicantUser;

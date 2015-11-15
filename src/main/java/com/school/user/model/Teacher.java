@@ -5,6 +5,7 @@ import com.school.login.model.Login;
 import com.school.profile.model.Profile;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.ForeignKey;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -21,82 +22,18 @@ import java.util.List;
  tr_joining_datedate NOT NULL
  */
 @Entity
-@Table(name = "teacher",uniqueConstraints = {
-        @UniqueConstraint(columnNames ="tr_user_id")
-})
-
+@Table(name = "teacher")
 public class Teacher extends CommonUser{
     private int teacherId;
-    private int userId;
     private String destination;
     private Date joiningDate;
-    private Profile profile;
-    private List<Clazz> clazzList;
+    private  String fullName;
 
-    @OneToOne(fetch = FetchType.EAGER, targetEntity = Profile.class)
-    @JoinColumn(name = "tr_user_id",referencedColumnName = "profileId",insertable = false, updatable = false)
-    @JsonManagedReference
-    public Profile getProfile() {
-        return profile;
+    public Teacher() {
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "classTeacher")
-    @JsonBackReference
-    public  List<Clazz>  getClazzList() {
-        return clazzList;
-    }
-
-    public void setClazzList(List<Clazz> clazzList) {
-        this.clazzList = clazzList;
-    }
-
-    @Override
-    public void setUsername(String username) {
-        login.setUsername(username);
-    }
-
-    @Override
-    public void setPassword(String password) {
-        login.setPassword(password);
-
-    }
-
-    @Override
-    public void setEmail(String email) {
-        login.setEmail(email);
-    }
-
-    @Override
-    public void setConfirmPassword(String confirmPassword) {
-        login.setConfirmPassword(confirmPassword);
-    }
-
-
-    @Transient
-    @Override
-    public String getUsername() {
-        return getLogin().getUsername();
-    }
-
-    @Transient
-    @Override
-    public String getConfirmPassword() {
-        return getLogin().getConfirmPassword();
-    }
-
-    @Transient
-    @Override
-    public String getPassword() {
-        return getLogin().getPassword();
-    }
-    @Transient
-    @Override
-    public String getEmail() {
-        return getLogin().getEmail();
+    public Teacher(Login user) {
+        super(user);
     }
 
     @Id
@@ -110,14 +47,6 @@ public class Teacher extends CommonUser{
         this.teacherId = teacherId;
     }
 
-    @Column(name = "tr_user_id",unique = true,nullable = false)
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
     @Column(name = "tr_designation",nullable = true)
     public String getDestination() {
         return destination;
@@ -137,26 +66,14 @@ public class Teacher extends CommonUser{
         this.joiningDate = joiningDate;
     }
 
-    @Transient
     @Override
-    public int getId() {
-        return userId;
+    public String getFullName() {
+        return fullName;
     }
 
     @Override
-    public void setId(int id) {
-        userId = id;
-    }
-
-    @Transient
-    @Override
-    public String getUserType() {
-        return getLogin().getUserType();
-    }
-
-    @Override
-    public void setUserType(String userType) {
-        getLogin().setUserType(userType);
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     @Override

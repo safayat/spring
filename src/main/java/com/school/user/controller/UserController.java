@@ -1,5 +1,6 @@
 package com.school.user.controller;
 
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.school.clazz.model.Clazz;
 import com.school.clazz.service.ClazzService;
@@ -15,10 +16,15 @@ import com.school.user.service.UserService;
 import com.school.user.validator.StudentValidator;
 import com.school.user.validator.TeacherValidator;
 import com.school.util.ApplicationConstants;
+import com.school.util.CriteriaContainer;
 import com.school.util.DaoResult;
+import com.school.util.JsonStringToObjectConvereter;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +38,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 //import javax.servlet.http.HttpServletRequest;
@@ -60,46 +67,61 @@ public class UserController {
 
 
     @RequestMapping(value = "/admin/private/createTeacher.web", method = RequestMethod.GET)
-    public String initTeacherForm(ModelMap map, @RequestParam(value = "userId", required = false) Integer userId){
-        CommonUser commonUser = null;
-        if(userId == null){
-            commonUser = new Teacher();
-        }else {
-            commonUser = userService.getUserByUserId(userId, Teacher.class);
+    public String initTeacherForm(ModelMap map, @RequestParam(value = "userId", required = false) Long userId){
 
-        }
+        CommonUser commonUser = userId == null ? new Teacher(new Login()) : userService.getUserByUserId(userId, Teacher.class);
         map.addAttribute("teacher", commonUser);
         return "user/createTeacher";
     }
 
     @RequestMapping(value = "/admin/private/createStaff.web", method = RequestMethod.GET)
-    public String initStaff(ModelMap map, @RequestParam(value = "userId", required = false) Integer userId){
-        CommonUser commonUser = null;
-        if(userId == null){
-            commonUser = new Staff();
-        }else {
-            commonUser = userService.getUserByUserId(userId, Staff.class);
-
-        }
+    public String initStaff(ModelMap map, @RequestParam(value = "userId", required = false) Long userId){
+        CommonUser commonUser = userId == null ? new Staff(new Login()) : userService.getUserByUserId(userId, Staff.class);
         map.addAttribute("staff", commonUser);
         return "user/createStaff";
     }
 
+
     @RequestMapping(value = "/admin/private/createTeacher.web", method = RequestMethod.POST)
-    public String processTeacherFormSubmit(@ModelAttribute("teacher")Teacher teacher,
+    public String processTeacherFormSubmit(@ModelAttribute Teacher teacher,
                                 BindingResult result,
                                 SessionStatus status,
-                                RedirectAttributes redirectAttributes
+                                RedirectAttributes redirectAttributes, HttpServletRequest request
                                 ){
-        CommonUser commonUser = teacher;
-        commonUser.setUserType("teacher");
+
+        teacher.getLogin().setUserType("teacher");
         teacherValidator.validate(teacher,result);
         System.out.println(result);
         if(!result.hasErrors()){
             status.setComplete();
-            userService.saveOrUpdate(commonUser);
+            userService.saveOrUpdate(teacher);
         }
-        return "redirect:createTeacher.web?userId=" + teacher.getUserId();
+
+        return "redirect:" + ApplicationConstants.APP_URL(request) + "/private/profileInfo.web?userId=" + teacher.getUserId();
+    }
+
+    @RequestMapping(value = "/admin/private/update/teacher.web", method = RequestMethod.POST)
+    @ResponseBody
+    public DaoResult updateTeacher(@ModelAttribute Teacher teacher,
+                                BindingResult result,
+                                SessionStatus status,
+                                RedirectAttributes redirectAttributes, HttpServletRequest request
+                                ){
+
+           return userService.update(teacher);
+
+    }
+
+    @RequestMapping(value = "/admin/private/update/student.web", method = RequestMethod.POST)
+    @ResponseBody
+    public DaoResult updateStudent(@ModelAttribute Student student,
+                                BindingResult result,
+                                SessionStatus status,
+                                RedirectAttributes redirectAttributes, HttpServletRequest request
+                                ){
+
+           return userService.update(student);
+
     }
 
     @RequestMapping(value = "/admin/private/createStaff.web", method = RequestMethod.POST)
@@ -108,24 +130,18 @@ public class UserController {
                                 ){
         staff.setStartingDesignation(staff.getStartingDesignation());
         CommonUser commonUser = staff;
-        commonUser.setUserType("staff");
+        commonUser.getLogin().setUserType("staff");
         userService.saveOrUpdate(commonUser);
         return "redirect:createStaff.web?userId=" + staff.getUserId();
     }
 
     @RequestMapping(value = "/admin/private/createStudent.web", method = RequestMethod.GET)
     public String initStudentForm(ModelMap map,
-                                  @RequestParam(value = "userId", required = false) Integer userId){
+                                  @RequestParam(value = "userId", required = false) Long userId){
 
-        CommonUser commonUser = null;
-        if(userId ==null){
-            commonUser = new Student();
-        }else{
-
-            commonUser = userService.getUserByUserId(userId, Student.class);
-        }
+        CommonUser commonUser = userId == null ? new Student(new Login()) : userService.getUserByUserId(userId, Student.class);
         map.addAttribute("student", commonUser);
-        map.addAttribute("classList",clazzService.getClassList());
+//        map.addAttribute("classList",clazzService.getClassList());
         return "user/createStudent";
     }
 
@@ -133,29 +149,125 @@ public class UserController {
     public String processStudentFormSubmit(@ModelAttribute("student")Student student,
                                 BindingResult result,
                                 SessionStatus status,
-                                RedirectAttributes redirectAttributes){
+                                HttpServletRequest request){
         CommonUser commonUser = student;
-        commonUser.setUserType("student");
         studentValidator.validate(student, result);
         if(!result.hasErrors()){
             status.setComplete();
             userService.saveOrUpdate(commonUser);
         }
-        return "redirect:createStudent.web?userId=" + student.getUserId();
+        return "redirect:" + ApplicationConstants.APP_URL(request) + "/private/profileInfo.web?userId=" + student.getUserId();
     }
 
 
-    @RequestMapping(value = "/private/getTeacherList.web", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/private/userDetail.web", method = RequestMethod.GET)
     public @ResponseBody
-    List getTeacherList(){
-        List list = userService.getUserList(Teacher.class);
+    CommonUser getUserDetailByUserId(@RequestParam(value = "userId")Long userId){
+        return userService.getUserByUserId(userId);
+    }
+
+
+    @RequestMapping(value = "/private/getTeacherList.web", method = RequestMethod.POST)
+    public @ResponseBody
+    List getTeacherList(@RequestParam(value = "name", required = false)String  name
+            , @RequestParam(value = "designation", required = false)String designation
+            , @RequestParam(value = "offset", required = false)int offset
+            , @RequestParam(value = "limit", required = false)int limit
+
+             ){
+        if(limit <= 0){
+            limit = 10;
+        }
+        if(offset<0)
+            offset = 0;
+        CriteriaContainer criteriaContainer = CriteriaContainer.instance();
+        if(!Strings.isNullOrEmpty(designation)){
+            criteriaContainer.add(Restrictions.eq("destination", designation));
+        }
+        if(!Strings.isNullOrEmpty(name)){
+            criteriaContainer.add(Restrictions.like("fullName", "%" + name + "%"));
+        }
+        List list = userService.getDetailUserList(Teacher.class, criteriaContainer.list(),offset,limit);
+        return list;
+    }
+    @RequestMapping(value = "/private/getStudentList.web", method = RequestMethod.POST)
+    public @ResponseBody
+    List getStudentList(@RequestParam(value = "classIds", required = false)Integer[] classIdList
+            , @RequestParam(value = "rollNumber", required = false)String rollNumber
+            , @RequestParam(value = "name", required = false)String fullName
+            , @RequestParam(value = "offset", required = false)int offset
+            , @RequestParam(value = "limit", required = false)int limit
+
+             ){
+        if(limit <= 0){
+            limit = 10;
+        }
+        if(offset<0)
+            offset = 0;
+        CriteriaContainer criteriaContainer = CriteriaContainer.instance();
+        if(!Strings.isNullOrEmpty(rollNumber)){
+            criteriaContainer.add(Restrictions.eq("rollNumber", rollNumber));
+        }
+        if(!Strings.isNullOrEmpty(fullName)){
+            criteriaContainer.add(Restrictions.like("fullName", "%" + fullName + "%"));
+        }
+        if(classIdList != null && classIdList.length>0){
+            criteriaContainer.add(Restrictions.in("classId", Arrays.asList(classIdList)));
+        }
+        List list = userService.getDetailUserList(Student.class, criteriaContainer.list(),offset,limit);
         return list;
     }
 
+    @RequestMapping(value = "/private/getTeacherList.web", method = RequestMethod.GET)
+    public @ResponseBody
+    List get_TeacherList(@RequestParam(value = "name", required = false)String  name
+            , @RequestParam(value = "designation", required = false)String designation
+            , @RequestParam(value = "offset", required = false)int offset
+            , @RequestParam(value = "limit", required = false)int limit
+
+             ){
+        if(limit <= 0){
+            limit = 10;
+        }
+        if(offset<0)
+            offset = 0;
+        CriteriaContainer criteriaContainer = CriteriaContainer.instance();
+        if(!Strings.isNullOrEmpty(designation)){
+            criteriaContainer.add(Restrictions.eq("destination", designation));
+        }
+        if(!Strings.isNullOrEmpty(name)){
+            criteriaContainer.add(Restrictions.like("fullName", "%" + name + "%"));
+        }
+        List list = userService.getDetailUserList(Teacher.class, criteriaContainer.list(),offset,limit);
+        return list;
+    }
     @RequestMapping(value = "/private/getStudentList.web", method = RequestMethod.GET)
     public @ResponseBody
-    List getStudentList(){
-         return userService.getUserList(Student.class);
+    List get_StudentList(@RequestParam(value = "classIds", required = false)Integer[] classIdList
+            , @RequestParam(value = "rollNumber", required = false)String rollNumber
+            , @RequestParam(value = "name", required = false)String fullName
+            , @RequestParam(value = "offset", required = false)int offset
+            , @RequestParam(value = "limit", required = false)int limit
+
+             ){
+        if(limit <= 0){
+            limit = 10;
+        }
+        if(offset<0)
+            offset = 0;
+        CriteriaContainer criteriaContainer = CriteriaContainer.instance();
+        if(!Strings.isNullOrEmpty(rollNumber)){
+            criteriaContainer.add(Restrictions.eq("rollNumber", rollNumber));
+        }
+        if(!Strings.isNullOrEmpty(fullName)){
+            criteriaContainer.add(Restrictions.like("fullName", "%" + fullName + "%"));
+        }
+        if(classIdList != null && classIdList.length>0){
+            criteriaContainer.add(Restrictions.in("classId", Arrays.asList(classIdList)));
+        }
+        List list = userService.getDetailUserList(Student.class, criteriaContainer.list(),offset,limit);
+        return list;
     }
 
 

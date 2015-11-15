@@ -58,7 +58,7 @@ public class MessageController {
         Message message = new Message();
         message.setMessage(messageText);
         message.setMessageGroupKey(messagekey);
-        message.setSenderId(Login.getLoginIdFromPrincipal(principal.getName()));
+//        message.setSenderId(Login.getLoginIdFromPrincipal(principal.getName()));
         message.setMessageCreationTime(new Date());
         messageService.saveOrUpdate(message);
         return "{'message': 'success'}";

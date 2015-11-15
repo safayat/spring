@@ -20,7 +20,7 @@
                             <select name = "userId" ng-model = "formData.userId" class="form-control">
                                 <option value="-1">ALL</option>
                                 <c:forEach var="item" items="${userList}">
-                                    <option value="${item.userId}">${item.profile.firstName}&nbsp;${item.profile.lastName}</option>
+                                    <option value="${item.userId}">${item.username}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -52,7 +52,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat = "item in attendanceList">
-                                <td>{{item.user.profile.firstName}}&nbsp;{{item.user.profile.lastName}}</td>
+                                <td>{{item.user.fullName}}</td>
                                 <td>{{item.rollCallDate | date:'fullDate'}}</td>
                                 <td><i ng-if="item.present == true" class="fa fa-check"></i> <i ng-if="item.present == false" class="fa fa-crosshairs"></i></td>
                             </tr>

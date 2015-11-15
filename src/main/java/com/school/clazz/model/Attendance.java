@@ -1,6 +1,7 @@
 package com.school.clazz.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
@@ -94,6 +95,7 @@ public class Attendance implements Serializable{
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @ForeignKey(name="none")
     @JsonBackReference
     @JoinColumns({
             @JoinColumn(name = "att_date", referencedColumnName = "rc_date" , insertable = false, updatable = false),

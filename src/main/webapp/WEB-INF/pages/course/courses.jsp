@@ -35,7 +35,7 @@
                                             <a href="${appBaseUrl}/private/viewCourse.web?courseId=${course.courseId}">${course.courseName}</a>
                                         </td>
                                         <td>${course.courseCode}</td>
-                                        <td>${course.teacher.profile.firstName}&nbsp;${course.teacher.profile.lastName}</td>
+                                        <td>${course.teacher.fullName}</td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

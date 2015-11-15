@@ -1,6 +1,8 @@
 package com.school.course.model;
 
 
+import org.hibernate.annotations.ForeignKey;
+
 import javax.persistence.*;
 import javax.persistence.criteria.Fetch;
 import java.sql.Time;
@@ -73,6 +75,7 @@ public class CourseRoutine {
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @ForeignKey(name="none")
     @JoinColumn(name = "courseId", nullable = true, referencedColumnName = "courseId", insertable = false, updatable = false)
     public Course getCourse() {
         return course;

@@ -47,7 +47,7 @@ public class LeaveController {
     public String addUpdateLeaveApplication(@ModelAttribute("leaveApplication")LeaveApplication leaveApplication,RedirectAttributes redirectAttributesm, Principal principal){
 
         System.out.println("in post");
-        leaveApplication.setApplicantUserId(Login.getLoginIdFromPrincipal(principal.getName()));
+//        leaveApplication.setApplicantUserId(Login.getLoginIdFromPrincipal(principal.getName()));
         if(leaveApplication.getLeaveId()==null){
             leaveApplication.setLeaveStatus("pending");
         }

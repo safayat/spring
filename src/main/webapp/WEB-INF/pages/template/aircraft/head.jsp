@@ -13,18 +13,23 @@
 <link rel="stylesheet" href="${appBaseUrl}/css/neuboard/bootstrap.min.css">
 <link rel="stylesheet" href="${appBaseUrl}/css/aircraft/theme.css">
 <link rel="stylesheet" href="${appBaseUrl}/css/aircraft/premium.css">
+<link rel="stylesheet" href="${appBaseUrl}/css/custom.css">
 <link rel="stylesheet" href="${appBaseUrl}/css/aircraft/css?family=Open+Sans:400,700">
+<link rel="stylesheet" href="${appBaseUrl}/css/autocomplete.css">
 <!-- Fonts  -->
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" href="${appBaseUrl}/css/datepicker.css">
+<link rel="stylesheet" href="${appBaseUrl}/css/angular-datepicker.css">
 
 
 
 
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.js"></script>
 <script src="${appBaseUrl}/js/neuboard/jquery-1.11.1.min.js"></script>
 <script src="${appBaseUrl}/js/neuboard/bootstrap.min.js"></script>
 <script src="${appBaseUrl}/js/bootstrap-datepicker.js"></script>
+<script src="${appBaseUrl}/js/angular-datepicker.js"></script>
+<script src="${appBaseUrl}/js/autocomplete.js"></script>
 
 <script type="text/javascript">
     $(function() {
@@ -40,6 +45,8 @@
         $('[data-popover="true"]').popover({html: true});
 
     });
+
+
 </script>
 <style type="text/css">
     #line-chart {

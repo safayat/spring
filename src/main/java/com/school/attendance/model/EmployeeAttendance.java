@@ -2,6 +2,7 @@ package com.school.attendance.model;
 
 import com.school.login.model.Login;
 import com.school.user.model.Student;
+import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.util.Date;
 @Table(name = "employeeAttendance")
 public class EmployeeAttendance implements Serializable{
     private Date rollCallDate;
-    private Integer userId;
+    private Long userId;
     private boolean isPresent;
     private Long employeeAttendanceId;
     private Login user;
@@ -34,11 +35,11 @@ public class EmployeeAttendance implements Serializable{
         this.rollCallDate = rollCallDate;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -52,6 +53,7 @@ public class EmployeeAttendance implements Serializable{
     }
 
     @OneToOne(fetch = FetchType.EAGER, targetEntity = Login.class)
+    @ForeignKey(name="none")
     @JoinColumn(insertable = false, updatable = false, name = "userId", referencedColumnName = "userId")
     public Login getUser() {
         return user;

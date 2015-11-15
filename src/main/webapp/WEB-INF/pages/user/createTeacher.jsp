@@ -31,12 +31,13 @@
             <div class="row">
                 <div class="col-md-12" data-ng-controller="MyController">
                     <form:form method="POST" commandName="teacher" action="${appBaseUrl}/admin/private/createTeacher.web" cssClass="form-horizontal form-border" >
-                        <c:set var="readOnly" value="${teacher.id > 0}" scope="request"/>
+                        <c:set var="readOnly" value="${teacher.teacherId > 0}" scope="request"/>
 
                                 <jsp:include page="/WEB-INF/pages/user/loginInfo.jsp" />
                                 <form:hidden path="teacherId"/>
                                 <form:hidden path="userId"/>
-                                <div class="form-group">
+
+                        <div class="form-group">
                                     <label class="col-sm-3 control-label">Designation</label>
                                     <div class="col-sm-6">
                                         <form:input path="destination" cssClass="form-control"/>
@@ -47,8 +48,14 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Joining Date</label>
                                     <div class="col-sm-6"  >
+<%--
                                         <form:input path="joiningDate" cssClass="form-control" data-date="12/02/2012" data-date-format="dd/mm/yyyy" value="12/02/2012" readonly="true"/>
                                         <form:errors path="joiningDate" cssClass="has-error"/>
+--%>
+                                        <datepicker date-format="dd/MM/yyyy">
+                                            <input ng-model="joiningDate" class="form-control" name = "joiningDate" id="joiningDate"/>
+                                        </datepicker>
+
                                     </div>
                                 </div>
 
@@ -65,6 +72,33 @@
         </div>
     </div>
     <!--main content end-->
+        <script type="text/javascript">
+            var app = angular.module('myApp', ['720kb.datepicker']);
+            app.controller("MyController", MyController);
+            angular.element(document).ready(function () {
+                $('#joiningDate').datepicker();
+            });
+            function MyController($scope, $http){
+
+                $scope.verifyUserName = function(){
+                    if($scope.loginUsername.length <3) return;
+                    $http.get('${appBaseUrl}/private/search/login.web?username='+$scope.loginUsername).success(function(data){
+                        if(data == ''){
+                            $scope.usernameNotUnique = false;
+                        }else{
+                            $scope.usernameNotUnique = true;
+                        }
+
+                    }).error(function(data){
+                                console.log('error');
+
+                            });
+                }
+
+
+            }
+
+        </script>
 
     </tiles:putAttribute>
 </tiles:insertDefinition>

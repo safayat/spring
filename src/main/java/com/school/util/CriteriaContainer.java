@@ -19,6 +19,10 @@ public class CriteriaContainer {
         return new CriteriaContainer();
     }
 
+    public static CriteriaContainer instance(){
+        return new CriteriaContainer();
+    }
+
     public List<Criterion> list() {
         return criterionList;
     }

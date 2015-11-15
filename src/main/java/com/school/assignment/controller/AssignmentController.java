@@ -77,7 +77,7 @@ public class AssignmentController {
             assignment.setCourseId(1);
             assignment.setPostDateTime(new Date());
             assignment.setMessageKey(Utility.getUniqueKey());
-            assignment.setUserId(Login.getLoginIdFromPrincipal(principal.getName()));
+//            assignment.setUserId(Login.getLoginIdFromPrincipal(principal.getName()));
         }
         assignmentService.saveOrUpdate(assignment);
         return "redirect:addUpdateAssignment.web?id="+assignment.getAssignmentId();

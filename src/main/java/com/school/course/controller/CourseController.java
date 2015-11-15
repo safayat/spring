@@ -51,7 +51,7 @@ public class CourseController {
             course = new Course();
         }
         map.addAttribute("classList", clazzService.getClassList());
-        map.addAttribute("teacherList", userService.getUserList(Teacher.class));
+        map.addAttribute("teacherList", userService.getDetailUserList(Teacher.class));
         map.addAttribute("course", course);
 
         return "course/addCourse";

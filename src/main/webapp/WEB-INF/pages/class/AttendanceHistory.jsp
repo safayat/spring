@@ -16,7 +16,7 @@
                         <div class="form-group">
                             <label>Student</label>
                             <select name = "studentId" value="2" ng-model = "formData.studentId" >
-                                <option value="2" ng-repeat = "student in studentList" value="{{student.studentId}}">{{student.profile.firstName}}</option>
+                                <option value="2" ng-repeat = "student in studentList" value="{{student.studentId}}">{{student.fullName}}</option>
                             </select>
                         </div>
 

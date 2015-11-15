@@ -5,6 +5,8 @@ import com.school.clazz.model.Clazz;
 import com.school.clazz.model.RollCall;
 import com.school.clazz.service.ClazzService;
 import com.school.login.model.Login;
+import com.school.user.model.CommonUser;
+import com.school.user.model.Student;
 import com.school.user.model.Teacher;
 import com.school.user.service.UserService;
 import com.school.util.JsonStringToObjectConvereter;
@@ -42,10 +44,13 @@ public class ClazzController {
             method = RequestMethod.GET,
             produces = "application/json")
     public @ResponseBody
-    List getClassList()
+    List getClassList(@RequestParam(value = "includeClassCaptain", required = false)boolean includeClassCaptain
+            , @RequestParam(value = "includeClassTeacher", required = false)boolean includeClassTeacher
+            , @RequestParam(value = "includeStudentCount", required = false)boolean includeStudentCount)
     {
-        return clazzService.getClassList();
+        return clazzService.getClassList(includeClassTeacher,includeClassCaptain, includeStudentCount);
     }
+
 
     @RequestMapping(value = "/private/classDetail.web",
             method = RequestMethod.GET)
@@ -94,8 +99,6 @@ public class ClazzController {
             method = RequestMethod.GET)
     public String classList(ModelMap map)
     {
-        map.addAttribute("studentCountMap",clazzService.getClassStudentCount());
-        map.addAttribute("clazzList",clazzService.getClassList());
         return "class/ClassList";
     }
     @RequestMapping(value = "/private/AttendanceHistory.web",
@@ -130,9 +133,34 @@ public class ClazzController {
             method = RequestMethod.GET,
             produces = "application/json")
     public @ResponseBody
-    Clazz getClass(@RequestParam(value = "classId")Integer classId)
+    Clazz getClass(@RequestParam(value = "classId")Integer classId
+            , @RequestParam(value = "withStudents", required = false, defaultValue = "true")boolean withStudents
+            , @RequestParam(value = "withStudentProfile", required = false, defaultValue = "true")boolean withStudentProfile
+            , @RequestParam(value = "withTeacher", required = false, defaultValue = "true")boolean withTeacher
+            , @RequestParam(value = "withCaptain", required = false, defaultValue = "true")boolean withCaptain
+            , @RequestParam(value = "withStudentUserInfo", required = false,  defaultValue = "true")boolean withStudentUserInfo)
     {
-        return clazzService.getClassById(classId);
+        Clazz clazz = clazzService.getClassById(classId, withStudents);
+
+        if(withStudents && withStudentProfile){
+            userService.loadUserProfiles((List<CommonUser>)(List<?>)clazz.getStudentList());
+        }
+
+        if(withStudents && withStudentUserInfo){
+            userService.loadUserLoginInfos((List<CommonUser>)(List<?>)clazz.getStudentList());
+        }
+
+        if(withTeacher && clazz.getClassTeacherId() != null){
+            Teacher teacher = userService.getUser(Teacher.class, clazz.getClassTeacherId());
+            clazz.setClassTeacher(teacher);
+        }
+
+        if(withCaptain && clazz.getClassCaptainId() != null){
+             Student captain = userService.getUser(Student.class, clazz.getClassCaptainId());
+            clazz.setClassCaptain(captain);
+        }
+
+        return clazz;
     }
 
     @RequestMapping(value = "/admin/private/addUpdateClass.web",
@@ -151,10 +179,9 @@ public class ClazzController {
     }
     @RequestMapping(value = "/admin/private/addUpdateClass.web",
             method = RequestMethod.POST)
-    public String processClassForm(RedirectAttributes redirectAttributes, @ModelAttribute("clazz")Clazz clazz, @ModelAttribute("currentClazzMap")Map currentClazzMap)
+    public @ResponseBody int processClassForm(RedirectAttributes redirectAttributes, @ModelAttribute("clazz")Clazz clazz, @ModelAttribute("currentClazzMap")Map currentClazzMap)
     {
         clazzService.saveOrUpdate(clazz);
-        currentClazzMap.put(clazz.getClassId(), clazz.getClassName());
-        return "redirect:addUpdateClass.web?classId=" + clazz.getClassId();
+        return clazz.getClassId();
     }
 }

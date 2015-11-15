@@ -28,7 +28,7 @@
                             <tbody>
                             <c:forEach items="${empolyeeUserList}" varStatus="status" var="item">
                                 <tr>
-                                    <td>${item.profile.firstName}&nbsp;${item.profile.lastName}</td>
+                                    <td>${item.username}</td>
                                     <td>${item.userType}</td>
                                     <td class="presentEmployeeList">
                                         <input type="checkbox" class="presentBox" name="presentEmployeeList" value="${item.userId}" >

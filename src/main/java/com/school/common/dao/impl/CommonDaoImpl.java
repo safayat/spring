@@ -1,10 +1,13 @@
 package com.school.common.dao.impl;
 
+import com.school.util.DaoResult;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -48,6 +51,30 @@ public abstract class CommonDaoImpl{
         return (List<E>)criteria.list();
     }
 
+    public Criteria getCriteria(Class entityClass,Criterion criterion) {
+
+        Criteria criteria = getCurrentSession().createCriteria(entityClass);
+        criteria.add(criterion);
+        return criteria;
+    }
+    public <E> List<E> getPaginatedData(Class entityClass,List<Criterion> criterionList, int offset, int limit) {
+
+        return getCriteria(entityClass,criterionList).setFirstResult(offset).setMaxResults(limit).list();
+    }
+
+    public Criteria getCriteria(Class entityClass) {
+
+        return getCurrentSession().createCriteria(entityClass);
+    }
+
+    public Criteria getCriteria(Class entityClass, List<Criterion> criterionList) {
+
+        Criteria criteria = getCurrentSession().createCriteria(entityClass);
+        for(Criterion criterion : criterionList){
+            criteria.add(criterion);
+        }
+        return criteria;
+    }
     public<E> List<E> findByCriteriaList(Class entityClass, List<Criterion> criterionList) {
 
         Criteria criteria = getCurrentSession().createCriteria(entityClass);
@@ -59,7 +86,7 @@ public abstract class CommonDaoImpl{
 
 
     public<E> List<E> getAll(Class entityClass) {
-        return getCurrentSession().createQuery(" from " + entityClass.getSimpleName()).list();
+        return getCurrentSession().createQuery(" from " + entityClass.getSimpleName()).setMaxResults(100).list();
     }
 
     public<E> List<E> getAllWithOpenSession(Class entityClass) {
@@ -80,6 +107,9 @@ public abstract class CommonDaoImpl{
         return null;
     }
 
+    public Query getQuery(String hql) {
+        return getCurrentSession().createQuery(hql);
+    }
     public<E> List<E> getByHql(String hql) {
         return getCurrentSession().createQuery(hql).list();
     }
@@ -107,16 +137,38 @@ public abstract class CommonDaoImpl{
         return  (E)criteria.uniqueResult();
     }
 
+   public<I>  Criteria getInCriteria(Class entityClass, String fieldName, List<I> values) {
+
+       Criteria criteria = getCurrentSession().createCriteria(entityClass);
+       Disjunction disjunction = Restrictions.disjunction();
+       for( I i: values){
+           disjunction.add(Restrictions.eq(fieldName,i));
+       }
+       criteria.add(disjunction);
+        return criteria;
+    }
+
    public<E,I>  List<E> in(Class entityClass, String fieldName, List<I> values) {
 
         Criteria criteria = getCurrentSession().createCriteria(entityClass);
-        Conjunction conjunction = Restrictions.conjunction();
+        Disjunction disjunction = Restrictions.disjunction();
         for( I i: values){
-            conjunction.add(Restrictions.eq(fieldName,i));
+            disjunction.add(Restrictions.eq(fieldName,i));
         }
-        criteria.add(conjunction);
+        criteria.add(disjunction);
         return  (List<E>)criteria.list();
     }
+
+/*
+    public DaoResult updateSingle(Class entityClass ,String filedName, Object value){
+        Query query = getQuery(" update " + entityClass.getSimpleName() + " set " + filedName + "=:field");
+        query.setParameter("field", value);
+        query.executeUpdate();
+        return new DaoResult();
+
+    }
+*/
+
 
 
 

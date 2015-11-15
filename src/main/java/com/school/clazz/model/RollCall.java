@@ -2,6 +2,7 @@ package com.school.clazz.model;
 
 import com.school.user.model.Student;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -71,6 +72,7 @@ public class RollCall implements Serializable{
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "rollCall", cascade = CascadeType.ALL)
+    @ForeignKey(name="none")
     @JsonManagedReference
     public List<Attendance> getAttendanceList() {
         return attendanceList;

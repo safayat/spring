@@ -32,6 +32,7 @@
                 <form:form method="POST" commandName="profile" action="/private/updateProfile.web" cssClass="form-horizontal form-border">
 
                     <form:hidden path="profileId"/>
+                    <form:hidden path="userId"/>
                     <form:hidden path="profileImageUrl"/>
 
                     <div class="form-group">

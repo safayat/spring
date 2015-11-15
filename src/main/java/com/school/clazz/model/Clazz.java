@@ -4,6 +4,7 @@ import com.school.user.model.Student;
 import com.school.user.model.Teacher;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,14 +19,13 @@ import java.util.List;
  cs_teacher_id int(11) unsigned NULL
  */
 @Entity
-@Table(name = "class",uniqueConstraints = {
-        @UniqueConstraint(columnNames ="cs_name"),
-        @UniqueConstraint(columnNames ="cs_captain_id")
-})
+@Table(name = "class")
 
 public class Clazz {
     private int classId;
     private String className;
+    private String sectionName;
+    private String shiftName;
     private Integer classCaptainId;
     private Integer classTeacherId;
     private String classTeacherName;
@@ -33,6 +33,7 @@ public class Clazz {
     private Teacher classTeacher;
     private Student classCaptain;
     private List<Student> studentList;
+    private int studentCount;
 
 
     @Id
@@ -65,7 +66,6 @@ public class Clazz {
     }
 
     @Column(name = "cs_teacher_id",nullable = true)
-//    @Transient
     public Integer getClassTeacherId() {
         return classTeacherId;
     }
@@ -74,8 +74,7 @@ public class Clazz {
         this.classTeacherId = classTeacherId;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cs_teacher_id", nullable = true, referencedColumnName = "tr_teacher_id", insertable = false, updatable = false)
+    @Transient
     @JsonManagedReference
     public Teacher getClassTeacher() {
         return classTeacher;
@@ -86,6 +85,7 @@ public class Clazz {
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "clazz")
+    @ForeignKey(name="none")
     @JsonManagedReference
     public List<Student> getStudentList() {
         return studentList;
@@ -112,8 +112,7 @@ public class Clazz {
         this.classCaptainName = classCaptainName;
     }
 
-    @OneToOne(fetch = FetchType.EAGER, targetEntity = Student.class)
-    @JoinColumn(insertable = false, updatable = false, name = "cs_captain_id", referencedColumnName = "st_student_id")
+    @Transient
     @JsonManagedReference
     public Student getClassCaptain() {
         return classCaptain;
@@ -123,14 +122,28 @@ public class Clazz {
         this.classCaptain = classCaptain;
     }
 
-   /* @Override
-    public String toString() {
-        return "Clazz123{" +
-                "classId=" + classId +
-                ", className='" + className + '\'' +
-                ", classCaptainId=" + classCaptainId +
-                ", classTeacherId=" + classTeacherId +
-                ", classTeacher=" + classTeacher +
-                '}';
-    }*/
+    public String getSectionName() {
+        return sectionName;
+    }
+
+    public void setSectionName(String sectionName) {
+        this.sectionName = sectionName;
+    }
+
+    public String getShiftName() {
+        return shiftName;
+    }
+
+    public void setShiftName(String shiftName) {
+        this.shiftName = shiftName;
+    }
+
+    @Transient
+    public int getStudentCount() {
+        return studentCount;
+    }
+
+    public void setStudentCount(int studentCount) {
+        this.studentCount = studentCount;
+    }
 }

@@ -15,31 +15,49 @@
         <div class="main-content">
             <div data-ng-app="myApp">
                         <div data-ng-controller="MyController">
-                            <table class="table table-striped table-bordered dataTable no-footer">
+                            <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
                                         <th>Class Name</th>
+                                        <th>Section Name</th>
+                                        <th>Shift Name</th>
                                         <th>Class Teacher name</th>
+                                        <th>Class captain name</th>
                                         <th>Count</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach items="${clazzList}" var="clazz">
-                                    <tr>
-                                        <td>${clazz.classId}</td>
-                                        <td><a href="${appBaseUrl}/private/classDetail.web?classId=${clazz.classId}">${clazz.className}</a></td>
-                                        <td>${clazz.classTeacher.profile.firstName}&nbsp;${clazz.classTeacher.profile.lastName}</td>
-                                        <td>${studentCountMap[clazz.classId]}</td>
-                                        <td><a href="${appBaseUrl}/admin/private/addUpdateClass.web?classId=${clazz.classId}">Edit</a></td>
+                                    <tr ng-repeat="clazz in classInfo.classList">
+                                        <td><a href="${appBaseUrl}/private/classDetail.web?classId={{clazz.classId}}">{{clazz.className}}</a></td>
+                                        <td>{{clazz.sectionName}}</td>
+                                        <td>{{clazz.shiftName}}</td>
+                                        <td>{{clazz.classTeacher.fullName}}</td>
+                                        <td>{{clazz.classCaptain.fullName}}</td>
+                                        <td>{{clazz.studentCount}}</td>
+                                        <td><a href="${appBaseUrl}/admin/private/addUpdateClass.web?classId={{clazz.classId}}"><i class="fa fa-edit"></i></a></td>
                                     </tr>
-                                </c:forEach>
                                 </tbody>
                             </table>
                         </div>
             </div>
         </div>
     </div>
+
+        <script src="${appBaseUrl}/js/class.js"></script>
+        <script>
+
+            var app = angular.module('myApp', []);
+            app.controller("MyController", MyController);
+            function MyController($scope, $http) {
+
+                initClazzList($http,'${appBaseUrl}/private/getClassList.web?includeClassCaptain=true&includeClassTeacher=true&includeStudentCount=true', function(data){
+                    $scope.classInfo= data;
+                });
+
+
+            }
+        </script>
+
     </tiles:putAttribute>
 </tiles:insertDefinition>

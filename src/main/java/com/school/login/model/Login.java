@@ -1,15 +1,18 @@
 package com.school.login.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.school.menu.model.Menu;
 import com.school.profile.model.Profile;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.school.util.JsonStringToObjectConvereter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Created by safayat on 4/24/14.
@@ -21,13 +24,14 @@ import com.school.util.JsonStringToObjectConvereter;
 })
 public class Login implements Serializable{
 
-    private Integer userId;
+    private long userId;
     private String username;
     private String password;
     private String confirmPassword;
     private String email;
     private String userType;
-    private Profile profile;
+    private Date userCreated;
+    private Date lastLogin;
     private Map<Integer,Integer> permissionMap;
 
     public Login() {
@@ -41,21 +45,11 @@ public class Login implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "userId",unique = true,nullable = false)
-    public Integer getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "login", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    public Profile getProfile() {
-        return profile;
-    }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
-
-    public void setUserId(Integer userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -77,7 +71,7 @@ public class Login implements Serializable{
         this.username = username;
     }
 
-    @Column(name = "email",unique = true,nullable = false,length =128)
+    @Column(name = "email",unique = false,nullable = true,length =128)
     public String getEmail() {
         return email;
     }
@@ -91,8 +85,9 @@ public class Login implements Serializable{
         return confirmPassword;
     }
 
+    @JsonIgnore
     @Transient
-    public static Integer getLoginIdFromPrincipal(String loginString) {
+    public static long getLoginIdFromPrincipal(String loginString) {
         return ((Login) JsonStringToObjectConvereter.getInstance().getObject(loginString,Login.class)).getUserId();
     }
 
@@ -123,6 +118,24 @@ public class Login implements Serializable{
         this.permissionMap = permissionMap;
     }
 
+    @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss")
+    public Date getUserCreated() {
+        return userCreated;
+    }
+
+    public void setUserCreated(Date userCreated) {
+        this.userCreated = userCreated;
+    }
+
+    @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss")
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
     @Override
     public String toString() {
         return "Login{" +
@@ -131,7 +144,6 @@ public class Login implements Serializable{
                 ", password='" + password + '\'' +
                 ", confirmPassword='" + confirmPassword + '\'' +
                 ", email='" + email + '\'' +
-                ", profile=" + profile +
                 '}';
     }
 }

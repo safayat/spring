@@ -15,6 +15,7 @@ import org.springframework.validation.Validator;
 public class SignupValidator{
 
     public static void signupValidate(Object target, Errors errors) {
+/*
         CommonUser login = (CommonUser)target;
         System.out.println("sdsdsd:" +login.getLogin());
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username",
@@ -24,7 +25,7 @@ public class SignupValidator{
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email",
                 "required.email", "default msg for email");
 
-        if(!StringUtils.isNullOrEmpty(login.getEmail())){
+        if(!StringUtils.isNullOrEmpty(login.getLogin().getEmail())){
             if(!login.getEmail().matches(ApplicationConstants.EMAIL_REGEX)){
                 errors.rejectValue("email","required.invalidEmail");
             }
@@ -35,6 +36,7 @@ public class SignupValidator{
                 errors.rejectValue("password","required.passwordMissmatch");
             }
         }
+*/
 
     }
 }

@@ -1,5 +1,8 @@
 package com.school.user.service;
 
+import com.google.common.base.Strings;
+import com.school.clazz.model.Clazz;
+import com.school.common.dao.CommonDAO;
 import com.school.login.model.Login;
 import com.school.profile.model.Profile;
 import com.school.user.dao.UserDAO;
@@ -9,6 +12,7 @@ import com.school.user.model.Student;
 import com.school.user.model.Teacher;
 import com.school.util.DaoResult;
 import com.school.util.Utility;
+import org.hibernate.criterion.Criterion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +21,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by safayat on 2/3/15.
@@ -33,20 +41,40 @@ public class UserService {
     @Autowired
     UserDAO userDAO;
 
+    @Autowired
+    CommonDAO commonDAO;
+
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public DaoResult saveOrUpdate(CommonUser user){
         DaoResult daoResult = new DaoResult();
         try{
-            if(user.getId() == 0){
+            if(user.getUserId() == 0){
                 Login login = user.getLogin();
-                Profile profile = new Profile();
-                profile.setLogin(login);
-                profile.setProfileImageUrl("image/Default_Profile_Picture.png");
-                login.setProfile(profile);
                 login.setPassword(new BCryptPasswordEncoder().encode(login.getPassword()));
+                if(Strings.isNullOrEmpty(login.getEmail())){
+                    login.setEmail(login.getUsername() + "_" + System.currentTimeMillis() + "@school.com");
+                }
                 userDAO.saveOrUpdate(login);
-                user.setId(login.getUserId());
+                Profile profile = user.getProfile();
+                profile.setProfileImageUrl("image/Default_Profile_Picture.png");
+                profile.setUserId(login.getUserId());
+                commonDAO.saveOrUpdate(profile);
+                user.setUserId(login.getUserId());
+                user.setProfileId(profile.getProfileId());
             }
+            userDAO.saveOrUpdate(user);
+            daoResult.setValues(true,"", DaoResult.DONE);
+        }catch (Exception e){
+            e.printStackTrace();
+            daoResult.setValues(true,e.getMessage(), DaoResult.EXCEPTION);
+        }
+        return daoResult;
+    }
+
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public DaoResult update(CommonUser user){
+        DaoResult daoResult = new DaoResult();
+        try{
             userDAO.saveOrUpdate(user);
             daoResult.setValues(true,"", DaoResult.DONE);
         }catch (Exception e){
@@ -60,9 +88,24 @@ public class UserService {
     public List<CommonUser> getUserList(Class entityClass){
         return userDAO.getAll(entityClass);
     }
+    @Transactional(readOnly = false)
+    public List<CommonUser> getDetailUserList(Class entityClass){
+        List<CommonUser> list = userDAO.getAll(entityClass);
+        loadUserProfiles(list);
+        loadUserLoginInfos(list);
+        return list;
+    }
 
     @Transactional(readOnly = false)
-    public Teacher getTeacherByUserId(Integer id){
+    public List<CommonUser> getDetailUserList(Class entityClass, List<Criterion> criterionList,int offset,int limit){
+        List<CommonUser> list = userDAO.getPaginatedData(entityClass, criterionList, offset, limit);
+        loadUserProfiles(list);
+        loadUserLoginInfos(list);
+        return list;
+    }
+
+    @Transactional(readOnly = false)
+    public Teacher getTeacherByUserId(Long id){
         try{
             return userDAO.getUniqueByHql("from " + Teacher.class.getSimpleName() + " where userId = " + id);
         }catch (Exception e){
@@ -72,16 +115,92 @@ public class UserService {
         return null;
     }
 
-    public CommonUser getUserByUserId(Integer id, Class clazz){
+    @Transactional(readOnly = false)
+    public <I extends CommonUser, K extends Serializable> I getUser(Class<I> entityClass,  K primaryKey){
+
+        try{
+            CommonUser commonUser = commonDAO.getById(entityClass, primaryKey);
+            loadUserDeatil(commonUser);
+            return (I)commonUser;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public CommonUser getUserByUserId(long id, Class clazz){
         CommonUser commonUser = null;
         try {
-            Login login = userDAO.getById(Login.class,id);
-            commonUser = userDAO.getUniqueByHql("from " + clazz.getSimpleName() + " where userId = " + id);
+            Login login = commonDAO.getById(Login.class,id);
+            commonUser = commonDAO.getUniqueByHql("from " + clazz.getSimpleName() + " where userId = " + id);
+            Profile profile = commonDAO.getById(Profile.class, commonUser.getProfileId());
             commonUser.setLogin(login);
+            commonUser.setProfile(profile);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return commonUser;
     }
+
+    public CommonUser getUserByUserId(long id){
+        CommonUser commonUser = null;
+        try {
+            Login login = commonDAO.getById(Login.class,id);
+            Class entityClass = Utility.getUserEntityClass(login.getUserType());
+            commonUser = commonDAO.getUniqueByHql("from " + entityClass.getSimpleName() + " where userId = " + id);
+            Profile profile = commonDAO.getById(Profile.class, commonUser.getProfileId());
+            commonUser.setLogin(login);
+            commonUser.setProfile(profile);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return commonUser;
+    }
+
+
+    @Transactional(readOnly = false)
+    public void loadUserProfiles(List<CommonUser> userList){
+        List<Long> profileIdList = new ArrayList<>();
+        for(CommonUser user : userList){
+            profileIdList.add(user.getProfileId());
+        }
+        System.out.println(profileIdList);
+        List<Profile> profileList = commonDAO.in(Profile.class,"profileId",profileIdList);
+        System.out.println(profileList.size());
+        Map<Long,Profile> profileMap = new HashMap<>();
+        for(Profile profile : profileList){
+            profileMap.put(profile.getProfileId(), profile);
+        }
+        for(CommonUser user : userList){
+            user.setProfile(profileMap.get(user.getProfileId()));
+        }
+
+    }
+
+    @Transactional(readOnly = false)
+    public void loadUserLoginInfos(List<CommonUser> userList){
+        List<Long> loginIdList = new ArrayList<>();
+        for(CommonUser user : userList){
+            loginIdList.add(user.getUserId());
+        }
+        List<Login> loginList = commonDAO.in(Login.class,"userId",loginIdList);
+        Map<Long,Login> loginMap = new HashMap<>();
+        for(Login login : loginList){
+            loginMap.put(login.getUserId(), login);
+        }
+        for(CommonUser user : userList){
+            user.setLogin(loginMap.get(user.getUserId()));
+        }
+    }
+
+    @Transactional(readOnly = false)
+    public void loadUserDeatil(CommonUser user){
+        user.setLogin((Login)commonDAO.getById(Login.class, user.getUserId()));
+        user.setProfile((Profile)commonDAO.getById(Profile.class, user.getProfileId()));
+    }
+
+
 
 }

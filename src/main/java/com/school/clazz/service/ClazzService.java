@@ -9,6 +9,7 @@ import com.school.course.model.Course;
 import com.school.course.model.CourseRoutine;
 import com.school.login.model.Login;
 import com.school.user.model.Student;
+import com.school.user.model.Teacher;
 import com.school.util.CriteriaContainer;
 import com.school.util.Utility;
 import org.hibernate.Criteria;
@@ -18,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -36,6 +39,64 @@ public class ClazzService {
     public List<Clazz> getClassList(){
         return clazzDAO.getAll(Clazz.class);
     }
+
+    @Transactional
+    public List<Clazz> getClassList(boolean includeClassTeacher, boolean includeClassCaptain, boolean studentCount){
+        List<Clazz> clazzList = clazzDAO.getAll(Clazz.class);
+
+        if(includeClassTeacher){
+            List<Integer> teacherIdList = new ArrayList<>();
+            for(Clazz clazz : clazzList){
+                if(clazz.getClassTeacherId() != null){
+                    teacherIdList.add(clazz.getClassTeacherId());
+                }
+            }
+            List<Teacher> teacherList = clazzDAO.findByCriteria(Teacher.class, Restrictions.in("teacherId", teacherIdList));
+            Map<Integer, Teacher> teacherMap = new HashMap<>();
+            for(Teacher teacher : teacherList){
+              teacherMap.put(teacher.getTeacherId(),teacher);
+            }
+
+            for(Clazz clazz : clazzList){
+                if(clazz.getClassTeacherId() !=  null){
+                    clazz.setClassTeacher(teacherMap.get(clazz.getClassTeacherId()));
+                }
+            }
+        }
+
+        if(includeClassCaptain){
+            List<Integer> studentIdList = new ArrayList<>();
+            for(Clazz clazz : clazzList){
+                if(clazz.getClassCaptainId() != null){
+                    studentIdList.add(clazz.getClassCaptainId());
+                }
+            }
+            List<Student> studentList = clazzDAO.findByCriteria(Student.class, Restrictions.in("studentId", studentIdList));
+            Map<Integer, Student> studentMap = new HashMap<>();
+            for(Student student : studentList){
+                studentMap.put(student.getStudentId(),student);
+            }
+
+            for(Clazz clazz : clazzList){
+                if(clazz.getClassCaptainId() !=  null){
+                    clazz.setClassCaptain(studentMap.get(clazz.getClassCaptainId()));
+                }
+            }
+
+        }
+
+        if(studentCount){
+            Map<Integer,String> studentCountMap = getClassStudentCount();
+            for(Clazz clazz : clazzList){
+                String count = studentCountMap.get(clazz.getClassId());
+                if(count == null) count = "0";
+                clazz.setStudentCount(Integer.parseInt(count));
+            }
+
+        }
+
+        return clazzList;
+    }
     @Transactional
     public List<Clazz> getClassListWithOpenSession(){
         return clazzDAO.getAllWithOpenSession(Clazz.class);
@@ -53,10 +114,11 @@ public class ClazzService {
     }
     @Transactional
     public Clazz getClassById(Integer id,boolean eager){
+        Clazz clazz = clazzDAO.getById(Clazz.class,id);
         if(eager){
-            ((Clazz)clazzDAO.getById(Clazz.class,id)).getStudentList().size();
+            clazz.getStudentList().size();
         }
-        return clazzDAO.getById(Clazz.class,id);
+        return clazz;
     }
 
     @Transactional
@@ -76,6 +138,7 @@ public class ClazzService {
         ((Clazz)clazzDAO.getById(Clazz.class,id)).getStudentList().size();
         return clazzDAO.getById(Clazz.class,id);
     }
+
 
     @Transactional
     public void  saveRollCall(Integer classId,String[] studentList, Integer teacherId){
@@ -229,8 +292,6 @@ public class ClazzService {
         }
         return true;
     }
-
-
 
 
 

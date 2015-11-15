@@ -11,6 +11,8 @@
                     <button class="btn btn-success input-lg"><i class="fa fa-download"></i> Prospectus</button>
                     <button class="btn btn-primary input-lg"><i class="fa fa-download"></i> Syllabus</button>
             </div>
+
+
         </div>
 
     </tiles:putAttribute>

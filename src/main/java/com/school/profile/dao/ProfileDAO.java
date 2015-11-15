@@ -1,9 +1,12 @@
 package com.school.profile.dao;
 
 import com.school.common.dao.impl.CommonDaoImpl;
+import com.school.login.model.Login;
 import com.school.profile.dao.ProfileDAO;
 import com.school.profile.model.Profile;
+import com.school.user.model.CommonUser;
 import com.school.util.DaoResult;
+import com.school.util.Utility;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +25,10 @@ public class ProfileDAO extends CommonDaoImpl{
         DaoResult daoResult = new DaoResult();
         try{
             saveOrUpdate(profile);
+            Login login = getById(Login.class, profile.getUserId());
+            Class clazz = Utility.getUserEntityClass(login.getUserType());
+            CommonUser commonUser = (CommonUser)getQuery("from " + clazz.getSimpleName() + " where userId = " + profile.getUserId()).uniqueResult();
+            commonUser.setFullName(profile.getFullName());
             daoResult.setValues(true,"Profile updated successfully",DaoResult.DONE);
         }catch (Exception e){
             e.printStackTrace();
@@ -34,8 +41,5 @@ public class ProfileDAO extends CommonDaoImpl{
         return null;
     }
 
-    public Profile getProfileById(int id) {
-        return getById(Profile.class, id);
-    }
 
 }

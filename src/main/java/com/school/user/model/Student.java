@@ -1,9 +1,13 @@
 package com.school.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.school.clazz.model.Clazz;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.school.login.model.Login;
 import com.school.profile.model.Profile;
+import org.hibernate.annotations.ForeignKey;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -23,73 +27,22 @@ import java.util.Date;
 
  */
 @Entity
-@Table(name = "student",uniqueConstraints = {
-        @UniqueConstraint(columnNames ="st_user_id"),
-        @UniqueConstraint(columnNames ="st_parent_user_id")
-})
-
+@Table(name = "student")
 public class Student extends CommonUser{
     private int studentId;
-    private int userId;
     private int classId;
     private Date admissionDate;
     private Integer parentUserId;
     private String rollNumber;
+    private  String fullName;
+    @JsonBackReference
     private Clazz clazz;
-    private Profile profile;
 
-    @Transient
-    @Override
-    public String getUsername() {
-        return getLogin().getUsername();
+    public Student() {
     }
 
-    @Transient
-    @Override
-    public String getConfirmPassword() {
-        return getLogin().getConfirmPassword();
-    }
-
-    @Transient
-    @Override
-    public String getUserType() {
-        return getLogin().getUserType();
-    }
-
-    @Override
-    public void setUserType(String userType) {
-        getLogin().setUserType(userType);
-    }
-
-    @Override
-    public void setUsername(String username) {
-        getLogin().setUsername(username);
-    }
-
-    @Override
-    public void setPassword(String password) {
-        getLogin().setPassword(password);
-    }
-
-    @Override
-    public void setEmail(String email) {
-        getLogin().setEmail(email);
-    }
-
-    @Override
-    public void setConfirmPassword(String confirmPassword) {
-        getLogin().setConfirmPassword(confirmPassword);
-    }
-
-    @Transient
-    @Override
-    public String getPassword() {
-        return getLogin().getPassword();
-    }
-    @Transient
-    @Override
-    public String getEmail() {
-        return getLogin().getEmail();
+    public Student(Login user) {
+        super(user);
     }
 
     @Id
@@ -101,15 +54,6 @@ public class Student extends CommonUser{
 
     public void setStudentId(int studentId) {
         this.studentId = studentId;
-    }
-
-    @Column(name = "st_user_id",unique = true,nullable = false)
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     @Column(name = "st_class_id",nullable = false)
@@ -149,37 +93,25 @@ public class Student extends CommonUser{
         this.rollNumber = rollNumber;
     }
 
-    @Transient
-    @Override
-    public int getId() {
-        return userId;
-    }
 
-    @Override
-    public void setId(int id) {
-        userId = id;
-    }
-
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ForeignKey( name = "none" )
     @JoinColumn(insertable = false, updatable = false, name = "st_class_id", referencedColumnName = "cs_class_id", nullable = true)
-    @JsonBackReference
     public Clazz getClazz() {
         return clazz;
     }
+
 
     public void setClazz(Clazz clazz) {
         this.clazz = clazz;
     }
 
-    @OneToOne(fetch = FetchType.EAGER, targetEntity = Profile.class)
-    @JoinColumn(name = "st_user_id",referencedColumnName = "profileId",insertable = false, updatable = false)
-    @JsonManagedReference
-    public Profile getProfile() {
-        return profile;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     @Override
