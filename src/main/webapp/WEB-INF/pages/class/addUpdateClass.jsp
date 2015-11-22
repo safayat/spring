@@ -5,7 +5,8 @@
     <tiles:putAttribute name="body">    <!--main content start-->
         <div class="content"  data-ng-app="myApp" data-ng-controller="MyController">
             <div class="header">
-                Add/Update class
+                <h1>Add/Update Class <a ng-if="param.classId != undefined" href="${appBaseUrl}/private/classList.web" class="btn btn-primary" style="float:right">Back</a></h1>
+
             </div>
             <div class="main-content"  >
                 <form method="post" ng-submit = "saveOrUpdateClass()" class="form-horizontal form-border">
@@ -46,15 +47,19 @@
                         </div>
                     </div>
 
+
                     <div class="form-group" ng-show="param.classId != undefined">
                         <label class="col-sm-3 control-label">Class Captain</label>
                         <div class="col-sm-6">
-                            <select ng-model="param.classCaptainId" class="form-control">
-                                <option ng-repeat="student in students" value="{{student.studentId}}">
-                                    {{student.fullName}}
-                                </option>
+                            <input type="hidden" ng-model="param.classCaptainId" />
+                            <input ng-model="captainName" class="form-control" ng-change="loadStudnets()"/>
+                            <ul  ng-show="showStudentList == true" style="background-color: white;z-index: 1000;position: absolute;width: 95%" class="list-group">
+                                <li style="line-height: 15px" ng-repeat="student in students" ng-click=processStudentSelection(student) class="list-group-item">
+                                   <a href> {{student.fullName}}</a>
+                                </li>
 
-                                <select>
+                            </ul>
+
                         </div>
                     </div>
                     <div class="form-group">
@@ -78,22 +83,32 @@
             var app = angular.module('myApp', ['autocomplete']);
             app.controller("MyController", MyController);
             function MyController($scope, $http) {
-
+                $scope.showStudentList = false;
                 initClazzList($http,'${appBaseUrl}/private/getClassList.web', function(data){
                     $scope.classInfo= data;
                     if(window.location.search.indexOf("classId=") != -1){
                         var classId = window.location.search.split("classId=")[1];
                         $scope.param = $scope.classInfo.clazzMap[classId];
-                        loadStudnets("");
+//                        loadStudnets("");
+                        $http.get("${appBaseUrl}/private/user.web?userSpecificId=" + $scope.param.classCaptainId + "&userType=student").success(function(user){
+                           $scope.captainName = user.fullName;
+                        });
                         loadTeachers("");
                     }
 
                 });
-
-
-                function loadStudnets(name){
-                    $http.get("${appBaseUrl}/private/getStudentList.web?limit=100&offset=0&classIds=" + $scope.param.classId + "&name=" + name).success(function(data){
+               $scope.processStudentSelection = function(student){
+                   $scope.param.classCaptainId = student.studentId;
+                   $scope.captainName = student.fullName;
+                   $scope.showStudentList=false
+               }
+               $scope.loadStudnets = function(){
+                    console.log($scope.captainName);
+                    $http.get("${appBaseUrl}/private/getStudentList.web?limit=100&offset=0&classIds=" + $scope.param.classId + "&name=" + $scope.captainName).success(function(data){
                         $scope.students = data;
+                        if($scope.students.length>0){
+                            $scope.showStudentList = true;
+                        }
                     }).error(function(){
                                 console.log("error");
                             });
@@ -111,6 +126,9 @@
 
                 $scope.saveOrUpdateClass = function(){
                     console.log($scope.param);
+                    $scope.showSuccessMsg = false;
+                    $scope.showErrorMsg = false;
+
                     var formData={};
                     formData.classId = $scope.param.classId;
                     formData.className = $scope.param.className;
@@ -128,7 +146,6 @@
                     }).success(function (data) {
                                 console.log(data);
                                 $scope.param = $scope.classInfo.clazzMap[data];
-                                loadStudnets("");
                                 loadTeachers("");
                                 $scope.showSuccessMsg = true;
 

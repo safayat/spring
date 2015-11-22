@@ -15,10 +15,7 @@ import com.school.user.model.Teacher;
 import com.school.user.service.UserService;
 import com.school.user.validator.StudentValidator;
 import com.school.user.validator.TeacherValidator;
-import com.school.util.ApplicationConstants;
-import com.school.util.CriteriaContainer;
-import com.school.util.DaoResult;
-import com.school.util.JsonStringToObjectConvereter;
+import com.school.util.*;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,6 +163,15 @@ public class UserController {
     CommonUser getUserDetailByUserId(@RequestParam(value = "userId")Long userId){
         return userService.getUserByUserId(userId);
     }
+
+
+    @RequestMapping(value = "/private/user.web", method = RequestMethod.GET)
+    public @ResponseBody
+    CommonUser getUserByUserId(@RequestParam(value = "userSpecificId")Integer userSpecificId, @RequestParam(value = "userType")String userType){
+        Class entityClass = Utility.getUserEntityClass(userType);
+        return userService.get(userSpecificId,entityClass);
+    }
+
 
 
     @RequestMapping(value = "/private/getTeacherList.web", method = RequestMethod.POST)

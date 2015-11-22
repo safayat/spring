@@ -159,6 +159,10 @@ public class UserService {
         return commonUser;
     }
 
+    public CommonUser get(Integer userSpecificId, Class clazz){
+        return userDAO.getById(clazz,userSpecificId);
+    }
+
 
     @Transactional(readOnly = false)
     public void loadUserProfiles(List<CommonUser> userList){

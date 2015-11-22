@@ -18,7 +18,8 @@ To change this template use File | Settings | File Templates.
         <div class="content" data-ng-app="myApp">
 
             <div class="header">
-                <h1>Teachers</h1>
+                <h1>Teachers <a href="${appBaseUrl}/admin/private/createTeacher.web" target="_blank" class="btn btn-success pull-right" >New Teacher</a>
+                </h1>
             </div>
 
             <div class="main-content" >
@@ -34,7 +35,6 @@ To change this template use File | Settings | File Templates.
                                 <label class="sr-only"></label>
                                 <input type="text" class="form-control" ng-model="name" placeholder="Name" ng-change="loadNewTeacherList(0)" ng-model-options="{updateOn: 'blur'}">
                             </div>
-                            <a href="${appBaseUrl}/admin/private/createTeacher.web" target="_blank" class="btn btn-success pull-right" >New Teacher</a>
 
 
                         </form>
@@ -53,7 +53,7 @@ To change this template use File | Settings | File Templates.
                             <tbody>
 
                             <tr ng-repeat="teacher in teachers">
-                                <td><img class="user" src="${appBaseUrl}/{{teacher.profile.profileImageUrl}}"></td>
+                                <td><a href="${appBaseurl}/private/profileInfo.web?userId={{teacher.userId}}"><img class="user" src="${appBaseUrl}/{{teacher.profile.profileImageUrl}}"></a></td>
                                 <td>{{teacher.fullName}}</td>
                                 <td>{{teacher.destination}}</td>
                                 <td>{{teacher.joiningDate | date : 'shortDate'}}</td>

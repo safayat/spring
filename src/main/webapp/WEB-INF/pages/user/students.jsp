@@ -57,7 +57,9 @@
                             <label class="sr-only"></label>
                             <input type="text" class="form-control" ng-model="fullName" placeholder="Name" ng-change="loadNewStudentList(0)" ng-model-options="{updateOn: 'blur'}">
                         </div>
-                        <a href="${appBaseUrl}/admin/private/createStudent.web" target="_blank" class="btn btn-success pull-right" >New Student</a>
+                        <div class="form-group">
+                            <a href="${appBaseUrl}/admin/private/createStudent.web" target="_blank" class="btn btn-success pull-right" >New Student</a>
+                        </div>
 
 
                     </form>
@@ -77,7 +79,7 @@
                         <tbody>
 
                         <tr ng-repeat="student in students">
-                            <td><img class="user" src="${appBaseUrl}/{{student.profile.profileImageUrl}}"></td>
+                            <td><a href="${appBaseurl}/private/profileInfo.web?userId={{student.userId}}"><img class="user" src="${appBaseUrl}/{{student.profile.profileImageUrl}}"></a></td>
                             <td>{{student.fullName}}</td>
                             <td>{{classInfo.clazzMap[student.classId].className}}&nbsp;{{classInfo.clazzMap[student.classId].sectionName}}&nbsp;{{classInfo.clazzMap[student.classId].shiftName}}</td>
                             <td>{{student.rollNumber}}</td>

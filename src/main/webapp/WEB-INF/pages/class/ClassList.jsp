@@ -9,12 +9,15 @@
 
     <!--main content start-->
     <div class="content">
-        <div class="pageheader">
-            <h1>Class List</h1>
+        <div class="header">
+            <h1>Class List <a href="${appBaseUrl}/admin/private/addUpdateClass.web" target="_blank" class="btn btn-success pull-right" >New Class</a>
+            </h1>
         </div>
         <div class="main-content">
             <div data-ng-app="myApp">
                         <div data-ng-controller="MyController">
+                            <div class="col-md-10 col-md-offset-1">
+
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -39,6 +42,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                                </div>
                         </div>
             </div>
         </div>
