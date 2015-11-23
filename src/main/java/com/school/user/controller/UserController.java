@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -62,6 +63,8 @@ public class UserController {
     @Autowired
     SignupValidator signupValidator;
 
+    @Autowired
+    ServletContext servletContext;
 
     @RequestMapping(value = "/admin/private/createTeacher.web", method = RequestMethod.GET)
     public String initTeacherForm(ModelMap map, @RequestParam(value = "userId", required = false) Long userId){
@@ -284,6 +287,9 @@ public class UserController {
 
     @RequestMapping(value = "/private/showStudents.web", method = RequestMethod.GET)
     public String showStudents(){
+        System.out.println(System.getProperty("catalina.base"));
+        System.out.println(servletContext.getContextPath());
+        System.out.println(servletContext.getRealPath(""));
         return "user/students";
     }
 

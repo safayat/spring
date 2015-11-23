@@ -79,7 +79,7 @@
                         <tbody>
 
                         <tr ng-repeat="student in students">
-                            <td><a href="${appBaseurl}/private/profileInfo.web?userId={{student.userId}}"><img class="user" src="${appBaseUrl}/{{student.profile.profileImageUrl}}"></a></td>
+                            <td><a href="${appBaseUrl}/private/profileInfo.web?userId={{student.userId}}"><img class="user" src="${appBaseUrl}/{{student.profile.profileImageUrl}}"></a></td>
                             <td>{{student.fullName}}</td>
                             <td>{{classInfo.clazzMap[student.classId].className}}&nbsp;{{classInfo.clazzMap[student.classId].sectionName}}&nbsp;{{classInfo.clazzMap[student.classId].shiftName}}</td>
                             <td>{{student.rollNumber}}</td>

@@ -22,7 +22,7 @@
                     <div class="col-md-2">
                         <form action="${appBaseUrl}/private/uploadProfilePicture.web" method="post"
                               enctype="multipart/form-data">
-                            <img src="${appBaseUrl}/{{profile.profileImageUrl}}" class="img-rounded" width="100%">
+                            <img src="{{profile.profileImageUrl}}" class="img-rounded" width="100%">
                             <input name="profileImage" type="file" placeholder="upload profile picture">
                             <input name="profileId" type="hidden" value="{{profile.profileId}}">
                             <button class="btn btn-success">upload</button>
@@ -32,89 +32,121 @@
                     <div class="col-md-6">
                         <div class="panel panel-default" ng-init="viewMode = true">
                             <div class="panel-heading">User Info
-                                <a href class="pull-right" ng-click="viewMode = !viewMode">
-                                    <span ng-show="viewMode"  class="text-info fa fa-edit fa-fw" ></span>
-                                    <span ng-show="!viewMode" class="text-info fa fa-eye fa-fw" ></span>
+                                <a href class="pull-right" data-toggle="modal" data-target="#profileModal">
+                                    <span class="text-info fa fa-edit fa-fw" ng-click="showProfileUpdateSuccessMsg=false;showProfileUpdateErrorMsg=false;" ></span>
                                 </a>
                             </div>
                             <div class="panel-body">
-                                <form class="form-horizontal form-border" ng-submit="updateProfile()" >
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">First Name</label>
+                                <table class="table table_no_border">
+                                    <tr>
+                                        <td>First Name</td>
+                                        <td>{{profile.firstName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Last Name</td>
+                                        <td>{{profile.lastName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mother Name</td>
+                                        <td>{{profile.motherName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Father Name</td>
+                                        <td>{{profile.fatherName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Date Of Birth</td>
+                                        <td>{{profile.dateOfBirth}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mobile No</td>
+                                        <td>{{profile.mobileNo}}</td>
+                                    </tr>
+                                </table>
+                            <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="showProfileUpdateSuccessMsg=false;showProfileUpdateErrorMsg=false;"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="profileModalLabel">Update Info</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form class="form-horizontal form-border" ng-submit="updateProfile()" >
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">First Name</label>
 
-                                        <div class="col-sm-6">
-                                            <input ng-show="!viewMode" ng-model="profile.firstName" class="form-control"/>
-                                            <p class="form-control-static" ng-show="viewMode">{{profile.firstName}}</p>
+                                                        <div class="col-sm-6">
+                                                            <input  ng-model="profile.firstName" class="form-control"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Last Name</label>
+                                                        <div class="col-sm-6">
+                                                            <input ng-model="profile.lastName" class="form-control"/>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Mother Name</label>
+
+                                                        <div class="col-sm-6">
+                                                            <input  ng-model="profile.motherName" class="form-control"/>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Father Name</label>
+
+                                                        <div class="col-sm-6">
+                                                            <input  ng-model="profile.fatherName" class="form-control"/>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Date Of Birth</label>
+
+                                                        <div class="col-sm-6">
+                                                            <datepicker date-format="dd/MM/yyyy">
+                                                                <input ng-model="profile.dateOfBirth" class="form-control"/>
+                                                            </datepicker>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Mobile No</label>
+
+                                                        <div class="col-sm-6">
+                                                            <input  ng-model="profile.mobileNo"
+                                                                   class="form-control"/>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label"></label>
+
+                                                        <div class="col-sm-6">
+                                                            <button class="btn btn-block btn-success" >Update</button>
+                                                            <div ng-show="showProfileUpdateSuccessMsg == true" class="alert alert-success" style="text-align: center">Saved successfully</div>
+                                                            <div ng-show="showProfileUpdateErrorMsg == true" class="alert alert-error" style="text-align: center">Failed</div>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </form>
+
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Last Name</label>
-                                        <div class="col-sm-6">
-                                            <input ng-show="!viewMode" ng-model="profile.lastName" class="form-control"/>
-                                            <p class="form-control-static" ng-show="viewMode">{{profile.lastName}}</p>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Mother Name</label>
-
-                                        <div class="col-sm-6">
-                                            <input ng-show="!viewMode" ng-model="profile.motherName" class="form-control"/>
-                                            <p class="form-control-static" ng-show="viewMode">
-                                                {{profile.motherName}}</p>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Father Name</label>
-
-                                        <div class="col-sm-6">
-                                             <input ng-show="!viewMode" ng-model="profile.fatherName" class="form-control"/>
-                                            <p class="form-control-static" ng-show="viewMode"> {{profile.fatherName}}</p>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Date Of Birth</label>
-
-                                        <div class="col-sm-6">
-                                            <datepicker date-format="dd/MM/yyyy">
-                                                <input ng-model="profile.dateOfBirth" class="form-control" ng-show="!viewMode"/>
-                                            </datepicker>
-                                            <p class="form-control-static" ng-show="viewMode">
-                                                {{profile.dateOfBirth}}</p>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Mobile No</label>
-
-                                        <div class="col-sm-6">
-                                            <input ng-show="!viewMode" ng-model="profile.mobileNo"
-                                                   class="form-control"/>
-
-                                            <p class="form-control-static" ng-show="viewMode">
-                                                {{profile.mobileNo}}</p>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"></label>
-
-                                        <div class="col-sm-6">
-                                            <button class="btn btn-block btn-success" ng-show="!viewMode">Update</button>
-                                        </div>
-
-                                    </div>
-
-
-                                </form>
 
                             </div>
                         </div>
@@ -180,77 +212,103 @@
 
                             </div>
                         </div>
-                            <div class="panel panel-default" ng-init="viewAcademicInfoMode = true">
+                            <div class="panel panel-default">
                             <div class="panel-heading">Academic Info
-                                <a href class="pull-right" ng-click="viewAcademicInfoMode = !viewAcademicInfoMode">
-                                    <span ng-show="viewAcademicInfoMode"  class="text-info fa fa-edit fa-fw" ></span>
-                                    <span ng-show="!viewAcademicInfoMode" class="text-info fa fa-eye fa-fw" ></span>
+                                <a href class="pull-right">
+                                    <span  class="text-info fa fa-edit fa-fw" data-toggle="modal" data-target="#userUpdateModal" ng-click="showUserUpdateSuccessMsg=false;showUserUpdateErrorMsg=false;"></span>
                                 </a>
                             </div>
                             <div class="panel-body">
-                                <form  ng-submit="updateUser()" ng-if="login.userType == 'teacher'">
-                                    <div class="form-group">
-                                        <label class="control-label">Designation</label>
+                                    <ul ng-show="login.userType == 'teacher'">
+                                            <li>Designation: {{user.destination}}</li>
 
-                                            <input ng-show="!viewAcademicInfoMode" ng-model="user.destination" class="form-control"/>
-                                            <span ng-show="viewAcademicInfoMode">{{user.destination}}</span>
-                                    </div>
+                                        <li>Joining Date: {{user.joiningDate}} </li>
 
-                                    <div class="form-group">
-                                        <label class="control-label">Joining Date</label>
-                                            <datepicker date-format="dd/MM/yyyy">
-                                                <input ng-model="user.joiningDate" class="form-control" ng-show="!viewAcademicInfoMode"/>
-                                            </datepicker>
-                                            <span ng-show="viewAcademicInfoMode">{{user.joiningDate}}</span>
+                                </ul>
 
-                                    </div>
+                                <ul ng-show="login.userType == 'student'">
+                                            <li>Class: {{s_className}}</li>
 
-                                    <button class="btn btn-success" ng-show="!viewAcademicInfoMode">Update</button>
+                                                <li>Section&nbsp;{{s_sectionName}}</li>
 
-                                </form>
+                                            <li >Shift&nbsp;{{s_shiftName}}</li>
 
-                                <form  ng-submit="updateUser()" ng-show="login.userType == 'student'">
-                                        <div class="form-group">
-                                            <label class="control-label">Class</label>
-                                                <select ng-show="!viewAcademicInfoMode" ng-model="s_className" class="form-control" required="true" ng-change="selectClassForStudent()">
-                                                    <option value="">select class name</option>
-                                                    <option  ng-repeat="className in classInfo.classNames" value="{{className}}" ng-selected="{{s_className == className}}">{{className}}</option>
-                                                </select>
-                                                <span ng-show="viewAcademicInfoMode">{{s_className}}</span>
+                                        <li>Roll Number: {{user.rollNumber}}</li>
 
-                                                <select ng-show="!viewAcademicInfoMode" class="form-control" ng-model="s_sectionName" required="true" ng-change="selectClassForStudent()">
-                                                    <option value="">select section</option>
-                                                    <option ng-repeat="section in classInfo.sections" value="{{section}}" ng-selected="{{s_sectionName == section}}">{{section}}</option>
-                                                </select>
-                                                <span style="display: block" ng-show="viewAcademicInfoMode">Section&nbsp;{{s_sectionName}}</span>
 
-                                                <select ng-show="!viewAcademicInfoMode" class="form-control" ng-model="s_shiftName" required="true" ng-change="selectClassForStudent()">
-                                                    <option value="">select shift</option>
-                                                    <option ng-repeat="shift in classInfo.shifts" value="{{shift}}" ng-selected="{{s_shiftName == shift}}">{{shift}}</option>
-                                                </select>
-                                            <span style="display: block" ng-show="viewAcademicInfoMode">Shift&nbsp;{{s_shiftName}}</span>
+                                        <li>Admission Date: {{user.admissionDate}}</li>
+                                </ul>
+                                <div class="modal fade" id="userUpdateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="userUpdateModalLabel">Update Academic Info</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form  ng-submit="updateUser()" ng-show="login.userType == 'teacher'">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Designation</label>
+                                                        <input  ng-model="user.destination" class="form-control"/>
+                                                    </div>
 
+                                                    <div class="form-group">
+                                                        <label class="control-label">Joining Date</label>
+                                                        <datepicker date-format="dd/MM/yyyy">
+                                                            <input ng-model="user.joiningDate" class="form-control" />
+                                                        </datepicker>
+                                                    </div>
+
+                                                    <button class="btn btn-success" >Update</button>
+                                                    <div ng-show="showUserUpdateSuccessMsg == true" class="alert alert-success" style="text-align: center">Saved successfully</div>
+                                                    <div ng-show="showUserUpdateErrorMsg == true" class="alert alert-success" style="text-align: center">Failed</div>
+
+                                                </form>
+
+                                                <form  ng-submit="updateUser()" ng-show="login.userType == 'student'">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Class</label>
+                                                        <select ng-model="s_className" class="form-control" required="true" ng-change="selectClassForStudent()">
+                                                            <option value="">select class name</option>
+                                                            <option  ng-repeat="className in classInfo.classNames" value="{{className}}" ng-selected="{{s_className == className}}">{{className}}</option>
+                                                        </select>
+
+                                                        <select class="form-control" ng-model="s_sectionName" required="true" ng-change="selectClassForStudent()">
+                                                            <option value="">select section</option>
+                                                            <option ng-repeat="section in classInfo.sections" value="{{section}}" ng-selected="{{s_sectionName == section}}">{{section}}</option>
+                                                        </select>
+
+                                                        <select class="form-control" ng-model="s_shiftName" required="true" ng-change="selectClassForStudent()">
+                                                            <option value="">select shift</option>
+                                                            <option ng-repeat="shift in classInfo.shifts" value="{{shift}}" ng-selected="{{s_shiftName == shift}}">{{shift}}</option>
+                                                        </select>
+
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <label class="control-label">Roll Number</label>
+
+                                                        <input  ng-model="user.rollNumber" class="form-control"/>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label">Admission Date</label>
+                                                        <datepicker date-format="dd/MM/yyyy">
+                                                            <input ng-model="user.admissionDate" class="form-control"/>
+                                                        </datepicker>
+                                                    </div>
+
+                                                    <button class="btn btn-success" >Update</button>
+                                                    <div ng-show="showUserUpdateSuccessMsg == true" class="alert alert-success" style="text-align: center">Saved successfully</div>
+                                                    <div ng-show="showUserUpdateErrorMsg == true" class="alert alert-success" style="text-align: center">Failed</div>
+
+                                                </form>
+
+                                            </div>
                                         </div>
-
-
-                                        <div class="form-group">
-                                        <label class="control-label">Roll Number</label>
-
-                                            <input ng-show="!viewAcademicInfoMode" ng-model="user.rollNumber" class="form-control"/>
-                                            <span ng-show="viewAcademicInfoMode">{{user.rollNumber}}</span>
                                     </div>
-
-                                    <div class="form-group">
-                                        <label class="control-label">Admission Date</label>
-                                            <datepicker date-format="dd/MM/yyyy">
-                                                <input ng-model="user.admissionDate" class="form-control" ng-show="!viewAcademicInfoMode"/>
-                                            </datepicker>
-                                            <span ng-show="viewAcademicInfoMode">{{user.admissionDate}}</span>
-                                    </div>
-
-                                    <button class="btn btn-success" ng-show="!viewAcademicInfoMode">Update</button>
-
-                                </form>
+                                </div>
 
                             </div>
                         </div>
@@ -259,6 +317,11 @@
                 </div>
             </div>
         </div>
+        <style>
+            table.table_no_border tr td{
+                border: none;
+            }
+        </style>
         <script src="${appBaseUrl}/js/class.js"></script>
 
         <script>
@@ -269,6 +332,10 @@
                 console.log(window.location);
                 var userUpdateUrl = "";
                 $scope.classInfo = {};
+                $scope.showProfileUpdateErrorMsg = false;
+                $scope.showProfileUpdateSuccessMsg = false;
+                $scope.showUserUpdateErrorMsg = false;
+                $scope.showUserUpdateSuccessMsg = false;
                 $scope.s_shiftName = "";
                 $scope.s_sectionName  = "";
                 $scope.s_className = "";
@@ -325,6 +392,9 @@
                     }).success(function (data) {
                                 console.log(data);
                                 if (data.successful) {
+                                    $scope.showProfileUpdateSuccessMsg = true;
+                                }else{
+                                    $scope.showProfileUpdateErrorMsg = true;
                                 }
 
                             }).error(function (data) {
@@ -365,6 +435,10 @@
                     }).success(function (data) {
                                 console.log(data);
                                 if (data.successful) {
+                                    $scope.showUserUpdateSuccessMsg = true;
+                                }else{
+                                    $scope.showUserUpdateErrorMsg = true;
+
                                 }
 
                             }).error(function (data) {

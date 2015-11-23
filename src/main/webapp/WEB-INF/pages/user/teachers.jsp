@@ -53,7 +53,7 @@ To change this template use File | Settings | File Templates.
                             <tbody>
 
                             <tr ng-repeat="teacher in teachers">
-                                <td><a href="${appBaseurl}/private/profileInfo.web?userId={{teacher.userId}}"><img class="user" src="${appBaseUrl}/{{teacher.profile.profileImageUrl}}"></a></td>
+                                <td><a href="${appBaseUrl}/private/profileInfo.web?userId={{teacher.userId}}"><img class="user" src="${appBaseUrl}/{{teacher.profile.profileImageUrl}}"></a></td>
                                 <td>{{teacher.fullName}}</td>
                                 <td>{{teacher.destination}}</td>
                                 <td>{{teacher.joiningDate | date : 'shortDate'}}</td>

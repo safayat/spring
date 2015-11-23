@@ -103,8 +103,9 @@ public class ProfileController {
         String contextPath = servletContext.getRealPath("");
         String imagePath = "/images/" + profile.getProfileId() + "_" + System.currentTimeMillis() + ".jpg";
 
-        String uploadPath = contextPath.substring(0,contextPath.indexOf("/SchoolManagement")) + imagePath;
-        System.out.println("uploadPath:"  + uploadPath);
+        System.out.println("contextPath:" + contextPath);
+        System.out.println(servletContext.getContextPath());
+        String uploadPath = contextPath.substring(0,contextPath.indexOf(servletContext.getContextPath())) + imagePath;
         if (!profileImage.isEmpty()) {
             try {
                 byte[] bytes = profileImage.getBytes();
@@ -119,7 +120,7 @@ public class ProfileController {
                 e.printStackTrace();
             }
         } 
-        return "redirect:profile.web?profileId=" + profileId;
+        return "redirect:/profileInfo.web?userId=" + profile.getUserId();
 
     }
 

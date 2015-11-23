@@ -52,7 +52,35 @@
             </div>
         </div>
     </div>
-    <!--main content end-->
+        <!--main content end-->
+        <script type="text/javascript">
+            var app = angular.module('myApp', ['720kb.datepicker']);
+            app.controller("MyController", MyController);
+            angular.element(document).ready(function () {
+                $('#joiningDate').datepicker();
+            });
+            function MyController($scope, $http){
+
+                $scope.verifyUserName = function(){
+                    if($scope.loginUsername.length <3) return;
+                    $http.get('${appBaseUrl}/private/search/login.web?username='+$scope.loginUsername).success(function(data){
+                        if(data == ''){
+                            $scope.usernameNotUnique = false;
+                        }else{
+                            $scope.usernameNotUnique = true;
+                        }
+
+                    }).error(function(data){
+                        console.log('error');
+
+                    });
+                }
+
+
+            }
+
+        </script>
+
     </tiles:putAttribute>
 </tiles:insertDefinition>
 
