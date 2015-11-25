@@ -20,11 +20,11 @@
         </div>
         <div class="main-content">
             <div data-ng-app="myApp">
-                <form:form method="POST" commandName="salaryInfo" action="${appBaseUrl}/admin/private/addUpdateSalary.web" cssClass="form-horizontal form-border">
+                <form:form method="POST" commandName="salaryInfo" action="${appBaseUrl}/admin/private/addUpdateSalary.web" class="form-horizontal form-border">
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">User Name</label>
                                     <div class="col-sm-6">
-                                        <form:select path="userId" cssClass="form-control">
+                                        <form:select path="userId" class="form-control">
                                         <form:options items="${employeeList}" itemValue="userId"
                                                       itemLabel="profile.firstName"/>
                                         </form:select>
@@ -34,7 +34,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Salary</label>
                                     <div class="col-sm-6">
-                                        <form:input path="salary" cssClass="form-control"/>
+                                        <form:input path="salary" class="form-control"/>
                                     </div>
                                 </div>
 

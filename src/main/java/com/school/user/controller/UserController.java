@@ -124,15 +124,27 @@ public class UserController {
 
     }
 
+    @RequestMapping(value = "/admin/private/update/staff.web", method = RequestMethod.POST)
+    @ResponseBody
+    public DaoResult updateStudent(@ModelAttribute Staff staff,
+                                BindingResult result,
+                                SessionStatus status,
+                                RedirectAttributes redirectAttributes, HttpServletRequest request
+                                ){
+
+           return userService.update(staff);
+
+    }
+
     @RequestMapping(value = "/admin/private/createStaff.web", method = RequestMethod.POST)
     public String createStaff(@ModelAttribute("staff")Staff staff,
-                                RedirectAttributes redirectAttributes
+                                RedirectAttributes redirectAttributes,
+                                HttpServletRequest request
                                 ){
-        staff.setStartingDesignation(staff.getStartingDesignation());
         CommonUser commonUser = staff;
         commonUser.getLogin().setUserType("staff");
         userService.saveOrUpdate(commonUser);
-        return "redirect:createStaff.web?userId=" + staff.getUserId();
+        return "redirect:" + ApplicationConstants.APP_URL(request) + "/private/profileInfo.web?userId=" + staff.getUserId();
     }
 
     @RequestMapping(value = "/admin/private/createStudent.web", method = RequestMethod.GET)
@@ -177,6 +189,29 @@ public class UserController {
 
 
 
+    @RequestMapping(value = "/private/getstaffList.web", method = RequestMethod.POST)
+    public @ResponseBody
+    List getstaffList(@RequestParam(value = "name", required = false)String  name
+            , @RequestParam(value = "designation", required = false)String designation
+            , @RequestParam(value = "offset", required = false)int offset
+            , @RequestParam(value = "limit", required = false)int limit
+
+             ){
+        if(limit <= 0){
+            limit = 10;
+        }
+        if(offset<0)
+            offset = 0;
+        CriteriaContainer criteriaContainer = CriteriaContainer.instance();
+        if(!Strings.isNullOrEmpty(designation)){
+            criteriaContainer.add(Restrictions.eq("designation", designation));
+        }
+        if(!Strings.isNullOrEmpty(name)){
+            criteriaContainer.add(Restrictions.like("fullName", "%" + name + "%"));
+        }
+        List list = userService.getDetailUserList(Staff.class, criteriaContainer.list(),offset,limit);
+        return list;
+    }
     @RequestMapping(value = "/private/getTeacherList.web", method = RequestMethod.POST)
     public @ResponseBody
     List getTeacherList(@RequestParam(value = "name", required = false)String  name
@@ -278,8 +313,35 @@ public class UserController {
         List list = userService.getDetailUserList(Student.class, criteriaContainer.list(),offset,limit);
         return list;
     }
+    @RequestMapping(value = "/private/getstaffList.web", method = RequestMethod.GET)
+    public @ResponseBody
+    List get_staffList(@RequestParam(value = "name", required = false)String  name
+            , @RequestParam(value = "designation", required = false)String designation
+            , @RequestParam(value = "offset", required = false)int offset
+            , @RequestParam(value = "limit", required = false)int limit
+
+    ){
+        if(limit <= 0){
+            limit = 10;
+        }
+        if(offset<0)
+            offset = 0;
+        CriteriaContainer criteriaContainer = CriteriaContainer.instance();
+        if(!Strings.isNullOrEmpty(designation)){
+            criteriaContainer.add(Restrictions.eq("designation", designation));
+        }
+        if(!Strings.isNullOrEmpty(name)){
+            criteriaContainer.add(Restrictions.like("fullName", "%" + name + "%"));
+        }
+        List list = userService.getDetailUserList(Staff.class, criteriaContainer.list(),offset,limit);
+        return list;
+    }
 
 
+    @RequestMapping(value = "/private/showStaffs.web", method = RequestMethod.GET)
+    public String showStaffs(){
+        return "user/staffs";
+    }
     @RequestMapping(value = "/private/showTeachers.web", method = RequestMethod.GET)
     public String showTeachers(){
         return "user/teachers";

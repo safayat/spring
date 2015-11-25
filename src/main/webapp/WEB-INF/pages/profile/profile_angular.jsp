@@ -219,6 +219,13 @@
                                 </a>
                             </div>
                             <div class="panel-body">
+                                    <ul ng-show="login.userType == 'staff'">
+                                            <li>Designation: {{user.designation}}</li>
+
+                                        <li>Joining Date: {{user.dateOfJoin}} </li>
+                                        <li>Employee Level: {{user.employeeLevel}} </li>
+
+                                </ul>
                                     <ul ng-show="login.userType == 'teacher'">
                                             <li>Designation: {{user.destination}}</li>
 
@@ -246,6 +253,29 @@
                                                 <h4 class="modal-title" id="userUpdateModalLabel">Update Academic Info</h4>
                                             </div>
                                             <div class="modal-body">
+                                                <form  ng-submit="updateUser()" ng-show="login.userType == 'staff'">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Employee Level</label>
+                                                        <input  ng-model="user.employeeLevel" class="form-control"/>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label">Designation</label>
+                                                        <input  ng-model="user.designation" class="form-control"/>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label">Joining Date</label>
+                                                        <datepicker date-format="dd/MM/yyyy">
+                                                            <input ng-model="user.dateOfJoin" class="form-control" />
+                                                        </datepicker>
+                                                    </div>
+
+                                                    <button class="btn btn-success" >Update</button>
+                                                    <div ng-show="showUserUpdateSuccessMsg == true" class="alert alert-success" style="text-align: center">Saved successfully</div>
+                                                    <div ng-show="showUserUpdateErrorMsg == true" class="alert alert-success" style="text-align: center">Failed</div>
+
+                                                </form>
+
                                                 <form  ng-submit="updateUser()" ng-show="login.userType == 'teacher'">
                                                     <div class="form-group">
                                                         <label class="control-label">Designation</label>
@@ -351,6 +381,10 @@
                         data.joiningDate = $filter('date')(data.joiningDate, "dd/MM/yyyy");
                     }
 
+                    if(data.dateOfJoin != undefined){
+                        data.dateOfJoin = $filter('date')(data.dateOfJoin, "dd/MM/yyyy");
+                    }
+
                     if(data.admissionDate != undefined){
                         data.admissionDate = $filter('date')(data.admissionDate, "dd/MM/yyyy");
                     }
@@ -371,6 +405,9 @@
                     }
                     if($scope.login.userType == 'teacher'){
                         userUpdateUrl = "${appBaseUrl}/admin/private/update/teacher.web";
+                    }
+                    if($scope.login.userType == 'staff'){
+                        userUpdateUrl = "${appBaseUrl}/admin/private/update/staff.web";
                     }
                     $scope.user = data;
                     $scope.user.login = {};

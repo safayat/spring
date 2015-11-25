@@ -51,16 +51,19 @@ public class ClazzService {
                     teacherIdList.add(clazz.getClassTeacherId());
                 }
             }
-            List<Teacher> teacherList = clazzDAO.findByCriteria(Teacher.class, Restrictions.in("teacherId", teacherIdList));
-            Map<Integer, Teacher> teacherMap = new HashMap<>();
-            for(Teacher teacher : teacherList){
-              teacherMap.put(teacher.getTeacherId(),teacher);
-            }
-
-            for(Clazz clazz : clazzList){
-                if(clazz.getClassTeacherId() !=  null){
-                    clazz.setClassTeacher(teacherMap.get(clazz.getClassTeacherId()));
+            if(teacherIdList.size()>0){
+                List<Teacher> teacherList = clazzDAO.findByCriteria(Teacher.class, Restrictions.in("teacherId", teacherIdList));
+                Map<Integer, Teacher> teacherMap = new HashMap<>();
+                for(Teacher teacher : teacherList){
+                    teacherMap.put(teacher.getTeacherId(),teacher);
                 }
+
+                for(Clazz clazz : clazzList){
+                    if(clazz.getClassTeacherId() !=  null){
+                        clazz.setClassTeacher(teacherMap.get(clazz.getClassTeacherId()));
+                    }
+                }
+
             }
         }
 
@@ -71,15 +74,17 @@ public class ClazzService {
                     studentIdList.add(clazz.getClassCaptainId());
                 }
             }
-            List<Student> studentList = clazzDAO.findByCriteria(Student.class, Restrictions.in("studentId", studentIdList));
-            Map<Integer, Student> studentMap = new HashMap<>();
-            for(Student student : studentList){
-                studentMap.put(student.getStudentId(),student);
-            }
+            if(studentIdList.size()>0){
+                List<Student> studentList = clazzDAO.findByCriteria(Student.class, Restrictions.in("studentId", studentIdList));
+                Map<Integer, Student> studentMap = new HashMap<>();
+                for(Student student : studentList){
+                    studentMap.put(student.getStudentId(),student);
+                }
 
-            for(Clazz clazz : clazzList){
-                if(clazz.getClassCaptainId() !=  null){
-                    clazz.setClassCaptain(studentMap.get(clazz.getClassCaptainId()));
+                for(Clazz clazz : clazzList){
+                    if(clazz.getClassCaptainId() !=  null){
+                        clazz.setClassCaptain(studentMap.get(clazz.getClassCaptainId()));
+                    }
                 }
             }
 

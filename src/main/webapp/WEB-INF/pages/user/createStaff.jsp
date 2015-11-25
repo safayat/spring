@@ -36,8 +36,15 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Joining Date</label>
                                     <div class="col-sm-6"  >
+<%--
                                         <form:input path="dateOfJoin" cssClass="form-control" data-date="12/02/2012" data-date-format="dd/mm/yyyy"  readonly="true"/>
                                         <form:errors path="dateOfJoin" cssClass="has-error"/>
+
+--%>
+                                        <datepicker date-format="dd/MM/yyyy">
+                                            <input ng-model="dateOfJoin" class="form-control" name = "dateOfJoin" id="dateOfJoin"/>
+                                        </datepicker>
+
                                     </div>
                                 </div>
 
