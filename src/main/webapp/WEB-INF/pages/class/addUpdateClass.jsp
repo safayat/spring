@@ -84,19 +84,25 @@
             app.controller("MyController", MyController);
             function MyController($scope, $http) {
                 $scope.showStudentList = false;
-                initClazzList($http,'${appBaseUrl}/private/getClassList.web', function(data){
-                    $scope.classInfo= data;
-                    if(window.location.search.indexOf("classId=") != -1){
-                        var classId = window.location.search.split("classId=")[1];
-                        $scope.param = $scope.classInfo.clazzMap[classId];
-//                        loadStudnets("");
-                        $http.get("${appBaseUrl}/private/user.web?userSpecificId=" + $scope.param.classCaptainId + "&userType=student").success(function(user){
-                           $scope.captainName = user.fullName;
-                        });
-                        loadTeachers("");
-                    }
+                init();
 
-                });
+
+               function init(){
+                   initClazzList($http,'${appBaseUrl}', function(data){
+                       $scope.classInfo= data;
+                       if(window.location.search.indexOf("classId=") != -1){
+                           var classId = window.location.search.split("classId=")[1];
+                           $scope.param = $scope.classInfo.clazzMap[classId];
+//                        loadStudnets("");
+                           $http.get("${appBaseUrl}/private/user.web?userSpecificId=" + $scope.param.classCaptainId + "&userType=student").success(function(user){
+                               $scope.captainName = user.fullName;
+                           });
+                           loadTeachers("");
+                       }
+
+                   });
+
+               }
                $scope.processStudentSelection = function(student){
                    $scope.param.classCaptainId = student.studentId;
                    $scope.captainName = student.fullName;
@@ -130,12 +136,14 @@
                     $scope.showErrorMsg = false;
 
                     var formData={};
-                    formData.classId = $scope.param.classId;
                     formData.className = $scope.param.className;
                     formData.sectionName = $scope.param.sectionName;
                     formData.shiftName = $scope.param.shiftName;
-                    formData.classCaptainId = $scope.param.classCaptainId;
-                    formData.classTeacherId = $scope.param.classTeacherId;
+                    if($scope.param.classId != undefined){
+                        formData.classId = $scope.param.classId;
+                        formData.classCaptainId = $scope.param.classCaptainId;
+                        formData.classTeacherId = $scope.param.classTeacherId;
+                    }
                     console.log(formData);
 
                     $http({
@@ -144,10 +152,9 @@
                         data: $.param(formData),
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     }).success(function (data) {
-                                console.log(data);
-                                $scope.param = $scope.classInfo.clazzMap[data];
-                                loadTeachers("");
-                                $scope.showSuccessMsg = true;
+                        console.log(data);
+                        init();
+                        $scope.showSuccessMsg = true;
 
                             }).error(function (data) {
                                 $scope.showErrorMsg = true;

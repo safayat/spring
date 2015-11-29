@@ -22,15 +22,16 @@
                     <div class="col-md-2">
                         <form action="${appBaseUrl}/private/uploadProfilePicture.web" method="post"
                               enctype="multipart/form-data">
-                            <img src="{{profile.profileImageUrl}}" class="img-rounded" width="100%">
+                            <img ng-if="profile.profileImageUrl == 'image/Default_Profile_Picture.png' " src="../{{profile.profileImageUrl}}" class="img-rounded" width="100%">
+                            <img ng-if="profile.profileImageUrl != 'image/Default_Profile_Picture.png' " src="${appBaseUrl}/{{profile.profileImageUrl}}" class="img-rounded" width="100%">
                             <input name="profileImage" type="file" placeholder="upload profile picture">
                             <input name="profileId" type="hidden" value="{{profile.profileId}}">
                             <button class="btn btn-success">upload</button>
                         </form>
                     </div>
                         <%--<form method="POST" commandName="profile" action="/private/updateProfile.web" class="form-horizontal form-border">--%>
-                    <div class="col-md-6">
-                        <div class="panel panel-default" ng-init="viewMode = true">
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
                             <div class="panel-heading">User Info
                                 <a href class="pull-right" data-toggle="modal" data-target="#profileModal">
                                     <span class="text-info fa fa-edit fa-fw" ng-click="showProfileUpdateSuccessMsg=false;showProfileUpdateErrorMsg=false;" ></span>
@@ -39,12 +40,8 @@
                             <div class="panel-body">
                                 <table class="table table_no_border">
                                     <tr>
-                                        <td>First Name</td>
-                                        <td>{{profile.firstName}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Last Name</td>
-                                        <td>{{profile.lastName}}</td>
+                                        <td>Name</td>
+                                        <td>{{profile.firstName}} &nbsp;{{profile.lastName}}</td>
                                     </tr>
                                     <tr>
                                         <td>Mother Name</td>

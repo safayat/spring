@@ -4,11 +4,13 @@ import com.school.clazz.model.Attendance;
 import com.school.clazz.model.Clazz;
 import com.school.clazz.model.RollCall;
 import com.school.clazz.service.ClazzService;
+import com.school.common.service.CommonService;
 import com.school.login.model.Login;
 import com.school.user.model.CommonUser;
 import com.school.user.model.Student;
 import com.school.user.model.Teacher;
 import com.school.user.service.UserService;
+import com.school.util.DaoResult;
 import com.school.util.JsonStringToObjectConvereter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -39,6 +41,45 @@ public class ClazzController {
     ClazzService clazzService;
     @Autowired
     UserService userService;
+
+    @Autowired
+    CommonService commonService;
+
+    @RequestMapping(value = "/private/getShifts.web",
+            method = RequestMethod.GET,
+            produces = "application/json")
+    public @ResponseBody
+    Object[] getShifts()
+    {
+        return clazzService.getShifts();
+    }
+
+    @RequestMapping(value = "/private/addShift.web",
+            method = RequestMethod.GET,
+            produces = "application/json")
+    public @ResponseBody
+    DaoResult addShifts(@RequestParam(value = "shift")String shift)
+    {
+        return clazzService.addShift(shift);
+    }
+
+    @RequestMapping(value = "/private/addSection.web",
+            method = RequestMethod.GET,
+            produces = "application/json")
+    public @ResponseBody
+    DaoResult addSection(@RequestParam(value = "section")String section)
+    {
+        return clazzService.addSection(section);
+    }
+
+    @RequestMapping(value = "/private/getSections.web",
+            method = RequestMethod.GET,
+            produces = "application/json")
+    public @ResponseBody
+    Object[] getSections()
+    {
+        return clazzService.getSections();
+    }
 
     @RequestMapping(value = "/private/getClassList.web",
             method = RequestMethod.GET,
@@ -179,7 +220,7 @@ public class ClazzController {
     }
     @RequestMapping(value = "/admin/private/addUpdateClass.web",
             method = RequestMethod.POST)
-    public @ResponseBody int processClassForm(RedirectAttributes redirectAttributes, @ModelAttribute("clazz")Clazz clazz, @ModelAttribute("currentClazzMap")Map currentClazzMap)
+    public @ResponseBody int processClassForm(@ModelAttribute("clazz")Clazz clazz)
     {
         clazzService.saveOrUpdate(clazz);
         return clazz.getClassId();

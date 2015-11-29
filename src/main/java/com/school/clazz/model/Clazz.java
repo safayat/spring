@@ -19,10 +19,12 @@ import java.util.List;
  cs_teacher_id int(11) unsigned NULL
  */
 @Entity
-@Table(name = "class")
+@Table(name = "class"
+        , uniqueConstraints=
+            @UniqueConstraint(columnNames={"cs_name", "sectionName", "shiftName"}))
 
 public class Clazz {
-    private int classId;
+    private Integer classId;
     private String className;
     private String sectionName;
     private String shiftName;
@@ -38,12 +40,12 @@ public class Clazz {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cs_class_id",unique = true,nullable = false)
-    public int getClassId() {
+    @Column(name = "cs_class_id",nullable = false)
+    public Integer getClassId() {
         return classId;
     }
 
-    public void setClassId(int classId) {
+    public void setClassId(Integer classId) {
         this.classId = classId;
     }
 

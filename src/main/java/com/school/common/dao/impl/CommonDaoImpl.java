@@ -110,6 +110,9 @@ public abstract class CommonDaoImpl{
     public Query getQuery(String hql) {
         return getCurrentSession().createQuery(hql);
     }
+    public Query getSqlQuery(String hql) {
+        return getCurrentSession().createSQLQuery(hql);
+    }
     public<E> List<E> getByHql(String hql) {
         return getCurrentSession().createQuery(hql).list();
     }

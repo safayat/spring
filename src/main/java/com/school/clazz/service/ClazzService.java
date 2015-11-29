@@ -11,6 +11,8 @@ import com.school.login.model.Login;
 import com.school.user.model.Student;
 import com.school.user.model.Teacher;
 import com.school.util.CriteriaContainer;
+import com.school.util.DaoResult;
+import com.school.util.StringUtility;
 import com.school.util.Utility;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
@@ -296,6 +298,28 @@ public class ClazzService {
             return  false;
         }
         return true;
+    }
+
+    @Transactional
+    public Object[] getSections(){
+        return clazzDAO.getSqlQuery("select sectionName from sections").list().toArray();
+    }
+
+    @Transactional
+    public DaoResult addSection(String section){
+        clazzDAO.getSqlQuery("insert ignore into sections(sectionName) values(" + StringUtility.toQoute(section) + ")").executeUpdate();
+        return new DaoResult();
+    }
+
+    @Transactional
+    public DaoResult addShift(String shift){
+        clazzDAO.getSqlQuery("insert ignore into shifts(shiftName) values(" + StringUtility.toQoute(shift) + ")").executeUpdate();
+        return new DaoResult();
+    }
+
+    @Transactional
+    public Object[] getShifts(){
+        return clazzDAO.getSqlQuery("select shiftName from shifts").list().toArray();
     }
 
 

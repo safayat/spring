@@ -44,18 +44,20 @@
     }
 
     function initClazzList(http,url,callBack){
+        var classinfo = {};
         http.get(url).success(function(data){
             console.log(data);
-            var classinfo = {};
             classinfo.classList = data;
             classinfo.sections = getSections(classinfo.classList);
             classinfo.shifts = getShifts(classinfo.classList);
+
             classinfo.classNames = getClassNames(classinfo.classList);
             classinfo.clazzMap= getClazzMap(classinfo.classList);
             callBack(classinfo);
         },function(data){
             console.log("error");
         });
+
     }
 
     function filterClazz(classList, className, sectionName, shiftName){

@@ -126,6 +126,8 @@ public class LoginController {
     public String home(HttpServletRequest request,Principal principal)
     {
         System.out.println("=================" + ApplicationConstants.APP_URL(request));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         return "common/home";
     }
 

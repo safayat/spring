@@ -4,6 +4,7 @@ import com.school.admission.dao.AdmissionDAO;
 import com.school.admission.model.AdmissionApplication;
 import com.school.common.dao.CommonDAO;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,7 @@ public class CommonService {
     public<E> List<E> getAll(Class entityClass) {
         return commonDAO.getAll(entityClass);
     }
+
 
 /*
     @Transactional
