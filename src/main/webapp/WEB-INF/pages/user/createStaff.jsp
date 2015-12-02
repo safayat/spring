@@ -14,35 +14,20 @@
         <div  class="main-content" data-ng-app="myApp">
             <div class="row">
                 <div class="col-md-12" data-ng-controller="MyController">
-                            <form:form method="POST" commandName="staff" action="${appBaseUrl}/admin/private/createStaff.web" cssClass="form-horizontal form-border" >
-                                <c:set var="readOnly" value="${staff.staffId > 0}" scope="request"/>
+                            <form method="POST" class="form-horizontal form-border" ng-submit="saveStaff()">
 
                                 <jsp:include page="/WEB-INF/pages/user/loginInfo.jsp" />
-                                <form:hidden path="staffId"/>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Designation</label>
                                     <div class="col-sm-6">
-                                        <form:input path="designation" cssClass="form-control"/>
-                                        <form:errors path="designation" cssClass="has-error"/>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">Employee level / Paying Scale</label>
-                                    <div class="col-sm-6">
-                                        <form:input path="employeeLevel" cssClass="form-control"/>
-                                        <form:errors path="employeeLevel" cssClass="has-error"/>
+                                        <input ng-model="user.designation" class="form-control"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Joining Date</label>
                                     <div class="col-sm-6"  >
-<%--
-                                        <form:input path="dateOfJoin" cssClass="form-control" data-date="12/02/2012" data-date-format="dd/mm/yyyy"  readonly="true"/>
-                                        <form:errors path="dateOfJoin" cssClass="has-error"/>
-
---%>
                                         <datepicker date-format="dd/MM/yyyy">
-                                            <input ng-model="dateOfJoin" class="form-control" name = "dateOfJoin" id="dateOfJoin"/>
+                                            <input ng-model="user.dateOfJoin" class="form-control"/>
                                         </datepicker>
 
                                     </div>
@@ -51,11 +36,11 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label"></label>
                                     <div class="col-sm-6">
-                                        <button type="submit" class="btn btn-primary btn-block">Signup</button>
+                                        <button type="submit" class="btn btn-primary btn-block">Create Staff</button>
                                     </div>
                                 </div>
 
-                            </form:form>
+                            </form>
             </div>
         </div>
     </div>
@@ -63,27 +48,43 @@
         <script type="text/javascript">
             var app = angular.module('myApp', ['720kb.datepicker']);
             app.controller("MyController", MyController);
-            angular.element(document).ready(function () {
-                $('#joiningDate').datepicker();
-            });
             function MyController($scope, $http){
 
-                $scope.verifyUserName = function(){
-                    if($scope.loginUsername.length <3) return;
-                    $http.get('${appBaseUrl}/private/search/login.web?username='+$scope.loginUsername).success(function(data){
-                        if(data == ''){
-                            $scope.usernameNotUnique = false;
-                        }else{
-                            $scope.usernameNotUnique = true;
+                var vm = $scope;
+                vm.user = {};
+                vm.saveStaff = function(){
+                    vm.showErrorMsg = false;
+                    vm.user.userType="staff";
+                    if(vm.usernameNotUnique == true){
+                        $('#username').focus();
+                        return;
+                    }
+                    $http({
+                        method: 'POST',
+                        url: '${appBaseUrl}/admin/private/createUser.web',
+                        data: $.param(vm.user),
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    }).success(function (data) {
+                        console.log(data);
+                        if(data.successful){
+                            window.location.href = '${appBaseUrl}/private/profileInfo.web?userId=' + data.data;
                         }
-
-                    }).error(function(data){
-                        console.log('error');
-
+                        else{
+                            vm.showErrorMsg = true;
+                            vm.errorMsg = data.message;
+                        }
                     });
                 }
 
-
+                vm.verifyUserName = function () {
+                    if (vm.user.username.length < 3)
+                        return;
+                    $http.get('${appBaseUrl}/private/search/login.web?username=' + vm.user.username).success(function (data) {
+                        vm.usernameNotUnique = data != '';
+                    }).error(function (data) {
+                        console.log('error');
+                    });
+                }
             }
 
         </script>

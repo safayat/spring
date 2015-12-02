@@ -118,30 +118,50 @@
             var app = angular.module('myApp', []);
             app.controller("MyController", MyController);
             function MyController($scope, $http) {
-                $scope.classInfo = {};
-                $scope.classIds = [];
-                $scope.limit = 10;
-                $scope.offset = 0;
-                $scope.rollNumber = "";
-                $scope.fullName = "";
+                var vm = $scope;
+                vm.classInfo = {};
+                vm.classIds = [];
+                vm.limit = 10;
+                vm.offset = 0;
+                vm.rollNumber = "";
+                vm.fullName = "";
+
+/*
+                initClazzList($http,'${appBaseUrl}/private/getClassList.web', function(data){
+                    vm.classInfo= data;
+                });
+*/
 
                 initClazzList($http,'${appBaseUrl}/private/getClassList.web', function(data){
-                    $scope.classInfo= data;
+                    vm.classInfo= data;
+                    $http.get("${appBaseUrl}/private/getSections.web").success(function(sections){
+                        vm.classInfo.sections = sections;
+                        console.log(vm.classInfo.sections);
+
+                    });
+                    $http.get("${appBaseUrl}/private/getShifts.web").success(function(shifts){
+                        vm.classInfo.shifts = shifts;
+                    });
+
+                    console.log(vm.classInfo);
+
                 });
-                $scope.filterClass = function(){
-                    $scope.classIds = filterClazz($scope.classInfo.classList, $scope.s_className, $scope.s_sectionName, $scope.s_shiftName);
-                    $scope.loadNewStudentList(0);
+
+
+                vm.filterClass = function(){
+                    vm.classIds = filterClazz(vm.classInfo.classList, vm.s_className, vm.s_sectionName, vm.s_shiftName);
+                    vm.loadNewStudentList(0);
 
                 };
 
-                $scope.loadNewStudentList = function(offset){
-                    $scope.offset = offset;
+                vm.loadNewStudentList = function(offset){
+                    vm.offset = offset;
                     var param = {};
-                    param.limit = $scope.limit;
-                    param.rollNumber = $scope.rollNumber;
-                    param.name = $scope.fullName;
-                    param.offset = $scope.offset;
-                    param.classIds = $scope.classIds.toString();
+                    param.limit = vm.limit;
+                    param.rollNumber = vm.rollNumber;
+                    param.name = vm.fullName;
+                    param.offset = vm.offset;
+                    param.classIds = vm.classIds.toString();
 
 
                     $http({
@@ -150,9 +170,8 @@
                         data: $.param(param),
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                     }).success(function (data) {
-                                $scope.students = data;
-                                console.log($scope.students);
-
+                                vm.students = data;
+                                console.log(vm.students);
                             }).error(function (data) {
                             });
 

@@ -30,6 +30,7 @@
 <script src="${appBaseUrl}/js/bootstrap-datepicker.js"></script>
 <script src="${appBaseUrl}/js/angular-datepicker.js"></script>
 <script src="${appBaseUrl}/js/autocomplete.js"></script>
+<script src="${appBaseUrl}/js/utility.js"></script>
 
 <script type="text/javascript">
     $(function() {

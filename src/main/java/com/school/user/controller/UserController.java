@@ -8,10 +8,7 @@ import com.school.login.model.Login;
 import com.school.login.service.LoginService;
 import com.school.login.validator.LoginValidator;
 import com.school.login.validator.SignupValidator;
-import com.school.user.model.CommonUser;
-import com.school.user.model.Staff;
-import com.school.user.model.Student;
-import com.school.user.model.Teacher;
+import com.school.user.model.*;
 import com.school.user.service.UserService;
 import com.school.user.validator.StudentValidator;
 import com.school.user.validator.TeacherValidator;
@@ -57,48 +54,74 @@ public class UserController {
     ClazzService clazzService;
 
     @Autowired
-    StudentValidator studentValidator;
-    @Autowired
-    TeacherValidator teacherValidator;
-    @Autowired
-    SignupValidator signupValidator;
-
-    @Autowired
     ServletContext servletContext;
 
     @RequestMapping(value = "/admin/private/createTeacher.web", method = RequestMethod.GET)
-    public String initTeacherForm(ModelMap map, @RequestParam(value = "userId", required = false) Long userId){
+    public String initTeacherForm(ModelMap map){
 
-        CommonUser commonUser = userId == null ? new Teacher(new Login()) : userService.getUserByUserId(userId, Teacher.class);
-        map.addAttribute("teacher", commonUser);
         return "user/createTeacher";
     }
 
     @RequestMapping(value = "/admin/private/createStaff.web", method = RequestMethod.GET)
-    public String initStaff(ModelMap map, @RequestParam(value = "userId", required = false) Long userId){
-        CommonUser commonUser = userId == null ? new Staff(new Login()) : userService.getUserByUserId(userId, Staff.class);
+    public String initStaff(ModelMap map){
+        CommonUser commonUser = new Staff(new Login());
         map.addAttribute("staff", commonUser);
         return "user/createStaff";
     }
 
 
+    @RequestMapping(value = "/admin/private/createUser.web", method = RequestMethod.POST)
+    @ResponseBody public  DaoResult createUser(@ModelAttribute UserForm userForm){
+
+        DaoResult daoResult = new DaoResult();
+            try{
+                Long userId = userService.createUser(userForm.createUser());
+                daoResult.setData(userId);
+            }catch (Exception e){
+                daoResult.setValues(false, e.getMessage(),DaoResult.EXCEPTION);
+            }
+
+        return daoResult;
+
+    }
+
+    @RequestMapping(value = "/admin/private/createTeacher.web", method = RequestMethod.POST)
+    @ResponseBody
+    public DaoResult processTeacherFormSubmit(@ModelAttribute Teacher teacher){
+
+        DaoResult daoResult = teacher.validate();
+        if(daoResult.isSuccessful()){
+            try{
+                userService.saveOrUpdate(teacher);
+            }catch (Exception e){
+                daoResult.setValues(false, e.getMessage(), DaoResult.EXCEPTION);
+            }
+        }
+        return daoResult;
+
+    }
+/*
     @RequestMapping(value = "/admin/private/createTeacher.web", method = RequestMethod.POST)
     public String processTeacherFormSubmit(@ModelAttribute Teacher teacher,
-                                BindingResult result,
-                                SessionStatus status,
                                 RedirectAttributes redirectAttributes, HttpServletRequest request
                                 ){
 
-        teacher.getLogin().setUserType("teacher");
-        teacherValidator.validate(teacher,result);
-        System.out.println(result);
-        if(!result.hasErrors()){
-            status.setComplete();
-            userService.saveOrUpdate(teacher);
+        DaoResult daoResult = teacher.validate();
+        if(daoResult.isSuccessful()){
+            try{
+                userService.saveOrUpdate(teacher);
+            }catch (Exception e){
+                daoResult.setValues(false, e.getMessage(), DaoResult.EXCEPTION);
+            }
+            if(daoResult.isSuccessful()){
+                return "redirect:" + ApplicationConstants.APP_URL(request) + "/private/profileInfo.web?userId=" + teacher.getUserId();
+            }
         }
+        redirectAttributes.addFlashAttribute("errorMsg", daoResult.getMessage());
+        return "redirect:" + ApplicationConstants.APP_URL(request) + "/admin/private/createTeacher.web";
 
-        return "redirect:" + ApplicationConstants.APP_URL(request) + "/private/profileInfo.web?userId=" + teacher.getUserId();
     }
+*/
 
     @RequestMapping(value = "/admin/private/update/teacher.web", method = RequestMethod.POST)
     @ResponseBody
@@ -143,15 +166,18 @@ public class UserController {
                                 ){
         CommonUser commonUser = staff;
         commonUser.getLogin().setUserType("staff");
-        userService.saveOrUpdate(commonUser);
+        try{
+            userService.saveOrUpdate(commonUser);
+        }catch (Exception e){
+
+        }
         return "redirect:" + ApplicationConstants.APP_URL(request) + "/private/profileInfo.web?userId=" + staff.getUserId();
     }
 
     @RequestMapping(value = "/admin/private/createStudent.web", method = RequestMethod.GET)
-    public String initStudentForm(ModelMap map,
-                                  @RequestParam(value = "userId", required = false) Long userId){
+    public String initStudentForm(ModelMap map){
 
-        CommonUser commonUser = userId == null ? new Student(new Login()) : userService.getUserByUserId(userId, Student.class);
+        CommonUser commonUser = new Student(new Login());
         map.addAttribute("student", commonUser);
 //        map.addAttribute("classList",clazzService.getClassList());
         return "user/createStudent";
@@ -159,16 +185,21 @@ public class UserController {
 
     @RequestMapping(value = "/admin/private/createStudent.web", method = RequestMethod.POST)
     public String processStudentFormSubmit(@ModelAttribute("student")Student student,
-                                BindingResult result,
-                                SessionStatus status,
-                                HttpServletRequest request){
+                                HttpServletRequest request, RedirectAttributes redirectAttributes){
         CommonUser commonUser = student;
-        studentValidator.validate(student, result);
-        if(!result.hasErrors()){
-            status.setComplete();
-            userService.saveOrUpdate(commonUser);
+        DaoResult daoResult = student.validate();
+        if(daoResult.isSuccessful()){
+            try{
+                userService.saveOrUpdate(commonUser);
+            }catch (Exception e){
+                daoResult.setValues(false, e.getMessage(),DaoResult.EXCEPTION);
+            }
+            if(daoResult.isSuccessful()){
+                return "redirect:" + ApplicationConstants.APP_URL(request) + "/private/profileInfo.web?userId=" + student.getUserId();
+            }
         }
-        return "redirect:" + ApplicationConstants.APP_URL(request) + "/private/profileInfo.web?userId=" + student.getUserId();
+        redirectAttributes.addFlashAttribute("errorMsg", daoResult.getMessage());
+        return "redirect:" + ApplicationConstants.APP_URL(request) + "/admin/private/createStudent.web";
     }
 
 

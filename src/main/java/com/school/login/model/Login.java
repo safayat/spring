@@ -1,6 +1,7 @@
 package com.school.login.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Strings;
 import com.school.menu.model.Menu;
 import com.school.profile.model.Profile;
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.school.util.DaoResult;
 import com.school.util.JsonStringToObjectConvereter;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -30,9 +32,11 @@ public class Login implements Serializable{
     private String confirmPassword;
     private String email;
     private String userType;
+    private String fullName;
     private Date userCreated;
     private Date lastLogin;
     private Map<Integer,Integer> permissionMap;
+
 
     public Login() {
 		// TODO Auto-generated constructor stub
@@ -136,6 +140,33 @@ public class Login implements Serializable{
         this.lastLogin = lastLogin;
     }
 
+    @Transient
+    public String getFirstName() {
+        try{
+            return fullName.split(" ")[0];
+        }catch (Exception e){
+
+        }
+        return "";
+    }
+    @Transient
+    public String getLastName() {
+        try{
+            return fullName.split(" ")[1];
+        }catch (Exception e){
+
+        }
+        return "";
+    }
+    @Transient
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     @Override
     public String toString() {
         return "Login{" +
@@ -146,4 +177,22 @@ public class Login implements Serializable{
                 ", email='" + email + '\'' +
                 '}';
     }
+
+    public DaoResult validate(){
+        DaoResult daoResult = new DaoResult();
+        if(Strings.isNullOrEmpty(username)){
+            return daoResult.setValues(false," Username is empty", DaoResult.VALIDATION_ERROR);
+        }
+        if(Strings.isNullOrEmpty(fullName)){
+            return daoResult.setValues(false," First Name or Last Name is empty", DaoResult.VALIDATION_ERROR);
+        }
+        if(Strings.isNullOrEmpty(password)){
+            return daoResult.setValues(false," Password is empty", DaoResult.VALIDATION_ERROR);
+        }
+        if(Strings.isNullOrEmpty(userType)){
+            return daoResult.setValues(false," User type is empty", DaoResult.VALIDATION_ERROR);
+        }
+        return daoResult;
+    }
+
 }

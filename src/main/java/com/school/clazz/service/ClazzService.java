@@ -292,7 +292,15 @@ public class ClazzService {
     public boolean saveOrUpdate(Clazz clazz){
 
         try {
-            clazzDAO.saveOrUpdate(clazz);
+            if(clazz.getClassId()!=null){
+                Clazz oldClazz = clazzDAO.getById(Clazz.class, clazz.getClassId());
+                oldClazz.setClassName(clazz.getClassName());
+                oldClazz.setSectionName(clazz.getSectionName());
+                oldClazz.setShiftName(clazz.getShiftName());
+            }
+            else{
+                clazzDAO.saveOrUpdate(clazz);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return  false;

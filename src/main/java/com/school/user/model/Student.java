@@ -3,10 +3,12 @@ package com.school.user.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.google.common.base.Strings;
 import com.school.clazz.model.Clazz;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.school.login.model.Login;
 import com.school.profile.model.Profile;
+import com.school.util.DaoResult;
 import org.hibernate.annotations.ForeignKey;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -29,8 +31,8 @@ import java.util.Date;
 @Entity
 @Table(name = "student")
 public class Student extends CommonUser{
-    private int studentId;
-    private int classId;
+    private Integer studentId;
+    private Integer classId;
     private Date admissionDate;
     private Integer parentUserId;
     private String rollNumber;
@@ -48,20 +50,20 @@ public class Student extends CommonUser{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "st_student_id",unique = true,nullable = false)
-    public int getStudentId() {
+    public Integer getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(int studentId) {
+    public void setStudentId(Integer studentId) {
         this.studentId = studentId;
     }
 
     @Column(name = "st_class_id",nullable = false)
-    public int getClassId() {
+    public Integer getClassId() {
         return classId;
     }
 
-    public void setClassId(int classId) {
+    public void setClassId(Integer classId) {
         this.classId = classId;
     }
 
@@ -125,4 +127,19 @@ public class Student extends CommonUser{
                 ", rollNumber=" + rollNumber +
                 '}';
     }
+
+    public DaoResult validate(){
+        StringBuilder sb = new StringBuilder();
+        boolean valid=true;
+        DaoResult daoResult = new DaoResult();
+        if(classId == null){
+            sb.append("Class is empty");
+            valid = false;
+        }
+        if(!valid){
+            daoResult.setValues(false,sb.toString(),DaoResult.VALIDATION_ERROR);
+        }
+        return daoResult;
+    }
+
 }

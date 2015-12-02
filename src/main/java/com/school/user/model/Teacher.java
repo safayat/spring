@@ -1,10 +1,13 @@
 package com.school.user.model;
 
+import com.google.common.base.Strings;
 import com.school.clazz.model.Clazz;
 import com.school.login.model.Login;
 import com.school.profile.model.Profile;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.school.util.DaoResult;
+import com.school.util.StringUtility;
 import org.hibernate.annotations.ForeignKey;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -84,5 +87,19 @@ public class Teacher extends CommonUser{
                 ", destination='" + destination + '\'' +
                 ", joiningDate=" + joiningDate +
                 '}';
+    }
+
+    public DaoResult validate(){
+        StringBuilder sb = new StringBuilder();
+        boolean valid=true;
+        DaoResult daoResult = new DaoResult();
+        if(Strings.isNullOrEmpty(destination)){
+            sb.append("Designation is empty");
+            valid = false;
+        }
+        if(!valid){
+            daoResult.setValues(false,sb.toString(),DaoResult.VALIDATION_ERROR);
+        }
+        return daoResult;
     }
 }

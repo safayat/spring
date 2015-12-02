@@ -21,31 +21,26 @@
             <div class="main-content" data-ng-app="myApp">
                 <div class="row">
                     <div class="col-md-12" data-ng-controller="MyController">
-                        <form:form method="POST" commandName="student" action="/admin/private/createStudent.web"
-                                   cssClass="form-horizontal form-border" >
+                        <form method="POST" class="form-horizontal form-border" ng-submit="saveStudent()">
 
-                            <c:set var="readOnly" value="${student.studentId > 0}" scope="request"/>
 
                             <jsp:include page="/WEB-INF/pages/user/loginInfo.jsp"/>
-                            <form:hidden path="studentId"/>
-                            <form:hidden path="userId"/>
-                            <form:hidden path="classId"/>
-                            <input name="login.userType" id="login.userType" value="student" style="display: none"/>
+                            <input type="hidden" ng-model="user.classId"/>
 
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Class</label>
 
                                 <div class="col-sm-2">
-                                    <select ng-model="s_className" class="form-control" required="true" ng-change="selectClassForStudent()">
+                                    <select ng-model="s_className" class="form-control" id="classNameSelect" required="true" ng-change="selectClassForStudent()">
                                         <option value="">select class name</option>
-                                        <option  ng-repeat="className in classNames" value="{{className}}" ng-selected="{{s_className == className}}">{{className}}</option>
+                                        <option  ng-repeat="className in classInfo.classNames" value="{{className}}" ng-selected="{{s_className == className}}">{{className}}</option>
                                     </select>
                                 </div>
 
                                 <div class="col-sm-2">
                                     <select class="form-control" ng-model="s_sectionName" required="true" ng-change="selectClassForStudent()">
                                         <option value="">select section</option>
-                                        <option ng-repeat="section in sections" value="{{section}}" ng-selected="{{s_sectionName == section}}">{{section}}</option>
+                                        <option ng-repeat="section in classInfo.sections" value="{{section}}" ng-selected="{{s_sectionName == section}}">{{section}}</option>
                                     </select>
                                 </div>
 
@@ -53,10 +48,10 @@
                                         <%--<input id="sectionName" class="form-control"/>--%>
                                     <select class="form-control" ng-model="s_shiftName" required="true" ng-change="selectClassForStudent()">
                                         <option value="">select shift</option>
-                                        <option ng-repeat="shift in shifts" value="{{shift}}" ng-selected="{{s_shiftName == shift}}">{{shift}}</option>
+                                        <option ng-repeat="shift in classInfo.shifts" value="{{shift}}" ng-selected="{{s_shiftName == shift}}">{{shift}}</option>
                                     </select>
                                 </div>
-
+                                <span style="color: red" ng-show="showClassWarningMsg">Class not found</span>
                             </div>
 
 
@@ -64,14 +59,8 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Admission Date</label>
                                 <div class="col-sm-6">
-<%--
-                                    <form:input path="admissionDate" class="form-control" data-date="12/02/2012"
-                                                data-date-format="dd/mm/yyyy" readonly="true"/>
-
-
---%>
                                     <datepicker date-format="dd/MM/yyyy">
-                                        <input ng-model="admissionDate" class="form-control" name = "admissionDate" id="admissionDate"/>
+                                        <input ng-model="user.admissionDate" class="form-control" name = "admissionDate" id="admissionDate"/>
                                     </datepicker>
 
                                 </div>
@@ -81,8 +70,7 @@
                                 <label class="col-sm-3 control-label">Roll Number</label>
 
                                 <div class="col-sm-6">
-                                    <form:input path="rollNumber" cssClass="form-control"/>
-                                    <form:errors path="rollNumber" cssClass="has-error"/>
+                                    <input ng-model="user.rollNumber" class="form-control"/>
                                 </div>
                             </div>
 
@@ -90,85 +78,98 @@
                                 <label class="col-sm-3 control-label"></label>
 
                                 <div class="col-sm-6">
-                                    <button type="submit" class="btn btn-primary btn-block">Signup</button>
+                                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
                                 </div>
                             </div>
-                        </form:form>
+                            <div class="form-group" ng-show="showErrorMsg">
+                                <label class="col-sm-3 control-label"></label>
+                                <div class="col-sm-6">
+                                    <div class="alert-error alert">{{errorMsg}}</div>
+                                </div>
+                            </div>
+
+
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
         <!--main content end-->
+        <script src="${appBaseUrl}/js/class.js"></script>
+
         <script type="text/javascript">
 
             var app = angular.module('myApp', ['720kb.datepicker']);
             app.controller("MyController", MyController);
-            angular.element(document).ready(function () {
-                console.log("in ready");
-                $('#admissionDate').datepicker();
-            });
             function MyController($scope, $http){
-                $scope.classList = [];
                 var selectedClassId;
-                $http.get('${appBaseUrl}/private/getClassList.web').success(function(data){
-                    console.log(data);
-                    $scope.classList = data;
-                    function concatUniqueElements(list, elem){
-                        var result = '';
-                        if(list.indexOf(elem) == -1){
-                            if(list != ''){
-                                result = result + ',';
-                            }
-                            result = result + elem;
-                        }
-                        return result;
-
+                var vm = $scope;
+                vm.user = {};
+                vm.saveStudent = function(){
+                    vm.showErrorMsg = false;
+                    vm.user.userType="student";
+                    if(vm.usernameNotUnique == true){
+                        $('#username').focus();
+                        return;
                     }
-                    var sections = '';
-                    var shifts = '';
-                    var classNames = '';
-
-                    $scope.classList.forEach(function(clazz){
-                        classNames = classNames + concatUniqueElements(classNames,clazz.className);
-                        shifts = shifts + concatUniqueElements(shifts,clazz.shiftName);
-                        sections = sections + concatUniqueElements(sections,clazz.sectionName);
+                    if(isEmpty(vm.user.classId)){
+                        $('#classNameSelect').focus();
+                        return;
+                    }
+                    $http({
+                        method: 'POST',
+                        url: '${appBaseUrl}/admin/private/createUser.web',
+                        data: $.param(vm.user),
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    }).success(function (data) {
+                        console.log(data);
+                        if(data.successful){
+                            window.location.href = '${appBaseUrl}/private/profileInfo.web?userId=' + data.data;
+                        }
+                        else{
+                            vm.showErrorMsg = true;
+                            vm.errorMsg = data.message;
+                        }
                     });
-                    $scope.sections = sections.split(',');
-                    $scope.shifts = shifts.split(',');
-                    $scope.classNames = classNames.split(',');
+                }
 
 
-                }).error(function(data,status){
-                            console.log("error");
-                        });
+                initClazzList($http,'${appBaseUrl}/private/getClassList.web', function(data){
+                    vm.classInfo= data;
+                    $http.get("${appBaseUrl}/private/getSections.web").success(function(sections){
+                        vm.classInfo.sections = sections;
+                        console.log(vm.classInfo.sections);
 
-                $scope.selectClassForStudent = function(){
-                    if($scope.s_className !="" && $scope.s_sectionName !="" && $scope.s_shiftName !=""){
-                        $scope.classList.forEach(function(clazz){
-                            if(clazz.shiftName == $scope.s_shiftName && clazz.sectionName == $scope.s_sectionName && clazz.className == $scope.s_className ){
-                                selectedClassId = clazz.classId;
-                            }
-                            console.log(selectedClassId);
-                        });
-                        $("#classId").val(selectedClassId);
+                    });
+                    $http.get("${appBaseUrl}/private/getShifts.web").success(function(shifts){
+                        vm.classInfo.shifts = shifts;
+                    });
 
+                    console.log(vm.classInfo);
+
+                });
+
+                vm.selectClassForStudent = function(){
+                    if(notEmpty(vm.s_className) && notEmpty(vm.s_sectionName) && notEmpty(vm.s_shiftName)){
+                        vm.showClassWarningMsg = false;
+                        vm.user.classId = filterClazz(vm.classInfo.classList,vm.s_className, vm.s_sectionName, vm.s_shiftName).pop();
+                        if(vm.user.classId == undefined){
+                            vm.showClassWarningMsg = true;
+                        }
+                        console.log(vm.user.classId);
                     }
                 }
 
-                $scope.verifyUserName = function(){
-                    if($scope.loginUsername.length <3) return;
-                    $http.get('${appBaseUrl}/private/search/login.web?username='+$scope.loginUsername).success(function(data){
-                        if(data == ''){
-                            $scope.usernameNotUnique = false;
-                        }else{
-                            $scope.usernameNotUnique = true;
-                        }
-
-                    }).error(function(data){
-                                console.log('error');
-
-                            });
+                vm.verifyUserName = function () {
+                    if (vm.user.username.length < 3)
+                        return;
+                    $http.get('${appBaseUrl}/private/search/login.web?username=' + vm.user.username).success(function (data) {
+                        vm.usernameNotUnique = data != '';
+                    }).error(function (data) {
+                        console.log('error');
+                    });
                 }
+
 
 
             }

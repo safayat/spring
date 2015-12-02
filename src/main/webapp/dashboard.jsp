@@ -45,7 +45,7 @@ window.onload = function () {
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <script src="${appBaseUrl}/js/neuboard/pieChart.js"></script>
 
-<tiles:insertDefinition name="defaultTemplate">
+<tiles:insertDefinition name="aircrafttTemplate">
     <tiles:putAttribute name="body">
         <section class="main-content-wrapper">
             <div class="pageheader">

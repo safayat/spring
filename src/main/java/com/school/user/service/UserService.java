@@ -6,10 +6,7 @@ import com.school.common.dao.CommonDAO;
 import com.school.login.model.Login;
 import com.school.profile.model.Profile;
 import com.school.user.dao.UserDAO;
-import com.school.user.model.CommonUser;
-import com.school.user.model.Staff;
-import com.school.user.model.Student;
-import com.school.user.model.Teacher;
+import com.school.user.model.*;
 import com.school.util.DaoResult;
 import com.school.util.Utility;
 import org.hibernate.criterion.Criterion;
@@ -45,30 +42,32 @@ public class UserService {
     CommonDAO commonDAO;
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public DaoResult saveOrUpdate(CommonUser user){
-        DaoResult daoResult = new DaoResult();
-        try{
-            if(user.getUserId() == 0){
-                Login login = user.getLogin();
-                login.setPassword(new BCryptPasswordEncoder().encode(login.getPassword()));
-                if(Strings.isNullOrEmpty(login.getEmail())){
-                    login.setEmail(login.getUsername() + "_" + System.currentTimeMillis() + "@school.com");
-                }
-                userDAO.saveOrUpdate(login);
-                Profile profile = user.getProfile();
-                profile.setProfileImageUrl("image/Default_Profile_Picture.png");
-                profile.setUserId(login.getUserId());
-                commonDAO.saveOrUpdate(profile);
-                user.setUserId(login.getUserId());
-                user.setProfileId(profile.getProfileId());
-            }
-            userDAO.saveOrUpdate(user);
-            daoResult.setValues(true,"", DaoResult.DONE);
-        }catch (Exception e){
-            e.printStackTrace();
-            daoResult.setValues(true,e.getMessage(), DaoResult.EXCEPTION);
+    public void saveOrUpdate(CommonUser user) throws Exception{
+
+        Profile profile = (Profile)userDAO.getQuery("from " + Profile.class.getSimpleName() +  " where userId=" + user.getUserId()).uniqueResult();
+        user.setProfileId(profile.getProfileId());
+        user.setFullName(profile.getFirstName() + " " + profile.getLastName());
+        userDAO.saveOrUpdate(user);
+    }
+
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public Long createUser(CommonUser user) throws Exception{
+        Login login = user.getLogin();
+        login.setPassword(new BCryptPasswordEncoder().encode(login.getPassword()));
+        if(Strings.isNullOrEmpty(login.getEmail())){
+            login.setEmail(login.getUsername() + "_" + System.currentTimeMillis() + "@school.com");
         }
-        return daoResult;
+        userDAO.saveOrUpdate(login);
+
+        Profile profile = user.getProfile();
+        profile.setProfileImageUrl("image/Default_Profile_Picture.png");
+        profile.setUserId(login.getUserId());
+        userDAO.saveOrUpdate(profile);
+
+        user.setProfileId(profile.getProfileId());
+        user.setUserId(login.getUserId());
+        userDAO.saveOrUpdate(user);
+        return user.getUserId();
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
