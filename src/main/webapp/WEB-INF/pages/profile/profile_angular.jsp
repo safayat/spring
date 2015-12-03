@@ -23,7 +23,7 @@
                         <form action="${appBaseUrl}/private/uploadProfilePicture.web" method="post"
                               enctype="multipart/form-data">
                             <img ng-if="profile.profileImageUrl == 'image/Default_Profile_Picture.png' " src="../{{profile.profileImageUrl}}" class="img-rounded" width="100%">
-                            <img ng-if="profile.profileImageUrl != 'image/Default_Profile_Picture.png' " src="${appBaseUrl}/{{profile.profileImageUrl}}" class="img-rounded" width="100%">
+                            <img ng-if="profile.profileImageUrl != 'image/Default_Profile_Picture.png' " src="{{profile.profileImageUrl}}" class="img-rounded" width="100%">
                             <input name="profileImage" type="file" placeholder="upload profile picture">
                             <input name="profileId" type="hidden" value="{{userId}}">
                             <button class="btn btn-success">upload</button>

@@ -92,7 +92,7 @@ public class ProfileController {
     @RequestMapping(value = "/private/uploadProfilePicture.web", method = RequestMethod.POST)
     public String uploadProfilePicture(@RequestParam(value = "profileId", defaultValue = "1",required = false)Integer profileId,
                                        @RequestParam("profileImage")MultipartFile profileImage,
-                                        RedirectAttributes redirectAttributes)
+                                        RedirectAttributes redirectAttributes, HttpServletRequest request)
     {
 
 
@@ -116,8 +116,8 @@ public class ProfileController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } 
-        return "redirect:/profileInfo.web?userId=" + profile.getUserId();
+        }
+        return "redirect:" + ApplicationConstants.APP_URL(request) + "/private/profileInfo.web?userId=" + profileId;
 
     }
 
