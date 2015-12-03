@@ -127,6 +127,7 @@ public class Login implements Serializable{
         return userCreated;
     }
 
+    @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss")
     public void setUserCreated(Date userCreated) {
         this.userCreated = userCreated;
     }

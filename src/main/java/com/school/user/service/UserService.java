@@ -147,8 +147,12 @@ public class UserService {
         try {
             Login login = commonDAO.getById(Login.class,id);
             Class entityClass = Utility.getUserEntityClass(login.getUserType());
-            commonUser = commonDAO.getUniqueByHql("from " + entityClass.getSimpleName() + " where userId = " + id);
-            Profile profile = commonDAO.getById(Profile.class, commonUser.getProfileId());
+            if(entityClass == UserAdmin.class){
+                commonUser = new UserAdmin();
+            }else{
+                commonUser = commonDAO.getUniqueByHql("from " + entityClass.getSimpleName() + " where userId = " + id);
+            }
+            Profile profile = commonDAO.getUniqueByHql("from " + Profile.class.getSimpleName() + " where userId = " + id);
             commonUser.setLogin(login);
             commonUser.setProfile(profile);
 

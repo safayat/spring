@@ -44,6 +44,8 @@ public class LoginAuthenticationService implements UserDetailsService{
             ObjectMapper mapper = new ObjectMapper();
             String loginInfo = null;
             login.setPermissionMap(menuService.getPermissionMap(login.getUserType()));
+            login.setUserCreated(null);
+            login.setLastLogin(null);
             loginInfo = mapper.writeValueAsString(login);
             userDetails = new User(loginInfo, login.getPassword(), true, true, true, true, buildAuthority(login.getUserType()));
 

@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.school.user.model.Staff;
 import com.school.user.model.Student;
 import com.school.user.model.Teacher;
+import com.school.user.model.UserAdmin;
 import org.springframework.http.HttpRequest;
 
 import javax.servlet.http.HttpServlet;
@@ -81,6 +82,8 @@ public class Utility {
             return Teacher.class;
         if("staff".equalsIgnoreCase(userType))
             return Staff.class;
+        if("admin".equalsIgnoreCase(userType))
+            return UserAdmin.class;
         return null;
     }
 

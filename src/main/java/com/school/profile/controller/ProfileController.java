@@ -51,16 +51,12 @@ public class ProfileController {
     ServletContext servletContext;
 
     @RequestMapping(value = "/private/profile.web", method = RequestMethod.GET)
-    public String initForm(ModelMap map, Principal principal)
+    public String initForm(ModelMap map, Principal principal, HttpServletRequest request)
     {
         System.out.println("principal.getName():"+principal.getName());
-        Profile profile = profileService.getProfileById(new Gson().fromJson(principal.getName(), Login.class).getUserId());
-        if(profile == null){
-            map.addAttribute("errorMsg","Authentication error");
-            return "common/error";
-        }
-        map.addAttribute("profile",profile);
-        return "profile/profile";
+        Login login = Login.getLoginFromPrincipal(principal.getName());
+        return "redirect:" + ApplicationConstants.APP_URL(request) + "/private/profileInfo.web?userId=" + login.getUserId();
+
     }
 
     @RequestMapping(value = "/private/profileInfo.web", method = RequestMethod.GET)
@@ -98,6 +94,7 @@ public class ProfileController {
                                        @RequestParam("profileImage")MultipartFile profileImage,
                                         RedirectAttributes redirectAttributes)
     {
+
 
         Profile profile = profileService.getProfileById(profileId);
         String contextPath = servletContext.getRealPath("");
